@@ -1,0 +1,10 @@
+group	label	threshold	n_samples	n_positive	predictor	status	estimate	conf.low	conf.high	pvalue	qvalue	detail
+s_aureus	S. aureus	0.004	68	48	normal_score_abundance	ok	1.1121200008622314	0.6555907456357095	1.5686492560887533	8.253506158022505e-6	1.1013992859618991e-5	
+p_aeruginosa	P. aeruginosa	0.098	68	17	normal_score_abundance	ok	1.4443212244385935	0.9462173581638569	1.94242509071333	3.8356982678570934e-7	9.589245669642733e-7	
+serratia_marcescens	Serratia	0.073	68	4	normal_score_abundance	ok	1.2995250868586088	0.6261508631127638	1.9728993106044537	3.0211131098108174e-4	3.0211131098108174e-4	
+proteus_mirabilis	Proteus	0.001	68	2	normal_score_abundance	skipped	NA	NA	NA	NA	NA	Too few positives/negatives or no variation in the rank-normalized metagenomic abundance response.
+gas	GAS	0.002	68	4	normal_score_abundance	ok	2.112584356574658	1.486679785311726	2.7384889278375897	1.3855736299707706e-8	6.927868149853853e-8	
+klebsiella_spp	Klebsiella spp.	0.097	68	5	normal_score_abundance	ok	1.9661869930902307	1.192737584397846	2.739636401782615	8.811194287695193e-6	1.1013992859618991e-5	
+e_coli	E. coli	0.078	68	1	normal_score_abundance	skipped	NA	NA	NA	NA	NA	Too few positives/negatives or no variation in the rank-normalized metagenomic abundance response.
+acinetobacter_baumannii	A. baumannii	0.07100000000000001	68	3	normal_score_abundance	skipped	NA	NA	NA	NA	NA	Too few positives/negatives or no variation in the rank-normalized metagenomic abundance response.
+e_faecalis	E. faecalis	0.003	68	2	normal_score_abundance	skipped	NA	NA	NA	NA	NA	Too few positives/negatives or no variation in the rank-normalized metagenomic abundance response.

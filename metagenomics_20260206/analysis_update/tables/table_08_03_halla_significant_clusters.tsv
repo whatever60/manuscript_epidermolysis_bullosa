@@ -1,0 +1,437 @@
+cluster_rank	metadata_features	microbiome_features	best_adjusted_pvalue	metadata_size	microbiome_size
+1	culture_klebsiella_spp	Pantoea sp. GABEPS69;Metapseudomonas otitidis;Xanthomonas citri;Ectopseudomonas oleovorans	8.045481569574572e-11	1	4
+2	host_removed_fraction;log10_bacterial_reads	Cutibacterium acnes;Gordonia sp. w5E2;Gordonia bronchialis	9.801208126375084e-07	2	3
+3	host_removed_fraction;log10_bacterial_reads	Serratia inhibens;Serratia odorifera;Serratia aquatilis;Serratia nevei;Serratia grimesii;Serratia quinivorans;Serratia sp. 1D1416;Serratia sp. NGAS9;Serratia rhizosphaerae;Serratia sp. SCBI;Serratia proteamaculans;Serratia plymuthica;Serratia rubidaea;Serratia liquefaciens;Serratia fonticola;Serratia symbiotica	1.0618815344572162e-06	2	16
+4	host_removed_fraction;log10_bacterial_reads	Klebsiella michiganensis;Salmonella enterica;Klebsiella variicola;Klebsiella quasipneumoniae;Citrobacter freundii;Citrobacter koseri	1.5746213260133952e-06	2	6
+5	chronicity_group_acute_like;culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas sp. PDNC002;Pseudomonas paraeruginosa;Pseudomonas citronellolis;Pseudomonas sp. ATCC 13867;Pseudomonas sp. GCEP-101	1.5746213260133952e-06	3	5
+6	host_removed_fraction;log10_bacterial_reads	Serratia sp. UGAL515B_01;Serratia sp. FGI94;Serratia sp. JSRIV001;Serratia sp. HRI;Serratia sarumanii;Serratia sp. JSRIV002;Serratia sp. szju;Serratia sp. P2ACOL2;Serratia sp. Tan611;Serratia sp. JKS000199;Serratia nematodiphila;Serratia sp. SSNIH1;Serratia sp. LS-1;Serratia sp. CMO1;Serratia sp. 3ACOL1;Serratia ficaria	9.645942023891632e-06	2	16
+7	culture_klebsiella_spp	Escherichia albertii;Klebsiella grimontii;Enterobacter roggenkampii;Enterobacter kobei;Raoultella ornithinolytica;Klebsiella aerogenes;Enterobacter cloacae;Erwinia tracheiphila;Raoultella planticola;Jejubacter calystegiae;Yokenella regensburgei;Klebsiella electrica;Klebsiella pasteurii;Shigella boydii;Klebsiella huaxiensis;Klebsiella africana;Klebsiella quasivariicola	9.859918701504013e-06	1	17
+8	host_removed_fraction;log10_bacterial_reads	Serratia entomophila	1.6261745669798527e-05	2	1
+9	culture_klebsiella_spp	Pseudomonas sp. LTJR-52;Pseudomonas sp. 02C 26;Pseudomonas allokribbensis;Pseudomonas libanensis;Pseudomonas juntendi;Pseudomonas lactis	1.8909663402181985e-05	1	6
+10	chronicity_group_acute_like;culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas viridiflava;Pseudomonas sp. PS1(2021);Pseudomonas sp. MTM4;Pseudomonas cavernae;Pseudomonas sp. AN-1;Pseudomonas sp. SCB32;Pseudomonas sp. LS44;Pseudomonas sp. QE6;Pseudomonas sp. C9-3;Pseudomonas sp. DTU_2021_1001937_2_SI_NGA_ILE_001;Pseudomonas vanderleydeniana;Pseudomonas sp. J452;Pseudomonas sp. TCU-HL1;Pseudomonas solani	3.346375120894648e-05	3	14
+11	chronicity_group_unknown;clinical_infection_flag_unknown	Serratia inhibens;Serratia odorifera;Serratia aquatilis;Serratia nevei;Serratia grimesii;Serratia quinivorans;Serratia sp. 1D1416;Serratia sp. NGAS9;Serratia rhizosphaerae;Serratia sp. SCBI;Serratia proteamaculans;Serratia plymuthica;Serratia rubidaea;Serratia liquefaciens;Serratia fonticola;Serratia symbiotica	0.000102006899959	2	16
+12	host_removed_fraction;log10_bacterial_reads	Yersinia enterocolitica;Leclercia adecarboxylata;Enterobacter bugandensis;Enterobacter asburiae;Enterobacter ludwigii	0.0001180058088697	2	5
+13	culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas aeruginosa	0.0001805135150879	2	1
+14	host_removed_fraction;log10_bacterial_reads	Klebsiella grimontii	0.0002559063952166	2	1
+15	culture_p_aeruginosa	Pseudomonas sp. DR48;Pseudomonas sp. JDS08PS003;Pseudomonas lini;Pseudomonas thivervalensis;Pseudomonas sp. MYb327;Pseudomonas sp. ADAK13;Pseudomonas sp. URMO17WK12:I11	0.000278103896429	1	7
+16	chronicity_group_unknown;clinical_infection_flag_unknown	Brevibacterium luteolum;Brevibacterium sp. CS2;Auritidibacter ignavus;Dermabacter jinjuensis;Alcaligenes faecalis;Streptococcus agalactiae;Pseudomonas sp. LM12	0.0003233162304944	2	7
+17	chronicity_group_acute_like;culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas brassicacearum	0.0003233162304944	3	1
+18	culture_serratia_marcescens	Serratia sp. UGAL515B_01;Serratia sp. FGI94;Serratia sp. JSRIV001;Serratia sp. HRI;Serratia sarumanii;Serratia sp. JSRIV002;Serratia sp. szju;Serratia sp. P2ACOL2;Serratia sp. Tan611;Serratia sp. JKS000199;Serratia nematodiphila;Serratia sp. SSNIH1;Serratia sp. LS-1;Serratia sp. CMO1;Serratia sp. 3ACOL1;Serratia ficaria	0.0003349387301654	1	16
+19	host_removed_fraction;log10_bacterial_reads	Atlantibacter hermannii;Pectobacterium brasiliense;Citrobacter werkmanii;Kosakonia cowanii;Cronobacter condimenti	0.0003604081154955	2	5
+20	culture_klebsiella_spp	Pseudomonas zeae;Pseudomonas sp. Z003-0.4C(8344-21);Pseudomonas sp. JS3066;Pseudomonas benzopyrenica;Pseudomonas sp. PP3;Pseudomonas sp. JBR1;Pseudomonas laurylsulfatiphila;Pseudomonas sp. CYM-20-01;Pseudomonas grandcourensis;Pseudomonas sp. B21-053;Pseudomonas helvetica;Pseudomonas sp. FP1742;Pseudomonas tritici	0.0003931510850439	1	13
+21	culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas sp. KHPS1	0.0003931510850439	2	1
+22	culture_p_aeruginosa	Staphylococcus hominis;Staphylococcus epidermidis;Staphylococcus capitis	0.0003952478227477	1	3
+23	chronicity_group_acute_like;culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas sp. FDAARGOS_761	0.0003961725587198	3	1
+24	culture_klebsiella_spp	Pseudomonas sichuanensis;Pseudomonas sp. A34-9;Pseudomonas sp. DY-1	0.0004471125992043	1	3
+25	body_region_head_neck	Brevibacterium sp. CS2;Auritidibacter ignavus	0.0004634799055335	1	2
+26	body_region_head_neck	Acinetobacter indicus;Acinetobacter pittii;Acinetobacter sp. 8_A20231192;Acinetobacter johnsonii	0.0004702429494376	1	4
+27	culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas sp. LPB0260;Pseudomonas sp. HLS-6;Pseudomonas sp. SL4(2022);Pseudomonas wenzhouensis	0.0004804190730822	2	4
+28	culture_p_aeruginosa	Pseudomonas yamanorum;Pseudomonas sp. N3-W;Pseudomonas hamedanensis;Pseudomonas cedrina;Pseudomonas palleroniana;Pseudomonas mucidolens;Pseudomonas rhizosphaerae	0.0004806352259011	1	7
+29	culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas argentinensis;Pseudomonas eucalypticola;Pseudomonas sp. ABC1;Pseudomonas sp. StFLB209	0.0005427795196133	2	4
+30	culture_klebsiella_spp	Pseudomonas beijingensis;Pseudomonas sp. stari2;Pseudomonas sp. LG1E9;Pseudomonas sp. R5-89-07;Pseudomonas congelans;Pseudomonas lijiangensis;Pseudomonas sp. HN11;Pseudomonas psychrophila;Pseudomonas sp. IzPS59;Pseudomonas sp. TMP25;Pseudomonas hormoni;Pseudomonas sp. AA-38;Pseudomonas sp. B33.4;Pseudomonas sp. Lz4W;Pseudomonas sp. CCOS 191;Pseudomonas sp. MRSN 12121;Pseudomonas sp. G2-4;Pseudomonas sp. SK3(2021)	0.000624606206641	1	18
+31	culture_p_aeruginosa	Pseudomonas moraviensis	0.000624606206641	1	1
+32	culture_p_aeruginosa	Pseudomonas sp. QL9;Pseudomonas sp. MM227;Pseudomonas oryzae;Pseudomonas indoloxydans;Pseudomonas anguilliseptica;Pseudomonas frederiksbergensis;Pseudomonas sp. L5B5;Pseudomonas tructae	0.0006977868855505	1	8
+33	chronicity_group_acute_like;culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas nitroreducens;Pseudomonas benzenivorans;Pseudomonas entomophila;Pseudomonas sp. SO81;Pseudomonas sp. 273;Pseudomonas protegens	0.0007854617126342	3	6
+34	culture_s_aureus;culture_serratia_marcescens	Serratia marcescens;Serratia sp. FS14;Serratia sp. FDAARGOS_506;Serratia ureilytica;Serratia surfactantfaciens	0.0008030890549464	2	5
+35	culture_p_aeruginosa	uncultured Pseudomonas sp.	0.0008153637444041	1	1
+36	culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas beijingensis	0.0009328297538824	2	1
+37	culture_p_aeruginosa	Pseudomonas sp. NA-150;Pseudomonas asiatica;Pseudomonas baltica;Pseudomonas huanghezhanensis;Pseudomonas sp. G.S.17;Pseudomonas sp. LRP2-20	0.0009506646229904	1	6
+38	host_removed_fraction;log10_bacterial_reads	Pseudomonas viridiflava;Pseudomonas sp. PS1(2021);Pseudomonas sp. MTM4;Pseudomonas cavernae;Pseudomonas sp. AN-1;Pseudomonas sp. SCB32;Pseudomonas sp. LS44;Pseudomonas sp. QE6;Pseudomonas sp. C9-3;Pseudomonas sp. DTU_2021_1001937_2_SI_NGA_ILE_001;Pseudomonas vanderleydeniana;Pseudomonas sp. J452;Pseudomonas sp. TCU-HL1;Pseudomonas solani	0.0010104752829931	2	14
+39	host_removed_fraction;log10_bacterial_reads	Yersinia pestis	0.0010820005266571	2	1
+40	culture_p_aeruginosa	Pseudomonas graminis;Pseudomonas caspiana;Pseudomonas prosekii	0.0010937165791562	1	3
+41	chronicity_group_acute_like;culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas sp. Q1-7;Pseudomonas triclosanedens	0.0010942255839599	3	2
+42	chronicity_group_unknown;clinical_infection_flag_unknown	Acinetobacter baumannii;Acinetobacter nosocomialis;Acinetobacter seifertii;Acinetobacter indicus;Acinetobacter pittii;Acinetobacter sp. 8_A20231192;Acinetobacter johnsonii	0.0011147404154609	2	7
+43	culture_p_aeruginosa	Pseudomonas poae;Pseudomonas tohonis;Pseudomonas marginalis;Pseudomonas coleopterorum;Pseudomonas simiae	0.0012115281914769	1	5
+44	culture_e_faecalis	Aeromonas caviae	0.0012315633657405	1	1
+45	culture_p_aeruginosa	Pseudomonas sp. 7SR1;Pseudomonas sp. TUM22785;Pseudomonas sp. JQ170C	0.00145425430785	1	3
+46	host_removed_fraction;log10_bacterial_reads	Pseudomonas sp. nanlin1;Pseudomonas xantholysinigenes;Pseudomonas sp. B11D7D;Pseudomonas cremoricolorata;Pseudomonas saudiphocaensis	0.0014955546259612	2	5
+47	culture_serratia_marcescens	Atlantibacter hermannii;Pectobacterium brasiliense;Citrobacter werkmanii;Kosakonia cowanii;Cronobacter condimenti	0.001496694829378	1	5
+48	host_removed_fraction;log10_bacterial_reads	Klebsiella aerogenes;Enterobacter cloacae	0.0015099177521901	2	2
+49	culture_p_aeruginosa	Pseudomonas sp. R5-89-07;Pseudomonas congelans;Pseudomonas lijiangensis;Pseudomonas sp. HN11;Pseudomonas psychrophila	0.0015125061169616	1	5
+50	culture_s_aureus	Staphylococcus aureus;Staphylococcus schweitzeri;Staphylococcus argenteus;Staphylococcus lugdunensis;Staphylococcus sp. MZ8;Staphylococcus sp. MZ9;Staphylococcus pasteuri;Staphylococcus simiae;Staphylococcus saccharolyticus;Staphylococcus felis	0.0015695636179928	1	10
+51	culture_e_faecalis	Bordetella hinzii	0.0015940772922472	1	1
+52	chronicity_group_acute_like;culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas sp. KNUC1026;Pseudomonas pohangensis	0.0015940772922472	3	2
+53	log10_bacterial_reads	Pseudomonas serboccidentalis;Pseudomonas sp. B21-056;Pseudomonas versuta	0.0017439193535866	1	3
+54	culture_p_aeruginosa	Pseudomonas sp. MM211;Pseudomonas muyukensis;Pseudomonas sp. Ost2;Pseudomonas kielensis;Pseudomonas leptonychotis;Pseudomonas extremaustralis;Pseudomonas sp. M30-35;Pseudomonas abieticivorans	0.0017591363778097	1	8
+55	chronicity_group_unknown;clinical_infection_flag_unknown	Serratia entomophila	0.0018650259281726	2	1
+56	body_region_head_neck	Mammaliicoccus sciuri	0.0018814194492753	1	1
+57	host_removed_fraction;log10_bacterial_reads	Pseudomonas sp. KNUC1026;Pseudomonas pohangensis	0.0018858039885589	2	2
+58	culture_p_aeruginosa	Pseudomonas sp. Marseille-Q3773;Pseudomonas sp. PSE14;Pseudomonas agarici;Pseudomonas sp. LS1212;Pseudomonas xanthosomatis	0.0019215264796242	1	5
+59	culture_klebsiella_spp	Pseudomonas sp. CBS;Pseudomonas sp. SGAir0191;Pseudomonas sp. TMP9;Pseudomonas gozinkensis;Pseudomonas monteilii;Pseudomonas antarctica;Pseudomonas sp. BW7P1;Pseudomonas sp. S35;Pseudomonas mediterranea;Pseudomonas ogarae;Pseudomonas sp. FP597;Pseudomonas asgharzadehiana;Pseudomonas sp. S09G 359;Pseudomonas sp. 10S4;Pseudomonas nunensis;Pseudomonas sp. D3;Pseudomonas kribbensis	0.0019561979847707	1	17
+60	culture_p_aeruginosa	Pseudomonas sp. P8_241;Pseudomonas maumuensis	0.0020191036897082	1	2
+61	culture_p_aeruginosa	Pseudomonas atacamensis;Pseudomonas sp. DC1.2;Pseudomonas sp. RtIB026;Pseudomonas sp. DG56-2;Pseudomonas inefficax	0.0020191036897082	1	5
+62	culture_p_aeruginosa	Pseudomonas sp. FP198;Pseudomonas cichorii;Pseudomonas umsongensis;Pseudomonas sivasensis;Pseudomonas migulae;Pseudomonas sp. P5_109;Pseudomonas sp. FP2335;Pseudomonas sp. MPC6;Pseudomonas sp. CMR5c;Pseudomonas sp. WJP1	0.0020191036897082	1	10
+63	host_removed_fraction;log10_bacterial_reads	Pseudomonas sichuanensis	0.0020580761288225	2	1
+64	host_removed_fraction;log10_bacterial_reads	Pseudomonas knackmussii	0.0021612809703541	2	1
+65	culture_p_aeruginosa	Pseudomonas sp. ADAK18;Pseudomonas taetrolens	0.0021612809703541	1	2
+66	host_removed_fraction;log10_bacterial_reads	Pseudomonas piscis;Pseudomonas silesiensis;Pseudomonas sp. B22129;Pseudomonas lundensis	0.002265146998086	2	4
+67	host_removed_fraction;log10_bacterial_reads	Buchnera aphidicola	0.0023024068889709	2	1
+68	body_region_head_neck	Staphylococcus rostri;Staphylococcus coagulans;Staphylococcus sp. 17KM0847;Staphylococcus debuckii;Staphylococcus sp. FSL W8-0305;Staphylococcus lloydii;Staphylococcus gallinarum;Staphylococcus sp. IVB6181;Staphylococcus lutrae;Staphylococcus auricularis;Staphylococcus devriesei;Staphylococcus agnetis;Staphylococcus carnosus;Staphylococcus ratti	0.0023675598944138	1	14
+69	chronicity_group_unknown;clinical_infection_flag_unknown	Serratia sp. UGAL515B_01;Serratia sp. FGI94;Serratia sp. JSRIV001;Serratia sp. HRI;Serratia sarumanii;Serratia sp. JSRIV002;Serratia sp. szju;Serratia sp. P2ACOL2;Serratia sp. Tan611;Serratia sp. JKS000199;Serratia nematodiphila;Serratia sp. SSNIH1;Serratia sp. LS-1;Serratia sp. CMO1;Serratia sp. 3ACOL1;Serratia ficaria	0.0024208252551628	2	16
+70	host_removed_fraction;log10_bacterial_reads	Pseudomonas sediminis	0.0024208252551628	2	1
+71	host_removed_fraction;log10_bacterial_reads	Pseudomonas sp. KHPS1	0.0024504179702429	2	1
+72	log10_bacterial_reads	Pseudomonas sp. NA-150;Pseudomonas asiatica;Pseudomonas baltica;Pseudomonas huanghezhanensis;Pseudomonas sp. G.S.17;Pseudomonas sp. LRP2-20	0.0024641766232587	1	6
+73	host_removed_fraction;log10_bacterial_reads	Pseudomonas fulva	0.0024966110710285	2	1
+74	log10_bacterial_reads	Brevibacterium luteolum;Brevibacterium sp. CS2;Auritidibacter ignavus;Dermabacter jinjuensis;Alcaligenes faecalis;Streptococcus agalactiae;Pseudomonas sp. LM12	0.0025345689955465	1	7
+75	culture_p_aeruginosa	Gordonia sp. w5E2;Gordonia bronchialis	0.0028249521160801	1	2
+76	culture_p_aeruginosa	Pseudomonas trivialis;Pseudomonas seleniipraecipitans;Pseudomonas marincola;Pseudomonas parafulva;Pseudomonas berkeleyensis;Pseudomonas mosselii;Pseudomonas batumici;Pseudomonas sp. p1(2021b);Pseudomonas sp. MH9.2	0.0028317526697289	1	9
+77	chronicity_group_acute_like;culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas fulva	0.002858058682075	3	1
+78	host_removed_fraction;log10_bacterial_reads	Pseudomonas promysalinigenes	0.0028596388875321	2	1
+79	host_removed_fraction;log10_bacterial_reads	Pseudomonas sp. 7SR1;Pseudomonas sp. TUM22785;Pseudomonas sp. JQ170C	0.0029113248040714	2	3
+80	culture_p_aeruginosa	Pseudomonas sp. B21-028	0.0029113248040714	1	1
+81	host_removed_fraction;log10_bacterial_reads	Proteus mirabilis	0.0030281640825075	2	1
+82	host_removed_fraction;log10_bacterial_reads	Pseudomonas sp. MM211;Pseudomonas muyukensis;Pseudomonas sp. Ost2;Pseudomonas kielensis;Pseudomonas leptonychotis;Pseudomonas extremaustralis;Pseudomonas sp. M30-35;Pseudomonas abieticivorans	0.0030281640825075	2	8
+83	chronicity_group_unknown;clinical_infection_flag_unknown	Mammaliicoccus sciuri	0.0031072233930294	2	1
+84	culture_klebsiella_spp	Pseudomonas amygdali	0.0031072233930294	1	1
+85	culture_p_aeruginosa	Pseudomonas sp. M1	0.0031072233930294	1	1
+86	log10_bacterial_reads	Pseudomonas sp. DR48;Pseudomonas sp. JDS08PS003;Pseudomonas lini;Pseudomonas thivervalensis;Pseudomonas sp. MYb327;Pseudomonas sp. ADAK13;Pseudomonas sp. URMO17WK12:I11	0.0031072233930294	1	7
+87	culture_p_aeruginosa	Pseudomonas syringae group genomosp. 7;Pseudomonas sp. Z8(2022);Pseudomonas canadensis;Pseudomonas sp. REST10;Pseudomonas sp. FP2309	0.0031072233930294	1	5
+88	log10_bacterial_reads	Pseudomonas nitroreducens;Pseudomonas benzenivorans;Pseudomonas entomophila;Pseudomonas sp. SO81;Pseudomonas sp. 273;Pseudomonas protegens	0.0031916029548161	1	6
+89	host_removed_fraction;log10_bacterial_reads	Bordetella hinzii;Bordetella bronchiseptica;Achromobacter sp. EB05;Achromobacter deleyi;Achromobacter spanius;Achromobacter denitrificans;Dermabacter hominis	0.0033960241338711	2	7
+90	culture_e_faecalis	Pectobacterium brasiliense	0.0033960241338711	1	1
+91	log10_bacterial_reads	Pseudomonas sp. Q1-7;Pseudomonas triclosanedens	0.0033960241338711	1	2
+92	culture_e_faecalis	Xanthomonas citri;Ectopseudomonas oleovorans	0.0033960241338711	1	2
+93	culture_p_aeruginosa	Pseudomonas sp. HR96	0.0034520458977535	1	1
+94	culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas chlororaphis	0.0034520458977535	2	1
+95	log10_bacterial_reads	Pseudomonas syringae group genomosp. 7;Pseudomonas sp. Z8(2022);Pseudomonas canadensis;Pseudomonas sp. REST10;Pseudomonas sp. FP2309	0.0034520458977535	1	5
+96	culture_p_aeruginosa	Pseudomonas serboccidentalis;Pseudomonas sp. B21-056;Pseudomonas versuta	0.003551110203357	1	3
+97	host_removed_fraction;log10_bacterial_reads	Pseudomonas monteilii;Pseudomonas antarctica	0.003551110203357	2	2
+98	culture_p_aeruginosa	Pseudomonas sp. FP597;Pseudomonas asgharzadehiana;Pseudomonas sp. S09G 359;Pseudomonas sp. 10S4;Pseudomonas nunensis;Pseudomonas sp. D3;Pseudomonas kribbensis	0.003551110203357	1	7
+99	culture_p_aeruginosa	Pseudomonas sp. CCC3.1;Pseudomonas reinekei;Pseudomonas arsenicoxydans;Pseudomonas sp. B21-054;Pseudomonas sp. GOM7;Pseudomonas soli	0.003551110203357	1	6
+100	host_removed_fraction;log10_bacterial_reads	Pseudomonas trivialis;Pseudomonas seleniipraecipitans;Pseudomonas marincola;Pseudomonas parafulva;Pseudomonas berkeleyensis;Pseudomonas mosselii;Pseudomonas batumici;Pseudomonas sp. p1(2021b);Pseudomonas sp. MH9.2	0.0035822901501317	2	9
+101	culture_p_aeruginosa	Pseudomonas piscis;Pseudomonas silesiensis;Pseudomonas sp. B22129;Pseudomonas lundensis	0.0037352953281015	1	4
+102	culture_p_aeruginosa	Pseudomonas kermanshahensis	0.003774194371213	1	1
+103	chronicity_group_acute_like;culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas knackmussii;Pseudomonas alkylphenolica	0.003774194371213	3	2
+104	chronicity_group_acute_like;culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas sediminis	0.003774194371213	3	1
+105	culture_p_aeruginosa	Pseudomonas sp. gcc21;Pseudomonas sp. HS-18;Pseudomonas izuensis	0.003774194371213	1	3
+106	log10_bacterial_reads	Pseudomonas multiresinivorans	0.0039167386837685	1	1
+107	log10_bacterial_reads	Pseudomonas alkylphenolica	0.0040266500345307	1	1
+108	chronicity_group_acute_like;culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas multiresinivorans	0.0040363810826983	3	1
+109	culture_klebsiella_spp	Klebsiella variicola;Klebsiella quasipneumoniae	0.0040931167411082	1	2
+110	host_removed_fraction;log10_bacterial_reads	Pseudomonas argentinensis;Pseudomonas eucalypticola;Pseudomonas sp. ABC1;Pseudomonas sp. StFLB209	0.0041242784394382	2	4
+111	host_removed_fraction;log10_bacterial_reads	Pseudomonas sp. HR96	0.0042194462068511	2	1
+112	host_removed_fraction;log10_bacterial_reads	Staphylococcus pettenkoferi;Staphylococcus edaphicus;Staphylococcus chromogenes;Staphylococcus kloosii;Staphylococcus shinii;Staphylococcus hyicus;Staphylococcus massiliensis;Staphylococcus piscifermentans;Staphylococcus hsinchuensis	0.0043456770051666	2	9
+113	host_removed_fraction;log10_bacterial_reads	Enterobacter hormaechei	0.004514445968692	2	1
+114	culture_acinetobacter_baumannii	Cronobacter malonaticus	0.004514445968692	1	1
+115	log10_bacterial_reads	Pseudomonas sp. ML2-2023-3;Pseudomonas sp. HS6;Pseudomonas sp. 31-12	0.004514445968692	1	3
+116	host_removed_fraction;log10_bacterial_reads	uncultured Pseudomonas sp.;Pseudomonas sp. QL9;Pseudomonas sp. MM227;Pseudomonas oryzae;Pseudomonas indoloxydans;Pseudomonas anguilliseptica;Pseudomonas frederiksbergensis;Pseudomonas sp. L5B5;Pseudomonas tructae	0.0046864905816404	2	9
+117	host_removed_fraction	Staphylococcus lloydii;Staphylococcus gallinarum;Staphylococcus sp. IVB6181;Staphylococcus lutrae;Staphylococcus auricularis;Staphylococcus devriesei;Staphylococcus agnetis;Staphylococcus carnosus;Staphylococcus ratti	0.0046970942408887	1	9
+118	culture_klebsiella_spp	Klebsiella michiganensis	0.0047255470942566	1	1
+119	culture_acinetobacter_baumannii	Enterobacter hormaechei	0.0047388328593922	1	1
+120	body_region_head_neck	Staphylococcus pseudoxylosus;Mammaliicoccus vitulinus;Bacillus velezensis	0.0049645649299682	1	3
+121	culture_p_aeruginosa	Pseudomonas alvandae;Pseudomonas purpurea;Pseudomonas sp. ADPe;Pseudomonas granadensis;Pseudomonas sp. Leaf58;Pseudomonas vranovensis;Pseudomonas fakonensis;Pseudomonas corrugata;Pseudomonas paeninsulae	0.0049645649299682	1	9
+122	chronicity_group_unknown;clinical_infection_flag_unknown	Atlantibacter hermannii	0.005086678278182	2	1
+123	culture_e_faecalis	Bordetella bronchiseptica	0.0052226307866045	1	1
+124	culture_klebsiella_spp	Pseudomonas sp. CCC3.1;Pseudomonas reinekei;Pseudomonas arsenicoxydans;Pseudomonas sp. B21-054;Pseudomonas sp. GOM7;Pseudomonas soli;Pseudomonas sp. LS.1a;Pseudomonas sp. OIL-1;Pseudomonas sp. S34;Pseudomonas sp. REB1044;Pseudomonas sp. FP2196;Pseudomonas sp. TE3-3-F2023	0.0052279585557257	1	12
+125	culture_p_aeruginosa	Pseudomonas sp. stari2	0.0054302452649817	1	1
+126	culture_p_aeruginosa	Pseudomonas sp. AA-38;Pseudomonas sp. B33.4;Pseudomonas sp. Lz4W;Pseudomonas sp. CCOS 191;Pseudomonas sp. MRSN 12121;Pseudomonas sp. G2-4;Pseudomonas sp. SK3(2021)	0.0054302452649817	1	7
+127	culture_p_aeruginosa	Pseudomonas sp. B21-040;Pseudomonas sp. RC3H12;Pseudomonas sp. KnCO4;Pseudomonas sp. DTU12.3	0.0054302452649817	1	4
+128	culture_p_aeruginosa	Pseudomonas sp. CC6-YY-74	0.0054302452649817	1	1
+129	log10_bacterial_reads	Pseudomonas sp. Marseille-Q3773;Pseudomonas sp. PSE14;Pseudomonas agarici;Pseudomonas sp. LS1212;Pseudomonas xanthosomatis	0.0054302452649817	1	5
+130	log10_bacterial_reads	Pseudomonas syringae;Pseudomonas synxantha;Pseudomonas rhodesiae	0.0054302452649817	1	3
+131	culture_klebsiella_spp	Pseudomonas sp. ML2-2023-3;Pseudomonas sp. HS6;Pseudomonas sp. 31-12	0.0058612989649142	1	3
+132	culture_serratia_marcescens	Serratia inhibens;Serratia odorifera;Serratia aquatilis;Serratia nevei;Serratia grimesii;Serratia quinivorans;Serratia sp. 1D1416;Serratia sp. NGAS9;Serratia rhizosphaerae;Serratia sp. SCBI;Serratia proteamaculans;Serratia plymuthica;Serratia rubidaea;Serratia liquefaciens;Serratia fonticola;Serratia symbiotica	0.0060224608503484	1	16
+133	culture_p_aeruginosa	Pseudomonas sp. SG20056	0.0061087294016735	1	1
+134	host_removed_fraction;log10_bacterial_reads	Pseudomonas moraviensis	0.0061549129341335	2	1
+135	culture_p_aeruginosa	Pseudomonas sp. nanlin1;Pseudomonas xantholysinigenes;Pseudomonas sp. B11D7D;Pseudomonas cremoricolorata;Pseudomonas saudiphocaensis	0.0062736919291222	1	5
+136	host_removed_fraction	Staphylococcus succinus;Staphylococcus pseudoxylosus;Mammaliicoccus vitulinus;Bacillus velezensis	0.006458174716445	1	4
+137	body_region_head_neck	Corynebacterium kroppenstedtii;Staphylococcus caprae	0.0065491844334933	1	2
+138	host_removed_fraction;log10_bacterial_reads	Pseudomonas phenolilytica;Pseudomonas donghuensis;Pseudomonas laurentiana;Pseudomonas asplenii	0.0066761186820485	2	4
+139	culture_s_aureus	Bordetella hinzii	0.0067762029427268	1	1
+140	culture_p_aeruginosa	Pseudomonas sp. Z003-0.4C(8344-21);Pseudomonas sp. JS3066	0.0067762029427268	1	2
+141	culture_p_aeruginosa	Pseudomonas sp. CBS;Pseudomonas sp. SGAir0191;Pseudomonas sp. TMP9;Pseudomonas gozinkensis	0.0067762029427268	1	4
+142	culture_p_aeruginosa	Metapseudomonas otitidis	0.0067762029427268	1	1
+143	host_removed_fraction;log10_bacterial_reads	Pseudomonas sp. Seg1	0.0068869233308957	2	1
+144	culture_klebsiella_spp	Pseudomonas sp. KHPS1	0.0068869233308957	1	1
+145	culture_p_aeruginosa	Pseudomonas sp. IzPS59;Pseudomonas sp. TMP25;Pseudomonas hormoni	0.0069075765121848	1	3
+146	body_region_head_neck	Staphylococcus sp. NRL 16/872	0.007045783112221	1	1
+147	chronicity_group_unknown;clinical_infection_flag_unknown	Staphylococcus croceilyticus	0.0070806889753181	2	1
+148	host_removed_fraction;log10_bacterial_reads	Pseudomonas sp. LS.1a;Pseudomonas sp. OIL-1;Pseudomonas sp. S34;Pseudomonas sp. REB1044;Pseudomonas sp. FP2196;Pseudomonas sp. TE3-3-F2023	0.0071258146951905	2	6
+149	culture_e_faecalis	Pseudomonas qingdaonensis	0.0072360092207774	1	1
+150	culture_p_aeruginosa	Pseudomonas wadenswilerensis	0.0074137633360628	1	1
+151	culture_p_aeruginosa	Pseudomonas azotoformans;Pseudomonas lurida;Pseudomonas sp. KU43P;Pseudomonas sp. FP453;Pseudomonas plecoglossicida	0.0074137633360628	1	5
+152	culture_klebsiella_spp	Pseudomonas viridiflava;Pseudomonas sp. PS1(2021);Pseudomonas sp. MTM4;Pseudomonas cavernae;Pseudomonas sp. AN-1;Pseudomonas sp. SCB32;Pseudomonas sp. LS44;Pseudomonas sp. QE6;Pseudomonas sp. C9-3;Pseudomonas sp. DTU_2021_1001937_2_SI_NGA_ILE_001;Pseudomonas vanderleydeniana;Pseudomonas sp. J452;Pseudomonas sp. TCU-HL1;Pseudomonas solani	0.0077785878459407	1	14
+153	culture_p_aeruginosa	Pseudomonas phenolilytica;Pseudomonas donghuensis;Pseudomonas laurentiana;Pseudomonas asplenii	0.0080532480888507	1	4
+154	culture_e_faecalis	Pseudomonas sp. ML2-2023-3	0.0081461617869115	1	1
+155	culture_klebsiella_spp	Pseudomonas serboccidentalis;Pseudomonas sp. B21-056;Pseudomonas versuta	0.0084943941039893	1	3
+156	culture_p_aeruginosa	Pseudomonas sp. LS.1a;Pseudomonas sp. OIL-1;Pseudomonas sp. S34;Pseudomonas sp. REB1044;Pseudomonas sp. FP2196;Pseudomonas sp. TE3-3-F2023	0.0085485674984049	1	6
+157	culture_p_aeruginosa	Pseudomonas sp. Pc102;Pseudomonas moorei	0.0085838205648541	1	2
+158	host_removed_fraction;log10_bacterial_reads	Staphylococcus casei;Staphylococcus condimenti	0.0088009257451012	2	2
+159	culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas sihuiensis	0.0091121338747029	2	1
+160	host_removed_fraction;log10_bacterial_reads	Corynebacterium tuberculostearicum	0.0091224519003423	2	1
+161	host_removed_fraction;log10_bacterial_reads	Pseudomonas koreensis;Pseudomonas vancouverensis;Pseudomonas sp. PSKL.D1;Pseudomonas phytophila	0.0092130374342184	2	4
+162	log10_bacterial_reads	Pseudomonas yamanorum;Pseudomonas sp. N3-W;Pseudomonas hamedanensis;Pseudomonas cedrina;Pseudomonas palleroniana;Pseudomonas mucidolens;Pseudomonas rhizosphaerae	0.009540442154221	1	7
+163	host_removed_fraction;log10_bacterial_reads	Pseudomonas tolaasii	0.0100772168616635	2	1
+164	chronicity_group_unknown;clinical_infection_flag_unknown	Yersinia pestis	0.0102610284409046	2	1
+165	log10_bacterial_reads	Pseudomonas chlororaphis	0.010289041996593	1	1
+166	culture_klebsiella_spp	Pseudomonas sp. DR48;Pseudomonas sp. JDS08PS003;Pseudomonas lini;Pseudomonas thivervalensis;Pseudomonas sp. MYb327;Pseudomonas sp. ADAK13;Pseudomonas sp. URMO17WK12:I11	0.010289041996593	1	7
+167	host_removed_fraction;log10_bacterial_reads	Pseudomonas sihuiensis	0.0105427447325754	2	1
+168	culture_p_aeruginosa	Pseudomonas koreensis;Pseudomonas vancouverensis;Pseudomonas sp. PSKL.D1;Pseudomonas phytophila	0.0105427447325754	1	4
+169	log10_bacterial_reads	Pseudomonas hefeiensis	0.0107066090033748	1	1
+170	log10_bacterial_reads	Yokenella regensburgei;Klebsiella electrica;Klebsiella pasteurii;Shigella boydii;Klebsiella huaxiensis;Klebsiella africana;Klebsiella quasivariicola	0.0107997741451801	1	7
+171	body_region_head_neck	Cutibacterium avidum	0.0112774194763801	1	1
+172	log10_bacterial_reads	Pseudomonas sp. BW7P1;Pseudomonas sp. S35;Pseudomonas mediterranea;Pseudomonas ogarae	0.0113593127640591	1	4
+173	culture_klebsiella_spp	Pseudomonas multiresinivorans;Pseudomonas promysalinigenes;Pseudomonas knackmussii;Pseudomonas alkylphenolica;Pseudomonas fulva;Pseudomonas sp. Q1-7;Pseudomonas triclosanedens;Pseudomonas nitroreducens;Pseudomonas benzenivorans;Pseudomonas entomophila;Pseudomonas sp. SO81;Pseudomonas sp. 273;Pseudomonas protegens	0.0116286769216406	1	13
+174	log10_bacterial_reads	Staphylococcus devriesei	0.0117667572713311	1	1
+175	culture_klebsiella_spp	Pseudomonas glycinae;Pseudomonas sp. FP2338;Pseudomonas iranensis	0.0117667572713311	1	3
+176	culture_klebsiella_spp	Pseudomonas sp. MH9.3;Pseudomonas cucumis;Pseudomonas sp. ACM7;Pseudomonas sp. B21-048;Pseudomonas sp. NS1(2017);Pseudomonas oryziphila;Pseudomonas hygromyciniae;Pseudomonas aestiva	0.0117667572713311	1	8
+177	host_removed_fraction;log10_bacterial_reads	Erwinia tracheiphila;Raoultella planticola;Jejubacter calystegiae	0.0118643571084435	2	3
+178	culture_p_aeruginosa;chronicity_group_chronic_like	Staphylococcus simulans	0.0119291804503966	2	1
+179	log10_bacterial_reads	Pseudomonas sp. LPB0260;Pseudomonas sp. HLS-6;Pseudomonas sp. SL4(2022);Pseudomonas wenzhouensis	0.0119291804503966	1	4
+180	chronicity_group_acute_like;culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas hefeiensis	0.0119325046970217	3	1
+181	host_removed_fraction;log10_bacterial_reads	Pseudomonas allokribbensis	0.0123187517647078	2	1
+182	culture_p_aeruginosa	Pseudomonas siliginis	0.0129505691665347	1	1
+183	culture_p_aeruginosa	Pseudomonas sp. LG1E9	0.0129505691665347	1	1
+184	host_removed_fraction;log10_bacterial_reads	Pseudomonas amygdali	0.0129505691665347	2	1
+185	culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas saxonica	0.0129505691665347	2	1
+186	culture_p_aeruginosa	Pseudomonas sp. MUP55;Pseudomonas veronii	0.0129505691665347	1	2
+187	log10_bacterial_reads	Pseudomonas benzopyrenica;Pseudomonas sp. PP3;Pseudomonas sp. JBR1;Pseudomonas laurylsulfatiphila;Pseudomonas sp. CYM-20-01;Pseudomonas grandcourensis;Pseudomonas sp. B21-053;Pseudomonas helvetica;Pseudomonas sp. FP1742;Pseudomonas tritici	0.0132648165184287	1	10
+188	chronicity_group_chronic_like	Staphylococcus hominis	0.01340703926067	1	1
+189	log10_bacterial_reads	Pseudomonas sp. FP597;Pseudomonas asgharzadehiana;Pseudomonas sp. S09G 359;Pseudomonas sp. 10S4;Pseudomonas nunensis;Pseudomonas sp. D3;Pseudomonas kribbensis	0.01340703926067	1	7
+190	log10_bacterial_reads	Xanthomonas citri	0.01340703926067	1	1
+191	host_removed_fraction	Pseudomonas sp. DR48;Pseudomonas sp. JDS08PS003	0.0134112223178301	1	2
+192	host_removed_fraction	Streptococcus agalactiae;Pseudomonas sp. LM12	0.0134826801505578	1	2
+193	host_removed_fraction	Pseudomonas huanghezhanensis	0.0143602998870952	1	1
+194	log10_bacterial_reads	Pseudomonas sp. ADAK18;Pseudomonas taetrolens	0.0143746435775825	1	2
+195	culture_p_aeruginosa	Dermacoccus nishinomiyaensis;Gordonia otitidis	0.0143956522759482	1	2
+196	log10_bacterial_reads	Pseudomonas brassicacearum	0.0146861235098959	1	1
+197	log10_bacterial_reads	Pseudomonas atacamensis;Pseudomonas sp. DC1.2;Pseudomonas sp. RtIB026;Pseudomonas sp. DG56-2;Pseudomonas inefficax	0.0146945486187865	1	5
+198	log10_bacterial_reads	Pseudomonas sp. P8_241;Pseudomonas maumuensis	0.0147089558089982	1	2
+199	chronicity_group_unknown	Bordetella hinzii;Bordetella bronchiseptica;Achromobacter sp. EB05;Achromobacter deleyi;Achromobacter spanius	0.0149479491142672	1	5
+200	host_removed_fraction	Brevibacterium luteolum;Brevibacterium sp. CS2;Auritidibacter ignavus	0.0149479491142672	1	3
+201	log10_bacterial_reads	Pseudomonas sp. FP198;Pseudomonas cichorii;Pseudomonas umsongensis;Pseudomonas sivasensis;Pseudomonas migulae;Pseudomonas sp. P5_109;Pseudomonas sp. FP2335;Pseudomonas sp. MPC6;Pseudomonas sp. CMR5c;Pseudomonas sp. WJP1	0.0149479491142672	1	10
+202	culture_klebsiella_spp	Pseudomonas syringae group genomosp. 7;Pseudomonas sp. Z8(2022);Pseudomonas canadensis;Pseudomonas sp. REST10;Pseudomonas sp. FP2309	0.0149479491142672	1	5
+203	chronicity_group_acute_like;culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas promysalinigenes	0.0150040995385035	3	1
+204	body_region_head_neck	Staphylococcus epidermidis;Staphylococcus capitis	0.0153198036630531	1	2
+205	log10_bacterial_reads	Pseudomonas sp. M1	0.0154237943986092	1	1
+206	culture_s_aureus	Pseudomonas syringae group genomosp. 7	0.0157104202951504	1	1
+207	host_removed_fraction	Pseudomonas syringae group genomosp. 7	0.0158020664627953	1	1
+208	body_region_head_neck	Staphylococcus condimenti	0.0158290873347128	1	1
+209	log10_bacterial_reads	Pseudomonas sp. AA-38;Pseudomonas sp. B33.4;Pseudomonas sp. Lz4W;Pseudomonas sp. CCOS 191;Pseudomonas sp. MRSN 12121;Pseudomonas sp. G2-4;Pseudomonas sp. SK3(2021)	0.0159882158501222	1	7
+210	log10_bacterial_reads	Pseudomonas sp. SG20056	0.0161197270465387	1	1
+211	culture_e_faecalis	Pseudomonas monteilii;Pseudomonas antarctica	0.0162394362118095	1	2
+212	culture_serratia_marcescens	Acinetobacter pittii	0.016361892948758	1	1
+213	log10_bacterial_reads	Pseudomonas congelans;Pseudomonas lijiangensis	0.016361892948758	1	2
+214	host_removed_fraction;log10_bacterial_reads	Pseudomonas sp. CCC3.1;Pseudomonas reinekei;Pseudomonas arsenicoxydans;Pseudomonas sp. B21-054;Pseudomonas sp. GOM7;Pseudomonas soli	0.0165069157362896	2	6
+215	log10_bacterial_reads	Pseudomonas sp. B21-028	0.0171125177773245	1	1
+216	body_region_head_neck	Corynebacterium bovis	0.017625065428141	1	1
+217	culture_klebsiella_spp	Citrobacter freundii	0.0181228241413953	1	1
+218	host_removed_fraction;log10_bacterial_reads	Staphylococcus equorum	0.0181792248892658	2	1
+219	culture_p_aeruginosa	Pseudomonas sp. A34-9;Pseudomonas sp. DY-1	0.0182732354965571	1	2
+220	culture_klebsiella_spp	Pseudomonas sp. B21-040	0.0182732354965571	1	1
+221	culture_p_aeruginosa	Pseudomonas glycinae	0.0182732354965571	1	1
+222	culture_p_aeruginosa	Pseudomonas oryziphila;Pseudomonas hygromyciniae;Pseudomonas aestiva	0.0182732354965571	1	3
+223	culture_p_aeruginosa	Pseudomonas benzopyrenica;Pseudomonas sp. PP3;Pseudomonas sp. JBR1;Pseudomonas laurylsulfatiphila;Pseudomonas sp. CYM-20-01;Pseudomonas grandcourensis;Pseudomonas sp. B21-053;Pseudomonas helvetica;Pseudomonas sp. FP1742;Pseudomonas tritici	0.0182732354965571	1	10
+224	log10_bacterial_reads	Pseudomonas alvandae;Pseudomonas purpurea;Pseudomonas sp. ADPe;Pseudomonas granadensis;Pseudomonas sp. Leaf58;Pseudomonas vranovensis;Pseudomonas fakonensis;Pseudomonas corrugata;Pseudomonas paeninsulae	0.0182732354965571	1	9
+225	host_removed_fraction;log10_bacterial_reads	Pseudomonas poae	0.0182732354965571	2	1
+226	log10_bacterial_reads	Pseudomonas sp. PDNC002;Pseudomonas paraeruginosa;Pseudomonas citronellolis;Pseudomonas sp. ATCC 13867;Pseudomonas sp. GCEP-101	0.0182732354965571	1	5
+227	log10_bacterial_reads	Pseudomonas sp. St316	0.0184336799171761	1	1
+228	culture_klebsiella_spp	Pseudomonas fragi;Pseudomonas siliginis	0.0187750333552429	1	2
+229	culture_p_aeruginosa	Pseudomonas amygdali	0.0187750333552429	1	1
+230	log10_bacterial_reads	Pseudomonas saxonica;Pseudomonas sp. MAG733B;Pseudomonas viciae	0.0187750333552429	1	3
+231	chronicity_group_unknown;clinical_infection_flag_unknown	Stenotrophomonas sp. 57	0.0188657027810436	2	1
+232	culture_p_aeruginosa	Pseudomonas kurunegalensis	0.0195529402586123	1	1
+233	host_removed_fraction;log10_bacterial_reads	Enterobacter kobei	0.0195628498600561	2	1
+234	chronicity_group_acute_like	Alcaligenes faecalis	0.0195628498600561	1	1
+235	culture_p_aeruginosa	Pseudomonas sp. 15A4	0.0195628498600561	1	1
+236	host_removed_fraction;log10_bacterial_reads	Escherichia fergusonii	0.0201007833442119	2	1
+237	log10_bacterial_reads	Pseudomonas glycinae;Pseudomonas sp. FP2338;Pseudomonas iranensis	0.0201884665312196	1	3
+238	culture_p_aeruginosa	Pseudomonas sp. MAG733B;Pseudomonas viciae	0.0203918204528295	1	2
+239	log10_bacterial_reads	Mammaliicoccus vitulinus;Bacillus velezensis	0.0204516478092561	1	2
+240	host_removed_fraction;log10_bacterial_reads	Corynebacterium camporealensis	0.0204793309263984	2	1
+241	log10_bacterial_reads	Pseudomonas sp. 15A4;Pseudomonas sp. F3-2;Pseudomonas sp. KU26590;Pseudomonas sp. RC10;Pseudomonas abietaniphila	0.0204793309263984	1	5
+242	log10_bacterial_reads	Pseudomonas sp. SGAir0191;Pseudomonas sp. TMP9;Pseudomonas gozinkensis	0.0204793309263984	1	3
+243	log10_bacterial_reads	Pseudomonas wadenswilerensis	0.0204793309263984	1	1
+244	culture_klebsiella_spp	Pseudomonas sp. MUP55;Pseudomonas veronii	0.0204793309263984	1	2
+245	host_removed_fraction	Pseudomonas sp. G.S.17	0.0205064290394215	1	1
+246	culture_acinetobacter_baumannii	Enterobacter bugandensis	0.0205206319238261	1	1
+247	culture_acinetobacter_baumannii	Yokenella regensburgei;Klebsiella electrica;Klebsiella pasteurii;Shigella boydii;Klebsiella huaxiensis;Klebsiella africana;Klebsiella quasivariicola	0.0205206319238261	1	7
+248	clinical_infection_flag_unknown	Staphylococcus simulans	0.0205684275759015	1	1
+249	culture_klebsiella_spp	Pseudomonas sp. M1;Pseudomonas sp. B21-028;Pseudomonas sp. ADAK18;Pseudomonas taetrolens;Pseudomonas atacamensis;Pseudomonas sp. DC1.2;Pseudomonas sp. RtIB026;Pseudomonas sp. DG56-2;Pseudomonas inefficax;Pseudomonas sp. FP198;Pseudomonas cichorii;Pseudomonas umsongensis;Pseudomonas sivasensis;Pseudomonas migulae;Pseudomonas sp. P5_109;Pseudomonas sp. FP2335;Pseudomonas sp. MPC6;Pseudomonas sp. CMR5c;Pseudomonas sp. WJP1	0.0205690266394797	1	19
+250	culture_s_aureus	Bordetella bronchiseptica	0.0208082882974656	1	1
+251	culture_klebsiella_spp	Pseudomonas sp. FDAARGOS_761	0.0208082882974656	1	1
+252	culture_p_aeruginosa	Acinetobacter baumannii	0.0210426051769707	1	1
+253	culture_s_aureus	Serratia ficaria	0.0210426051769707	1	1
+254	log10_bacterial_reads	Pseudomonas sp. Pc102;Pseudomonas moorei	0.0210426051769707	1	2
+255	host_removed_fraction;log10_bacterial_reads	Mammaliicoccus sciuri	0.0213415355627403	2	1
+256	chronicity_group_unknown	Achromobacter denitrificans	0.0213868701185332	1	1
+257	culture_p_aeruginosa	Pseudomonas sp. LPH1	0.0213868701185332	1	1
+258	log10_bacterial_reads	Pseudomonas sp. NY5710	0.021577035733204	1	1
+259	culture_e_coli	Shigella boydii	0.0218220039250377	1	1
+260	culture_e_coli	Yersinia pestis	0.0218220039250377	1	1
+261	culture_p_aeruginosa	Pseudomonas syringae;Pseudomonas synxantha;Pseudomonas rhodesiae	0.0218840560777609	1	3
+262	body_region_upper_extremity	Ectopseudomonas oleovorans	0.0220834489438088	1	1
+263	log10_bacterial_reads	Staphylococcus agnetis	0.0224277923116914	1	1
+264	clinical_infection_flag_yes	Pseudomonas rhodesiae	0.0226460133452596	1	1
+265	chronicity_group_unknown	Staphylococcus casei	0.0227939879138414	1	1
+266	chronicity_group_acute_like	Serratia entomophila	0.0234889795112148	1	1
+267	culture_p_aeruginosa	Pseudomonas sp. S35;Pseudomonas mediterranea;Pseudomonas ogarae	0.0235144087152558	1	3
+268	log10_bacterial_reads	Pseudomonas sp. LPH1	0.0235144087152558	1	1
+269	body_region_lower_extremity	Serratia sp. 3ACOL1;Serratia ficaria	0.0238413984236803	1	2
+270	chronicity_group_mixed	Staphylococcus equorum	0.0240882150593147	1	1
+271	body_region_head_neck	Staphylococcus xylosus	0.0241709408599126	1	1
+272	log10_bacterial_reads	Acinetobacter sp. 8_A20231192;Acinetobacter johnsonii	0.0243072961743879	1	2
+273	host_removed_fraction	Pseudomonas serboccidentalis	0.0243494604152119	1	1
+274	body_region_head_neck	Dermacoccus nishinomiyaensis	0.0243595493993809	1	1
+275	culture_klebsiella_spp	Pseudomonas saxonica;Pseudomonas sp. MAG733B;Pseudomonas viciae	0.0244524974084377	1	3
+276	body_region_trunk_perineum	Variovorax sp. UC122_21	0.0244731145555231	1	1
+277	body_region_trunk_perineum	Corynebacterium kroppenstedtii;Staphylococcus caprae	0.0244731145555231	1	2
+278	body_region_head_neck	Staphylococcus aureus	0.0251756346843865	1	1
+279	log10_bacterial_reads	Pseudomonas tohonis	0.0252835375072937	1	1
+280	log10_bacterial_reads	Pseudomonas zeae	0.0253968283576873	1	1
+281	culture_acinetobacter_baumannii	Jejubacter calystegiae	0.0255928131658268	1	1
+282	body_region_lower_extremity	Citrobacter portucalensis;Citrobacter farmeri	0.0259295652417011	1	2
+283	body_region_head_neck	Acinetobacter nosocomialis	0.0259295652417011	1	1
+284	chronicity_group_unknown;clinical_infection_flag_unknown	Staphylococcus sp. FSL W8-0305	0.0260963994279169	2	1
+285	host_removed_fraction	Pseudomonas sp. ML2-2023-3	0.0262773329809999	1	1
+286	body_region_head_neck	Staphylococcus pseudintermedius	0.026369457391356	1	1
+287	body_region_lower_extremity	Serratia sp. JSRIV002;Serratia sp. szju;Serratia sp. P2ACOL2;Serratia sp. Tan611;Serratia sp. JKS000199;Serratia nematodiphila;Serratia sp. SSNIH1;Serratia sp. LS-1;Serratia sp. CMO1	0.0265436428388349	1	9
+288	body_region_lower_extremity	Corynebacterium genitalium	0.0265436428388349	1	1
+289	culture_p_aeruginosa	Pseudomonas tolaasii	0.0265436428388349	1	1
+290	culture_klebsiella_spp	Pseudomonas graminis;Pseudomonas caspiana;Pseudomonas prosekii	0.0265436428388349	1	3
+291	chronicity_group_acute_like	Cutibacterium granulosum	0.0271212611638047	1	1
+292	host_removed_fraction	Staphylococcus cohnii	0.0271212611638047	1	1
+293	log10_bacterial_reads	Pseudomonas sp. KU43P	0.0271895900349125	1	1
+294	host_removed_fraction;log10_bacterial_reads	Aeromonas caviae	0.0274329200468014	2	1
+295	culture_e_coli	Enterobacter bugandensis	0.027468610879526	1	1
+296	log10_bacterial_reads	Pseudomonas sp. FDAARGOS_761	0.027468610879526	1	1
+297	body_region_head_neck	Staphylococcus lugdunensis	0.0274923313546459	1	1
+298	chronicity_group_acute_like	Pseudomonas sp. HR96	0.0280412714455677	1	1
+299	log10_bacterial_reads	Pseudomonas graminis;Pseudomonas caspiana;Pseudomonas prosekii	0.0280412714455677	1	3
+300	host_removed_fraction	Pseudomonas lini	0.0280412714455677	1	1
+301	culture_s_aureus;culture_serratia_marcescens	Serratia entomophila	0.0285133424784357	2	1
+302	culture_s_aureus	Serratia odorifera	0.0288058023434055	1	1
+303	culture_s_aureus	Pseudomonas sp. nanlin1;Pseudomonas xantholysinigenes;Pseudomonas sp. B11D7D;Pseudomonas cremoricolorata;Pseudomonas saudiphocaensis	0.0288636358665722	1	5
+304	culture_s_aureus	Pseudomonas sichuanensis	0.028914800012744	1	1
+305	chronicity_group_acute_like	Cutibacterium acnes;Gordonia sp. w5E2;Gordonia bronchialis	0.0289228389125627	1	3
+306	host_removed_fraction	Pseudomonas agarici	0.0289228389125627	1	1
+307	culture_p_aeruginosa	Pseudomonas sp. BIOMIG1BAC	0.0295308230818733	1	1
+308	log10_bacterial_reads	Pseudomonas brenneri	0.0301228245938355	1	1
+309	log10_bacterial_reads	Streptococcus thermophilus	0.0302606147404596	1	1
+310	culture_serratia_marcescens	Acinetobacter nosocomialis	0.0304342301640371	1	1
+311	log10_bacterial_reads	Enterobacter roggenkampii	0.0306452121186212	1	1
+312	log10_bacterial_reads	Pseudomonas sp. LG1E9	0.0306452121186212	1	1
+313	culture_klebsiella_spp	Pseudomonas corrugata;Pseudomonas paeninsulae	0.0309908376968607	1	2
+314	chronicity_group_acute_like	Serratia inhibens	0.0315082095392492	1	1
+315	culture_klebsiella_spp	Pseudomonas sp. P8_241;Pseudomonas maumuensis	0.0315082095392492	1	2
+316	log10_bacterial_reads	Pseudomonas sp. CC6-YY-74	0.031700288790914	1	1
+317	culture_e_faecalis	Pseudomonas silesiensis	0.0319378539067474	1	1
+318	culture_klebsiella_spp	Pseudomonas sp. B21-051	0.0319952544677214	1	1
+319	chronicity_group_unknown	Staphylococcus gallinarum	0.0322419014323581	1	1
+320	host_removed_fraction	Pseudomonas sp. G2-4;Pseudomonas sp. SK3(2021)	0.0322725484639598	1	2
+321	culture_e_coli;culture_acinetobacter_baumannii	Escherichia fergusonii	0.0327055168290425	2	1
+322	culture_s_aureus	Pseudomonas sp. NY5710	0.0327055168290425	1	1
+323	culture_p_aeruginosa	Pseudomonas sp. ML2-2023-3	0.0327055168290425	1	1
+324	culture_p_aeruginosa	Pseudomonas monteilii;Pseudomonas antarctica	0.0327055168290425	1	2
+325	log10_bacterial_reads	Pseudomonas sp. A34-9	0.0327917709827632	1	1
+326	body_region_trunk_perineum	Staphylococcus sp. NRL 16/872	0.0329931246018594	1	1
+327	culture_p_aeruginosa;chronicity_group_chronic_like	Pseudomonas oryzihabitans	0.0332829830089348	2	1
+328	clinical_infection_flag_yes	Pseudomonas lactis	0.0332829830089348	1	1
+329	log10_bacterial_reads	Staphylococcus gallinarum	0.0335748756817439	1	1
+330	body_region_head_neck	Corynebacterium propinquum;Corynebacterium pseudodiphtheriticum	0.0337843751718302	1	2
+331	body_region_trunk_perineum	Dermacoccus nishinomiyaensis	0.0337843751718302	1	1
+332	culture_klebsiella_spp	Pseudomonas rhizosphaerae	0.0337843751718302	1	1
+333	culture_klebsiella_spp	Pseudomonas moraviensis	0.0337843751718302	1	1
+334	culture_klebsiella_spp	Pseudomonas vranovensis;Pseudomonas fakonensis	0.0337843751718302	1	2
+335	log10_bacterial_reads	Pseudomonas salmasensis	0.0341742173243001	1	1
+336	culture_klebsiella_spp	Pseudomonas sp. N3-W	0.034460049451172	1	1
+337	culture_klebsiella_spp	Pseudomonas sp. gcc21	0.034460049451172	1	1
+338	culture_e_coli	Dermabacter hominis	0.0353095162323564	1	1
+339	culture_e_coli	Kosakonia cowanii;Cronobacter condimenti	0.0353095162323564	1	2
+340	chronicity_group_acute_like	Kocuria rhizophila	0.0354402854981023	1	1
+341	chronicity_group_mixed	Staphylococcus sp. NRL 16/872	0.0356394058055603	1	1
+342	host_removed_fraction;log10_bacterial_reads	Corynebacterium striatum	0.035846407897424	2	1
+343	chronicity_group_unknown	Achromobacter xylosoxidans	0.0363075704510997	1	1
+344	culture_p_aeruginosa	Staphylococcus saprophyticus	0.0363075704510997	1	1
+345	clinical_infection_flag_yes	Pseudomonas lurida	0.0366953376139944	1	1
+346	culture_p_aeruginosa	Pseudomonas sp. HS6	0.0367007805791329	1	1
+347	culture_klebsiella_spp	Pseudomonas silesiensis;Pseudomonas sp. B22129;Pseudomonas lundensis	0.0367007805791329	1	3
+348	culture_p_aeruginosa	Mammaliicoccus sciuri	0.0376670321122397	1	1
+349	clinical_infection_flag_unknown	Pseudomonas putida	0.0378076436627866	1	1
+350	culture_klebsiella_spp	uncultured Pseudomonas sp.	0.0378076436627866	1	1
+351	log10_bacterial_reads	Raoultella ornithinolytica	0.0378934865802665	1	1
+352	culture_acinetobacter_baumannii	Corynebacterium genitalium	0.0378934865802665	1	1
+353	body_region_trunk_perineum	Staphylococcus equorum	0.0379208289527579	1	1
+354	log10_bacterial_reads	Pseudomonas sp. gcc21;Pseudomonas sp. HS-18;Pseudomonas izuensis	0.0379208289527579	1	3
+355	chronicity_group_acute_like	Salmonella enterica	0.0380082255983536	1	1
+356	host_removed_fraction	Pseudomonas sp. AA-38	0.0389201963955592	1	1
+357	culture_s_aureus	Stenotrophomonas sp. 59	0.0390283450720142	1	1
+358	chronicity_group_acute_like	Serratia plymuthica	0.0394448291019453	1	1
+359	culture_p_aeruginosa	Acinetobacter indicus	0.0394648705171309	1	1
+360	culture_p_aeruginosa	Staphylococcus croceilyticus	0.0396003061966756	1	1
+361	log10_bacterial_reads	Pseudomonas sp. LTJR-52	0.0398640456843844	1	1
+362	log10_bacterial_reads	Pseudomonas coleopterorum	0.0398640456843844	1	1
+363	culture_klebsiella_spp	Pseudomonas hamedanensis	0.0403711697677492	1	1
+364	body_region_head_neck	Micrococcus luteus	0.0404584576907704	1	1
+365	chronicity_group_unknown	Staphylococcus shinii	0.0408776524610169	1	1
+366	log10_bacterial_reads	Pseudomonas sp. HN11	0.0410886533587929	1	1
+367	culture_klebsiella_spp	Pseudomonas kermanshahensis	0.0416572742017174	1	1
+368	culture_e_coli	Jejubacter calystegiae	0.041694453603784	1	1
+369	chronicity_group_unknown	Kosakonia cowanii	0.041694453603784	1	1
+370	host_removed_fraction	Pseudomonas yamanorum	0.041694453603784	1	1
+371	culture_klebsiella_spp	Pseudomonas phenolilytica	0.042334175517843	1	1
+372	clinical_infection_flag_unknown	Staphylococcus devriesei	0.0426775241876507	1	1
+373	culture_s_aureus	Pseudomonas sp. MTM4	0.0428070577583162	1	1
+374	log10_bacterial_reads	Pseudomonas sp. MH9.3;Pseudomonas cucumis;Pseudomonas sp. ACM7;Pseudomonas sp. B21-048;Pseudomonas sp. NS1(2017);Pseudomonas oryziphila;Pseudomonas hygromyciniae;Pseudomonas aestiva	0.042942696966106	1	8
+375	log10_bacterial_reads	Staphylococcus lutrae	0.042967462056814	1	1
+376	culture_klebsiella_spp	Pseudomonas synxantha;Pseudomonas rhodesiae	0.0429777344708825	1	2
+377	culture_s_aureus	Aeromonas caviae	0.0431631753322231	1	1
+378	chronicity_group_acute_like	Streptococcus agalactiae	0.0431893326788081	1	1
+379	chronicity_group_acute_like	Serratia odorifera	0.0431893326788081	1	1
+380	chronicity_group_acute_like	Pseudomonas sp. LS.1a	0.0431893326788081	1	1
+381	chronicity_group_acute_like	Pseudomonas sp. MAG733B;Pseudomonas viciae	0.0431893326788081	1	2
+382	culture_acinetobacter_baumannii	Yersinia enterocolitica	0.043382816255558	1	1
+383	clinical_infection_flag_yes	Pseudomonas sp. HOU2	0.043382816255558	1	1
+384	culture_klebsiella_spp	Pseudomonas sp. FP453	0.0435745586980429	1	1
+385	host_removed_fraction	Pseudomonas benzenivorans;Pseudomonas entomophila	0.0437927486937878	1	2
+386	host_removed_fraction	Yokenella regensburgei	0.0437934818509952	1	1
+387	host_removed_fraction	Pseudomonas luteola	0.0440549720516473	1	1
+388	body_region_head_neck	Staphylococcus nepalensis	0.0441887818534413	1	1
+389	culture_p_aeruginosa	Pseudomonas zeae	0.0442353135044007	1	1
+390	body_region_head_neck	Rothia mucilaginosa	0.0442885538611766	1	1
+391	culture_e_faecalis	Pseudomonas tolaasii	0.0444133783340167	1	1
+392	culture_s_aureus	Serratia inhibens	0.0444253165833768	1	1
+393	culture_klebsiella_spp	Pseudomonas izuensis	0.0445665538700157	1	1
+394	culture_klebsiella_spp	Pseudomonas sp. St316	0.0446700909646899	1	1
+395	chronicity_group_chronic_like	Corynebacterium kroppenstedtii	0.0452289870307695	1	1
+396	culture_klebsiella_spp	Pseudomonas vancouverensis	0.0452289870307695	1	1
+397	culture_klebsiella_spp	Pseudomonas leptonychotis	0.0452289870307695	1	1
+398	clinical_infection_flag_unknown	Enterococcus faecalis	0.0453940990244568	1	1
+399	log10_bacterial_reads	Staphylococcus hominis	0.0458771001452743	1	1
+400	culture_s_aureus	Pseudomonas sp. LM12	0.0461826304639971	1	1
+401	host_removed_fraction	Staphylococcus rostri	0.0461826304639971	1	1
+402	culture_p_aeruginosa	Kocuria rhizophila	0.0463624348319146	1	1
+403	body_region_trunk_perineum	Kocuria marina	0.0464508457531858	1	1
+404	clinical_infection_flag_yes	Pseudomonas sp. DY-1	0.0467338922401151	1	1
+405	culture_p_aeruginosa	Staphylococcus aureus	0.0471310951917947	1	1
+406	culture_s_aureus	Pseudomonas sp. IzPS59	0.0471310951917947	1	1
+407	chronicity_group_acute_like	Cutibacterium modestum	0.0471456170857489	1	1
+408	body_region_head_neck	Staphylococcus equorum	0.0471456170857489	1	1
+409	culture_klebsiella_spp	Pseudomonas sp. TUM22785;Pseudomonas sp. JQ170C	0.0471456170857489	1	2
+410	chronicity_group_acute_like	uncultured Pseudomonas sp.	0.0471456170857489	1	1
+411	culture_klebsiella_spp	Pseudomonas wadenswilerensis	0.0471456170857489	1	1
+412	culture_klebsiella_spp	Pseudomonas purpurea	0.0471456170857489	1	1
+413	chronicity_group_chronic_like	Pseudomonas sp. MM211	0.0471456170857489	1	1
+414	body_region_head_neck	Streptococcus thermophilus	0.0473149992983541	1	1
+415	body_region_head_neck	Staphylococcus hsinchuensis	0.0475402359702986	1	1
+416	host_removed_fraction	Pseudomonas sp. LPB0260	0.0476288836956552	1	1
+417	log10_bacterial_reads	Pseudomonas siliginis	0.0477599168610583	1	1
+418	chronicity_group_chronic_like	Pseudomonas tohonis	0.0477990170875033	1	1
+419	host_removed_fraction	Staphylococcus delphini	0.0483232756622255	1	1
+420	chronicity_group_chronic_like	Staphylococcus arlettae	0.0483459400941731	1	1
+421	log10_bacterial_reads	Pseudomonas sp. KnCO4;Pseudomonas sp. DTU12.3	0.0484340200851484	1	2
+422	culture_s_aureus	Pluralibacter gergoviae	0.048609556274064	1	1
+423	culture_e_faecalis	Pseudomonas donghuensis	0.048677829849689	1	1
+424	culture_gas	Pseudomonas sp. ATCC 13867	0.048677829849689	1	1
+425	body_region_head_neck	Staphylococcus saprophyticus	0.0488046625254311	1	1
+426	chronicity_group_acute_like	Pseudomonas frederiksbergensis	0.0488707803821137	1	1
+427	culture_acinetobacter_baumannii	Leclercia adecarboxylata	0.0489519740884785	1	1
+428	log10_bacterial_reads	Clostridium botulinum	0.0489519740884785	1	1
+429	log10_bacterial_reads	Staphylococcus carnosus	0.0489519740884785	1	1
+430	chronicity_group_mixed	Pseudomonas sp. B21-051	0.0489519740884785	1	1
+431	log10_bacterial_reads	Pseudomonas orientalis	0.0489519740884785	1	1
+432	host_removed_fraction	Pseudomonas sp. FP2338	0.0489519740884785	1	1
+433	chronicity_group_unknown	Pseudomonas aeruginosa	0.0490793891169024	1	1
+434	host_removed_fraction	Pseudomonas congelans	0.0492136226260074	1	1
+435	clinical_infection_flag_unknown	Staphylococcus agnetis	0.0492631097238256	1	1
+436	body_region_upper_extremity	Pseudomonas sp. AN-B15	0.0498629807250326	1	1

@@ -1,0 +1,36 @@
+name: eb
+channels:
+  - conda-forge
+  - bioconda
+  - biobakery
+dependencies:
+  - python=3.12
+  - pandas
+  - numpy
+  - scipy
+  - statsmodels
+  - scikit-learn
+  - seaborn
+  - matplotlib
+  - openpyxl
+  - jupyterlab
+  - ipykernel
+  # bioconda::maaslin2 currently resolves cleanly with r-base 4.3 builds
+  - r-base=4.3
+  - r-irkernel
+  - r-tidyverse
+  - r-vegan
+  - r-glmmtmb
+  - r-lme4
+  - r-lmertest
+  - r-broom
+  - r-broom.mixed
+  - r-emmeans
+  # Explicit LEfSe runtime dependencies used through rpy2.
+  - r-modeltools
+  - r-coin
+  - r-mvtnorm
+  - r-survival
+  - r-mass
+  - bioconda::maaslin2
+  - bioconda::lefse

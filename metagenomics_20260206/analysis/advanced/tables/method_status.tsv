@@ -1,0 +1,5 @@
+method	status	runnable	reason	detail
+statsmodels_mixedlm	ran	True	Python variance-component mixed models executed successfully.	
+HAllA	blocked_dependency	False	Installed CLI fails to start in the current environment.	Missing R package XICOR required by the installed HAllA entrypoint.
+MaAsLin2	missing	False	R package is not installed locally. Inputs were prepared because this is a strong follow-up multivariable method for this dataset.	
+LEfSe	missing	False	Executable/package is not installed locally. Inputs were prepared, but the method is less suitable here because it does not model repeated measures and multiple covariates as directly as mixed models or MaAsLin2.	

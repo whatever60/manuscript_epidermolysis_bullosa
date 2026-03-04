@@ -1,0 +1,11 @@
+model_name	term	term_label	estimate	conf_low	conf_high	pvalue	qvalue	factor_family	posthoc_qvalue	record_type	lrt_statistic	df_diff
+host_extended	C(chronicity_group, Treatment('unknown'))[T.acute_like]	Acute-like vs unknown	2.320591990376104	0.2450315599891328	4.396152420763075	0.0284265658511665	0.3591211812851742	chronicity_group	0.0852796975534995	full_model_term		
+host_extended	C(body_region, Treatment('lower_extremity'))[T.upper_extremity]	Upper extremity vs lower extremity	1.3377995744556708	-0.0812145995904933	2.756813748501835	0.0646328521475017	0.3591211812851742	body_region	0.1938985564425051	full_model_term		
+host_extended	C(body_region, Treatment('lower_extremity'))[T.trunk_perineum]	Trunk / perineum vs lower extremity	0.6962959755935566	-0.8009122800559155	2.1935042312430286	0.3620285701406851	0.8741448109350641	body_region	0.452276696456346	full_model_term		
+host_extended	C(body_region, Treatment('lower_extremity'))[T.head_neck]	Head / neck vs lower extremity	0.750808650310378	-1.207026989260079	2.708644289880835	0.452276696456346	0.8741448109350641	body_region	0.452276696456346	full_model_term		
+host_extended	C(chronicity_group, Treatment('unknown'))[T.chronic_like]	Chronic-like vs unknown	0.6886163391138158	-1.4457444844012932	2.822977162628925	0.5271581501647837	0.8741448109350641	chronicity_group	0.7907372252471756	full_model_term		
+host_extended	years_since_first_sample	Per year since first patient sample	0.1856644892441645	-1.1170705820834457	1.4883995605717746	0.779989980585797	0.8741448109350641	elapsed_time	0.779989980585797	full_model_term		
+host_extended	C(culture_positive_label, Treatment('negative'))[T.positive]	Culture positive vs negative	0.2589369434613015	-1.9204949437194376	2.438368830642041	0.8158684902060599	0.8741448109350641	culture_positive	0.8158684902060599	full_model_term		
+host_extended	C(chronicity_group, Treatment('unknown'))[T.mixed]	Mixed vs unknown	0.0139732746611256	-3.8300117415792343	3.8579582909014856	0.9943153859006284	0.9943153859006284	chronicity_group	0.9943153859006284	full_model_term		
+host_extended	body_region_overall	Body region overall				0.29233921266089197		body_region		omnibus_test	3.7282807825662303	3.0
+host_extended	chronicity_group_overall	Chronicity overall				0.0801837599935326		chronicity_group		omnibus_test	6.753497920758946	3.0

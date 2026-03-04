@@ -1,0 +1,11 @@
+outcome	model_name	n_samples	converged	aic	bic	llf	patient_var	batch_var	optimizer	warning_count	warnings	record_type	tested_effect	full_model	reduced_model	lrt_statistic	df_diff	pvalue_chisq	pvalue_boundary
+host_logit	host_base	74	True	365.5026517438997	386.23923758273725	-173.75132587194986	0.9257443353943748	1.6135842059909047	lbfgs	0.0		model_fit							
+host_logit	host_extended	74	True	364.7491538231408	392.39793494159085	-170.3745769115704	0.8276627878723444	1.691567094145937	lbfgs	0.0		model_fit							
+host_logit	host_base	74										random_effect_test	patient_only_vs_fixed	patient_only	fixed_only	12.214512939733993	1.0	0.000474191887611393	0.0002370959438056965
+host_logit	host_base	74										random_effect_test	batch_only_vs_fixed	batch_only	fixed_only	9.544949492200033	1.0	0.00200500343336704	0.00100250171668352
+host_logit	host_base	74										random_effect_test	batch_added_to_patient	patient_plus_batch	patient_only	4.578085202038324	1.0	0.032383382413047224	0.016191691206523612
+host_logit	host_base	74										random_effect_test	patient_added_to_batch	patient_plus_batch	batch_only	7.247648649572284	1.0	0.007099391560804503	0.0035496957804022513
+host_logit	host_extended	74										random_effect_test	patient_only_vs_fixed	patient_only	fixed_only	8.389582199641495	1.0	0.00377377642126588	0.00188688821063294
+host_logit	host_extended	74										random_effect_test	batch_only_vs_fixed	batch_only	fixed_only	5.476252415194381	1.0	0.019276543361805648	0.009638271680902824
+host_logit	host_extended	74										random_effect_test	batch_added_to_patient	patient_plus_batch	patient_only	3.723702284407068	1.0	0.05364529867408282	0.02682264933704141
+host_logit	host_extended	74										random_effect_test	patient_added_to_batch	patient_plus_batch	batch_only	6.637032068854182	1.0	0.009988019642991305	0.0049940098214956525

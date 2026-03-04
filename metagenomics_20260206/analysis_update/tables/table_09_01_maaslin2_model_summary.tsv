@@ -1,0 +1,2 @@
+n_samples	n_prevalent_features	n_features_tested	fixed_effects	random_effects
+61	590	200	body_region + chronicity_group + clinical_infection_flag + log10_bacterial_reads	patient_id

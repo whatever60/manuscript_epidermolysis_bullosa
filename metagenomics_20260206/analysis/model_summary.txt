@@ -1,0 +1,31 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:             host_logit   R-squared:                       0.357
+Model:                            OLS   Adj. R-squared:                  0.289
+Method:                 Least Squares   F-statistic:                     7.958
+Date:                Tue, 03 Mar 2026   Prob (F-statistic):           0.000242
+Time:                        00:24:48   Log-Likelihood:                -172.40
+No. Observations:                  74   AIC:                             360.8
+Df Residuals:                      66   BIC:                             379.2
+Df Model:                           7                                         
+Covariance Type:              cluster                                         
+===================================================================================================================================
+                                                                      coef    std err          z      P>|z|      [0.025      0.975]
+-----------------------------------------------------------------------------------------------------------------------------------
+Intercept                                                          -0.6233      0.685     -0.910      0.363      -1.966       0.719
+C(body_region, Treatment('lower_extremity'))[T.head_neck]           0.6918      0.962      0.719      0.472      -1.193       2.576
+C(body_region, Treatment('lower_extremity'))[T.trunk_perineum]      0.9876      0.983      1.004      0.315      -0.940       2.915
+C(body_region, Treatment('lower_extremity'))[T.upper_extremity]     1.8304      0.909      2.013      0.044       0.048       3.612
+C(collection_year)[T.2022]                                          0.9730      0.717      1.357      0.175      -0.432       2.378
+C(collection_year)[T.2023]                                          1.8147      0.746      2.434      0.015       0.353       3.276
+C(collection_year)[T.2024]                                          4.2084      0.768      5.482      0.000       2.704       5.713
+C(collection_year)[T.2025]                                          1.4852      0.527      2.817      0.005       0.452       2.519
+==============================================================================
+Omnibus:                        0.381   Durbin-Watson:                   1.708
+Prob(Omnibus):                  0.827   Jarque-Bera (JB):                0.526
+Skew:                           0.144   Prob(JB):                        0.769
+Kurtosis:                       2.703   Cond. No.                         12.7
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (cluster)

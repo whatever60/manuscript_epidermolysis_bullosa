@@ -1,0 +1,7 @@
+outcome	model_name	n_samples	converged	aic	bic	llf	patient_var	visit_var	optimizer	warning_count	warnings	prevalence
+Cutibacterium acnes	species_mixedlm	61	True	272.300279619687	295.5198921255934	-125.15013980984348	1.0348838088739146e-10	0.7782025027703383	powell	2	The Hessian matrix at the estimated parameter values is not positive definite. | The MLE may be on the boundary of the parameter space.	0.9508196721311475
+Pseudomonas aeruginosa	species_mixedlm	61	True	282.4132286189198	305.6328411248262	-130.2066143094599	4.3652393935170224e-10	0.9906841386259116	powell	2	The Hessian matrix at the estimated parameter values is not positive definite. | The MLE may be on the boundary of the parameter space.	1.0
+Staphylococcus aureus	species_mixedlm	61	True	292.79884502424363	316.01845753015004	-135.39942251212182	1.001049523113236e-10	1.0838641639701827	powell	2	The Hessian matrix at the estimated parameter values is not positive definite. | The MLE may be on the boundary of the parameter space.	1.0
+Serratia marcescens	species_mixedlm	61	True	304.5858298538768	327.8054423597832	-141.2929149269384	2.056670714033285	1.9100127038582883e-07	lbfgs	1	The MLE may be on the boundary of the parameter space.	0.9672131147540983
+Corynebacterium striatum	species_mixedlm	61	True	308.5613047926207	331.78091729852713	-143.28065239631036	3.5039109183264276	0.44483778057349965	powell	0		0.9180327868852459
+Klebsiella pneumoniae	species_mixedlm	61	True	320.2579245919719	343.4775370978783	-149.12896229598596	1.261991323621494	0.15187327234227668	lbfgs	0		0.8032786885245902

@@ -1,0 +1,2 @@
+method	status	runnable	reason	detail
+HAllA	ran_with_local_shim	True	Executed in spearman mode with optional R-package imports shimmed locally.	Optional HAllA startup imports for XICOR/eva were shimmed so the non-xicor, non-permutation workflow could run.

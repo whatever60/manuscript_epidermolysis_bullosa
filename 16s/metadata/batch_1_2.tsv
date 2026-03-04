@@ -1,0 +1,45 @@
+sample	rep_group	sample_group	reference	spike_in	sample_weight	batch	Date of Culture 	location	result	location_short
+YSEBYY20220916P1wA4	01a: Ankle (L) - MSSA	EB batch 1 & 2				1	2021-12-02	Ankle (L)	MSSA	Ankle
+EB-Batch2-1d	01d: Arm (R) - MSSA	EB batch 1 & 2				2	2024-02-01	Arm (R)	MSSA	Arm
+YSEBYY20220916P1wB4	02a: Foot (L) - P. aeruginosa	EB batch 1 & 2				1	2021-12-16	Foot (L)	P. aeruginosa	Foot
+YSEBYY20220916P1wC4	02b: Buttock (L) - P. aeruginosa	EB batch 1 & 2				1	2021-12-16	Buttock (L)	P. aeruginosa	Buttock
+YSEBYY20220916P1wD4	02c: Shin (L) - S. marcescens	EB batch 1 & 2				1	2021-12-16	Shin (L)	S. marcescens	Shin
+YSEBYY20220916P1wA5	02h: Forearm (L) - MSSA	EB batch 1 & 2				1	2022-03-17	Forearm (L)	MSSA	Forearm
+YSEBYY20220916P1wG5	02i: Foot (L) - K. oxytoca	EB batch 1 & 2				1	2022-06-09	Foot (L)	K. oxytoca	Foot
+YSEBYY20220916P1wH5	02j: Thigh (L) - E. coli; A. baumannii c.	EB batch 1 & 2				1	2022-06-09	Thigh (L)	E. coli; A. baumannii c.	Thigh
+EB-Batch2-2l	02l: Thigh (L) - A. baumannii c.; MSSA	EB batch 1 & 2				2	2022-11-17	Thigh (L)	A. baumannii c.; MSSA	Thigh
+20230728YSEB2wA2	02m: Chest - A. baumannii c.; MSSA	EB batch 1 & 2				1	2023-01-05	Chest	A. baumannii c.; MSSA	Chest
+20230728YSEB2wB2	02n: Groin (L) - MSSA	EB batch 1 & 2				1	2023-01-05	Groin (L)	MSSA	Groin
+EB-Batch2-2o	02o: Chest - MSSA	EB batch 1 & 2				2	2023-01-26	Chest	MSSA	Chest
+YSEBYY20220916P1wE4	03a: Ear (R) - MSSA	EB batch 1 & 2				1	2022-01-06	Ear (R)	MSSA	Ear
+YSEBYY20220916P1wF4	03b: Eye (R) - MSSA	EB batch 1 & 2				1	2022-01-06	Eye (R)	MSSA	Eye
+20230728YSEB2wA1	03c: Earlobe - MSSA	EB batch 1 & 2				1	2022-10-25	Earlobe	MSSA	Earlobe
+20230728YSEB2wB1	03d: Earlobe - M.C.M	EB batch 1 & 2				1	2022-10-25	Earlobe	M.C.M	Earlobe
+20230728YSEB2wC1	03e: Knee (R) - MSSA	EB batch 1 & 2				1	2022-10-26	Knee (R)	MSSA	Knee
+20230728YSEB2wD1	03f: Earlobe (pre-auricular area) (R) - MSSA	EB batch 1 & 2				1	2022-11-17	Earlobe (pre-auricular area) (R)	MSSA	Earlobe
+EB-Batch2-3i	03i: Knee (R) - S. marcescens; E. faecalis	EB batch 1 & 2				2	2023-07-31	Knee (R)	S. marcescens; E. faecalis	Knee
+YSEBYY20220916P1wG4	04a: Upper chest (L) - MRSA	EB batch 1 & 2				1	2022-01-21	Upper chest (L)	MRSA	Upper
+YSEBYY20220916P1wH4	04b: Upper chest (R) - MRSA	EB batch 1 & 2				1	2022-01-21	Upper chest (R)	MRSA	Upper
+EB-Batch2-4c	04c: Neck (R) - MRSA	EB batch 1 & 2				2	2023-08-17	Neck (R)	MRSA	Neck
+YSEBYY20220916P1wB5	06a: Arm (L) - P. aeruginosa; K. oxytoca; E. faecalis	EB batch 1 & 2				1	2022-03-31	Arm (L)	P. aeruginosa; K. oxytoca; E. faecalis	Arm
+YSEBYY20220916P1wC5	07a: Back - P. aeruginosa; MSSA	EB batch 1 & 2				1	2022-06-01	Back	P. aeruginosa; MSSA	Back
+YSEBYY20220916P1wD5	07b: Abdomen - P. gergoviae; MSSA	EB batch 1 & 2				1	2022-06-01	Abdomen	P. gergoviae; MSSA	Abdomen
+YSEBYY20220916P1wE5	07c: Leg (R) - P. aeruginosa; MSSA	EB batch 1 & 2				1	2022-06-02	Leg (R)	P. aeruginosa; MSSA	Leg
+YSEBYY20220916P1wF5	07d: Leg (L) - P. aeruginosa	EB batch 1 & 2				1	2022-06-02	Leg (L)	P. aeruginosa	Leg
+EB-Batch2-8b	08b: Medial ankle (R) - P. mirabilis	EB batch 1 & 2				2	2023-09-21	Medial ankle (R)	P. mirabilis	Medial
+20230728YSEB2wE1	09a: Finger (D5) (R) - MSSA	EB batch 1 & 2				1	2022-11-18	Finger (D5) (R)	MSSA	Finger
+20230728YSEB2wF1	10a: Back - MSSA	EB batch 1 & 2				1	2022-12-01	Back	MSSA	Back
+EB-Batch2-10b	10b: Knee (L) - MSSA	EB batch 1 & 2				2	2023-07-27	Knee (L)	MSSA	Knee
+20230728YSEB2wG1	11a: Ear - MSSA	EB batch 1 & 2				1	2022-12-01	Ear	MSSA	Ear
+20230728YSEB2wH1	11b: Nose - MSSA	EB batch 1 & 2				1	2022-12-01	Nose	MSSA	Nose
+20230728YSEB2wC2	12a: Knee (R) - MRSA	EB batch 1 & 2				1	2023-03-23	Knee (R)	MRSA	Knee
+EB-Batch2-12b	12b: Posterior neck - MRSA	EB batch 1 & 2				2	2023-09-28	Posterior neck	MRSA	Posterior
+20230728YSEB2wD2	13a: Foot (R) - MSSA	EB batch 1 & 2				1	2023-03-30	Foot (R)	MSSA	Foot
+20230728YSEB2wF2	13b: Medial buttocks (L) - MSSA	EB batch 1 & 2				1	2023-06-23	Medial buttocks (L)	MSSA	Medial
+20230728YSEB2wE2	14a: Shin (L) - MSSA	EB batch 1 & 2				1	2023-06-08	Shin (L)	MSSA	Shin
+20230728YSEB2wG2	15a: Knee (L) - M.C.M	EB batch 1 & 2				1	2023-06-23	Knee (L)	M.C.M	Knee
+EB-Batch2-16a	16a: Lower back (Mid) - P. aeruginosa; MRSA	EB batch 1 & 2				2	2023-08-31	Lower back (Mid)	P. aeruginosa; MRSA	Lower
+EB-Batch2-16b	16b: Lower abdomen (Mid) - MRSA	EB batch 1 & 2				2	2023-08-31	Lower abdomen (Mid)	MRSA	Lower
+EB-Batch2-17b	17b: Ear (R) - MSSA	EB batch 1 & 2				2	2024-01-11	Ear (R)	MSSA	Ear
+EB-Batch2-17c	17c: Upper back - N.O.S	EB batch 1 & 2				2	2024-01-11	Upper back	N.O.S	Upper
+EB-Batch2-18a	18a: Upper back (R) - MSSA; E. cloacae c.; A. baumannii c.	EB batch 1 & 2				2	2023-10-21	Upper back (R)	MSSA; E. cloacae c.; A. baumannii c.	Upper

@@ -1,0 +1,32 @@
+Sample	Swab	Infection	Location
+YSEBYY20220916P1wA4	SUB1a	MSSA	left ankle
+YSEBYY20220916P1wB4	SUB2a	Pseudomanas aeruginosa	left foot
+YSEBYY20220916P1wC4	SUB2b	Pseudomanas aeruginosa	left buttock
+YSEBYY20220916P1wD4	SUB2c	Serratia marcescens	left shin
+YSEBYY20220916P1wE4	SUB3a	Staphylococcus aureus	right ear
+YSEBYY20220916P1wF4	SUB3b	Staphylococcus aureus	right eye
+YSEBYY20220916P1wG4	SUB4a	MRSA	left upper chest
+YSEBYY20220916P1wH4	SUB4b	MRSA	right upper chest
+YSEBYY20220916P1wA5	SUB2h	MSSA	left forearm
+YSEBYY20220916P1wB5	SUB6a	"Pseudomonas aeruginosa, Klebsiella oxytoca, Enterococcus faecalis"	left arm
+YSEBYY20220916P1wC5	SUB7a	"Pseudomonas aeruginosa, MSSA"	back
+YSEBYY20220916P1wD5	SUB7b	"Pluralibacter gergoviae, MSSA"	abdomen
+YSEBYY20220916P1wE5	SUB7c	"Pseudomonas aeruginosa, MSSA"	right leg
+YSEBYY20220916P1wF5	SUB7d	Pseudomanas aeruginosa	left leg
+YSEBYY20220916P1wG5	SUB2i	Klebsiella oxytoca	left foot
+YSEBYY20220916P1wH5	SUB2j	E. SUBi	left thigh
+20230728YSEB2wF1	SUB10a	MSSA	Back
+20230728YSEB2wG1	SUB11a	MSSA	Ear
+20230728YSEB2wH1	SUB11b	MSSA	Nose
+20230728YSEB2wC2	SUB12a	MRSA	R knee
+20230728YSEB2wD2	SUB13a	MSSA	R foot
+20230728YSEB2wF2	SUB13b	MSSA	L medial buttocks
+20230728YSEB2wE2	SUB14a	MSSA	L shin
+20230728YSEB2wG2	SUB15a	no abnormal growth/mixed commensal microbiota	L knee
+20230728YSEB2wA2	SUB2m	"Acinetobacter baumannii complex , MSSA"	Chest
+20230728YSEB2wB2	SUB2n	MSSA	L groin
+20230728YSEB2wA1	SUB3c	MSSA	earlobe
+20230728YSEB2wB1	SUB3d	no abnormal growth	earlobe
+20230728YSEB2wC1	SUB3e	no abnormal growth	R knee
+20230728YSEB2wD1	SUB3f	MSSA	R earlobe (pre-auricular area)
+20230728YSEB2wE1	SUB9a	MSSA	R finger (D5)

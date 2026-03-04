@@ -1,0 +1,40 @@
+HAllA version:	0.8.40
+
+--Configuration parameters--
+  preprocess:
+    max freq thresh               : 1
+    transform funcs               : None
+    discretize bypass if possible : True
+    discretize func               : None
+    discretize num bins           : None
+  association:
+    pdist metric                  : spearman
+  hierarchy:
+    sim2dist set abs              : True
+    sim2dist func                 : None
+    linkage method                : average
+  permute:
+    iters                         : 1000
+    func                          : gpd
+    speedup                       : True
+  stats:
+    fdr alpha                     : 0.05
+    fdr method                    : fdr_bh
+    fnr thresh                    : 0.2
+    rank cluster                  : best
+  output:
+    dir                           : /home/ubuntu/dev/20250320_eb_summary/metagenomics_20260206/analysis/advanced/halla/output
+    verbose                       : True
+
+--Results--
+X shape (# features, # size)                                : (23, 61)
+Y shape (# features, # size)                                : (590, 61)
+Number of significant associations                          : 1500
+Number of significant clusters                              : 436
+
+--Durations--
+Loading and preprocessing data                              : 0:00:00.098235
+Computing pairwise similarities, p-values, q-values         : 0:00:09.429266
+Performing hierarchical clustering                          : 0:00:58.757268
+Finding densely associated blocks                           : 0:00:00.508657
+Total execution time                                        : 0:01:08.793426

@@ -1,0 +1,76 @@
+# -----------------------------
+# OS / Editor
+# -----------------------------
+.DS_Store
+Thumbs.db
+
+# Keep VS Code settings only if you want them versioned.
+.vscode/*
+!.vscode/settings.json
+
+# -----------------------------
+# Python / Jupyter artifacts
+# -----------------------------
+**/__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# -----------------------------
+# R artifacts
+# -----------------------------
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+
+# -----------------------------
+# Local envs / temp / cache
+# -----------------------------
+.venv/
+venv/
+env/
+cache/
+tmp_method_probe/
+tmp_r_lib/
+
+# -----------------------------
+# Large sequencing inputs
+# -----------------------------
+**/*.fastq
+**/*.fastq.gz
+**/*.fq
+**/*.fq.gz
+
+# FastQC report bundles
+**/*_fastqc.html
+**/*_fastqc.zip
+
+# -----------------------------
+# Project-specific heavy outputs
+# -----------------------------
+# 16S large raw and intermediate outputs
+16s/fastq/
+16s/output_unoise3_16s/
+
+# Shotgun heavy intermediate outputs
+metagenomics_20260206/fastqc_before/
+metagenomics_20260206/fastqc_after/
+metagenomics_20260206/kraken/
+metagenomics_20260206/kraken_with_host/
+metagenomics_20260206/metaphlan/
+metagenomics_20260206/metaphlan_with_host/
+
+# External-tool working directories (regenerable)
+metagenomics_20260206/analysis_update/halla_output/
+metagenomics_20260206/analysis_update/maaslin2/
+metagenomics_20260206/analysis_update/lefse/
+
+# -----------------------------
+# Logs / transient files
+# -----------------------------
+*.log
+*.tmp
+*.bak

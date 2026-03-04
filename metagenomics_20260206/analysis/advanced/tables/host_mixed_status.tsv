@@ -1,0 +1,3 @@
+outcome	model_name	n_samples	converged	aic	bic	llf	patient_var	visit_var	optimizer	warning_count	warnings
+host_logit	host_base	74	True	356.80833391962665	382.1530499448725	-167.40416695981332	1.2915642681365743e-09	1.6365897047244724	powell	1	The MLE may be on the boundary of the parameter space.
+host_logit	host_extended	74	True	357.90159561023245	390.1585069150908	-164.95079780511622	9.198347779655524e-10	1.8848823962590675	lbfgs	1	The MLE may be on the boundary of the parameter space.

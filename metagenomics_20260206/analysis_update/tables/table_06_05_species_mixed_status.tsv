@@ -1,0 +1,7 @@
+outcome	model_name	n_samples	converged	aic	bic	llf	patient_var	batch_var	optimizer	warning_count	warnings	prevalence
+Cutibacterium acnes	species_mixedlm	61	True	274.4770573448933	299.807543714973	-125.23852867244663	3.4199461730187515e-09	0.31415147428210405	powell	1	The MLE may be on the boundary of the parameter space.	0.9508196721311475
+Pseudomonas aeruginosa	species_mixedlm	61	True	284.4396787715783	309.770165141658	-130.21983938578916	1.6383971629963763e-07	0.7720905775204178	bfgs	1	The MLE may be on the boundary of the parameter space.	1.0
+Staphylococcus aureus	species_mixedlm	61	True	293.7807362658276	319.1112226359073	-134.8903681329138	1.0009003403192542e-10	1.1370274995588505	powell	1	The MLE may be on the boundary of the parameter space.	1.0
+Serratia marcescens	species_mixedlm	61	True	303.16688191241985	328.49736828249956	-139.58344095620993	2.1750380820589608	6.59862639482537e-09	powell	1	The MLE may be on the boundary of the parameter space.	0.9672131147540983
+Corynebacterium striatum	species_mixedlm	61	True	310.14718858249864	335.47767495257835	-143.07359429124932	3.2949233745104083	0.18217471058746973	lbfgs	0		0.9180327868852459
+Klebsiella pneumoniae	species_mixedlm	61	True	311.72228759280324	337.05277396288295	-143.86114379640162	0.806096072043276	1.1284511932813376e-10	powell	1	The MLE may be on the boundary of the parameter space.	0.8032786885245902

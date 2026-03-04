@@ -1,0 +1,10 @@
+outcome	structure	status	converged	aic	optimizer	patient_var	batch_var	warning_count	warnings	error
+host_logit	patient_only	ok	True	368.08073694593804	powell	0.4542371489850803		0		
+host_logit	batch_only	ok	True	370.750300393472	powell		2.5237019890369394	0		
+host_logit	patient_plus_batch	ok	True	365.5026517438997	lbfgs	0.9257443353943748	1.6135842059909047	0		
+Pseudomonas aeruginosa	patient_only	ok	True	284.60813344658925	powell	1.0653689770561639e-10		2	The Hessian matrix at the estimated parameter values is not positive definite. | The MLE may be on the boundary of the parameter space.	
+Pseudomonas aeruginosa	batch_only	ok	True	282.4396786662826	powell		0.7721812457291293	0		
+Pseudomonas aeruginosa	patient_plus_batch	ok	True	284.4396787715783	bfgs	1.6383971629963763e-07	0.7720905775204178	1	The MLE may be on the boundary of the parameter space.	
+Staphylococcus aureus	patient_only	ok	True	297.49646503724216	powell	1.0239509847492132e-10		1	The MLE may be on the boundary of the parameter space.	
+Staphylococcus aureus	batch_only	ok	True	291.780736264873	powell		1.1370264636152616	0		
+Staphylococcus aureus	patient_plus_batch	ok	True	293.7807362658276	powell	1.0009003403192542e-10	1.1370274995588505	1	The MLE may be on the boundary of the parameter space.	
