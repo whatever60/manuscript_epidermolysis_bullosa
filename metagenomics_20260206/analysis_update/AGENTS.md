@@ -21,3 +21,13 @@ For figure references in Results, provide both a minimal figure set and an optio
 Deletion markup conventions used by the collaborator:
 Inline deletion requests may be marked by italic text with single asterisks.
 Block deletion requests may be marked as block quotes.
+
+Notebook editing workflow:
+Use Jupytext paired notebooks with formats `ipynb,notebook_py//py:percent`.
+Treat `.ipynb` notebooks as user-edited source documents that must not be overwritten by generated notebook scripts.
+For agent edits, modify the paired files in `analysis_update/notebook_py/` and sync with Jupytext.
+Assume the collaborator may directly edit `.ipynb` files and will not directly edit `notebook_py/*.py`.
+If Jupytext sync detects inconsistent edits or conflicts, stop and let the collaborator resolve before continuing.
+
+Commit/push hygiene:
+Before commit and push, clear notebook outputs to reduce repository size.
