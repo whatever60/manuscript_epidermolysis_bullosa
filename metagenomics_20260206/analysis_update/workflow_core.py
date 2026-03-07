@@ -133,8 +133,12 @@ def _load_module(module_name: str, path: Path):
 @lru_cache(maxsize=1)
 def load_modules():
     workflow_dir = get_context().output_dir
-    base = _load_module("analysis_update_base_kernel", workflow_dir / "analysis_base.py")
-    advanced = _load_module("analysis_update_advanced_kernel", workflow_dir / "analysis_advanced.py")
+    base = _load_module(
+        "analysis_update_base_kernel", workflow_dir / "analysis_base.py"
+    )
+    advanced = _load_module(
+        "analysis_update_advanced_kernel", workflow_dir / "analysis_advanced.py"
+    )
     return base, advanced
 
 
@@ -175,11 +179,12 @@ def save_table(frame: pd.DataFrame, path: Path) -> Path:
 
 
 def extract_metaphlan_species_matrix(metaphlan: pd.DataFrame) -> pd.DataFrame:
-    species_cols = [col for col in metaphlan.columns if "|s__" in col and "|t__" not in col]
+    species_cols = [
+        col for col in metaphlan.columns if "|s__" in col and "|t__" not in col
+    ]
     species = metaphlan[species_cols].copy()
     species.columns = [
-        col.split("|s__", 1)[1].replace("_", " ").strip()
-        for col in species.columns
+        col.split("|s__", 1)[1].replace("_", " ").strip() for col in species.columns
     ]
     species = species.T.groupby(level=0).sum().T
     return species.loc[:, species.sum(axis=0) > 0]
@@ -193,7 +198,9 @@ def prepare_base_data(context: WorkflowContext, base=None) -> dict[str, pd.DataF
     metaphlan = base.load_metaphlan_table(analysis_context)
     sample_ids = sorted(species_all.index)
     metadata = base.load_metadata(analysis_context, sample_ids)
-    qc = base.prepare_qc_table(analysis_context, metadata, species_all, species_bac, metaphlan)
+    qc = base.prepare_qc_table(
+        analysis_context, metadata, species_all, species_bac, metaphlan
+    )
     qc["patient_id"] = qc["patient_id"].astype(str)
     qc["visit_id"] = qc["visit_id"].astype(str)
     return {
@@ -206,7 +213,9 @@ def prepare_base_data(context: WorkflowContext, base=None) -> dict[str, pd.DataF
     }
 
 
-def bootstrap_notebook() -> tuple[WorkflowContext, dict[str, pd.DataFrame], object, object]:
+def bootstrap_notebook() -> tuple[
+    WorkflowContext, dict[str, pd.DataFrame], object, object
+]:
     context = get_context()
     ensure_dirs(context)
     set_plot_defaults()

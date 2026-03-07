@@ -135,7 +135,9 @@ def normalize_sample_id(name: str) -> str:
     upper = upper.replace(".TXT", "")
     upper = upper.replace(".CSV", "")
     upper = upper.replace(".TSV", "")
-    upper = re.sub(r"(_KRAKEN.*|_BRACKEN.*|_FASTQC.*|_R[12]_001.*|_[12]\.FQ\.GZ.*)$", "", upper)
+    upper = re.sub(
+        r"(_KRAKEN.*|_BRACKEN.*|_FASTQC.*|_R[12]_001.*|_[12]\.FQ\.GZ.*)$", "", upper
+    )
     if upper.startswith("YQEBMETA"):
         upper = "SUB" + upper.replace("YQEBMETA", "", 1)
     if not upper.startswith("SUB"):
@@ -161,8 +163,16 @@ def standardize_location(value: object) -> str:
     text = text.replace("pre-auricular", "preauricular")
     text = re.sub(r"^\br\b(?=\s)", "right", text)
     text = re.sub(r"^\bl\b(?=\s)", "left", text)
-    text = re.sub(r"\br\b(?=\s+(?:arm|axilla|buttock|chest|ear|earlobe|elbow|finger|foot|hand|knee|leg|neck|shoulder|shin|thigh|upper))", "right", text)
-    text = re.sub(r"\bl\b(?=\s+(?:ankle|arm|groin|knee|leg|medial|shin|thigh|upper|foot|buttock|forearm))", "left", text)
+    text = re.sub(
+        r"\br\b(?=\s+(?:arm|axilla|buttock|chest|ear|earlobe|elbow|finger|foot|hand|knee|leg|neck|shoulder|shin|thigh|upper))",
+        "right",
+        text,
+    )
+    text = re.sub(
+        r"\bl\b(?=\s+(?:ankle|arm|groin|knee|leg|medial|shin|thigh|upper|foot|buttock|forearm))",
+        "left",
+        text,
+    )
     text = text.replace("mid lower", "mid-lower")
     text = re.sub(r"\s+", " ", text).strip()
     return text
@@ -177,8 +187,25 @@ def infer_body_region(location: str) -> str:
         return any(re.search(rf"\b{re.escape(word)}\b", text) for word in words)
 
     head_neck = ["ear", "earlobe", "eye", "nose", "neck", "forehead", "antihelix"]
-    upper_extremity = ["shoulder", "arm", "axilla", "elbow", "hand", "finger", "forearm"]
-    trunk_perineum = ["back", "chest", "abdomen", "buttock", "buttocks", "groin", "perineum", "trunk"]
+    upper_extremity = [
+        "shoulder",
+        "arm",
+        "axilla",
+        "elbow",
+        "hand",
+        "finger",
+        "forearm",
+    ]
+    trunk_perineum = [
+        "back",
+        "chest",
+        "abdomen",
+        "buttock",
+        "buttocks",
+        "groin",
+        "perineum",
+        "trunk",
+    ]
     lower_extremity = ["knee", "shin", "ankle", "foot", "thigh", "leg"]
 
     if contains_any_word(head_neck):
@@ -209,7 +236,18 @@ def infer_chronicity(text: str) -> str:
     value = text.lower()
     if not value:
         return "unknown"
-    acute_tokens = ["acute", "new ", "new(", "new,", "new-", "<6", "3-day", "3 wk", "3-day", "subacute"]
+    acute_tokens = [
+        "acute",
+        "new ",
+        "new(",
+        "new,",
+        "new-",
+        "<6",
+        "3-day",
+        "3 wk",
+        "3-day",
+        "subacute",
+    ]
     chronic_tokens = ["chronic", "non-healing", "recurring", ">6", "continued trauma"]
     has_acute = any(token in value for token in acute_tokens)
     has_chronic = any(token in value for token in chronic_tokens)
@@ -273,7 +311,9 @@ def infer_pmn_category(text: str) -> str:
 def parse_seqkit_stats(path: Path) -> pd.DataFrame:
     stats = pd.read_table(path, sep=r"\s+", engine="python")
     for column in ["num_seqs", "sum_len", "min_len", "avg_len", "max_len"]:
-        stats[column] = stats[column].astype(str).str.replace(",", "", regex=False).astype(float)
+        stats[column] = (
+            stats[column].astype(str).str.replace(",", "", regex=False).astype(float)
+        )
 
     file_names = stats["file"].map(lambda value: Path(value).name)
 
@@ -295,8 +335,12 @@ def parse_seqkit_stats(path: Path) -> pd.DataFrame:
 
     stats["sample_id"] = file_names.map(extract_sample)
     stats["read"] = file_names.map(extract_read)
-    stats = stats.loc[stats["read"] == "R1", ["sample_id", "num_seqs", "sum_len", "avg_len"]].copy()
-    stats = stats.rename(columns={"num_seqs": "pairs", "sum_len": "sum_len_r1", "avg_len": "avg_len_r1"})
+    stats = stats.loc[
+        stats["read"] == "R1", ["sample_id", "num_seqs", "sum_len", "avg_len"]
+    ].copy()
+    stats = stats.rename(
+        columns={"num_seqs": "pairs", "sum_len": "sum_len_r1", "avg_len": "avg_len_r1"}
+    )
     stats["pairs"] = stats["pairs"].astype(int)
     return stats.set_index("sample_id").sort_index()
 
@@ -410,15 +454,21 @@ def parse_bracken_reports(
 
 
 def load_bracken_with_host_counts(context: AnalysisContext) -> pd.DataFrame:
-    _, read_count_df, _ = parse_bracken_reports(str(context.data_dir / "kraken_with_host"))
+    _, read_count_df, _ = parse_bracken_reports(
+        str(context.data_dir / "kraken_with_host")
+    )
     read_count_df.index = read_count_df.index.map(rename_sample)
     read_count_df = read_count_df.groupby(level=0).sum().sort_index()
     return read_count_df
 
 
 def load_bracken_tables(context: AnalysisContext) -> tuple[pd.DataFrame, pd.DataFrame]:
-    species_all = pd.read_csv(context.data_dir / "read_count_species_all.csv", index_col=0)
-    species_bac = pd.read_csv(context.data_dir / "read_count_species_bac.csv", index_col=0)
+    species_all = pd.read_csv(
+        context.data_dir / "read_count_species_all.csv", index_col=0
+    )
+    species_bac = pd.read_csv(
+        context.data_dir / "read_count_species_bac.csv", index_col=0
+    )
     species_all.index = species_all.index.map(normalize_sample_id)
     species_bac.index = species_bac.index.map(normalize_sample_id)
     species_all = species_all.groupby(level=0).sum().sort_index()
@@ -426,7 +476,9 @@ def load_bracken_tables(context: AnalysisContext) -> tuple[pd.DataFrame, pd.Data
     return species_all, species_bac
 
 
-def load_kraken_unclassified_counts(context: AnalysisContext, report_subdir: str = "kraken_with_host") -> pd.Series:
+def load_kraken_unclassified_counts(
+    context: AnalysisContext, report_subdir: str = "kraken_with_host"
+) -> pd.Series:
     report_dir = context.data_dir / report_subdir
     values: dict[str, int] = {}
     for report_path in sorted(report_dir.glob("*_kraken_report.txt")):
@@ -452,12 +504,19 @@ def load_kraken_unclassified_counts(context: AnalysisContext, report_subdir: str
     if not values:
         return pd.Series(dtype=float, name="kraken_unclassified_reads")
 
-    series = pd.Series(values, name="kraken_unclassified_reads").groupby(level=0).sum().sort_index()
+    series = (
+        pd.Series(values, name="kraken_unclassified_reads")
+        .groupby(level=0)
+        .sum()
+        .sort_index()
+    )
     return series
 
 
 def load_metaphlan_table(context: AnalysisContext) -> pd.DataFrame:
-    metaphlan = pd.read_csv(context.data_dir / "read_count_metaphlan.tsv", sep="\t", index_col=0)
+    metaphlan = pd.read_csv(
+        context.data_dir / "read_count_metaphlan.tsv", sep="\t", index_col=0
+    )
     metaphlan.index = metaphlan.index.map(normalize_sample_id)
     metaphlan = metaphlan.groupby(level=0).sum().sort_index()
     return metaphlan
@@ -469,7 +528,9 @@ def load_metadata(context: AnalysisContext, sample_ids: list[str]) -> pd.DataFra
         sheet_name="Corrected EB wound spreadsheet",
     )
     supplement = pd.read_excel(
-        context.data_dir / "metadata" / "EB_Wound_Cultures_Coded_Data_Lab_Archives_20260210.xlsx",
+        context.data_dir
+        / "metadata"
+        / "EB_Wound_Cultures_Coded_Data_Lab_Archives_20260210.xlsx",
         sheet_name="Sheet1",
     )
 
@@ -549,21 +610,35 @@ def load_metadata(context: AnalysisContext, sample_ids: list[str]) -> pd.DataFra
     )
     metadata = metadata.reindex(sample_ids)
 
-    metadata["culture_date"] = metadata["culture_date"].fillna(metadata["culture_date_supplement"])
-    metadata["location_raw"] = metadata["location_raw"].fillna(metadata["location_supplement"])
+    metadata["culture_date"] = metadata["culture_date"].fillna(
+        metadata["culture_date_supplement"]
+    )
+    metadata["location_raw"] = metadata["location_raw"].fillna(
+        metadata["location_supplement"]
+    )
     metadata["clinical_correlates"] = metadata["clinical_correlates_primary"].fillna(
         metadata["clinical_correlates_supplement"]
     )
-    metadata["culture_result"] = metadata["culture_result_primary"].fillna(metadata["culture_result_supplement"])
-    metadata["gram_stain"] = metadata["gram_stain_primary"].fillna(metadata["gram_stain_supplement"])
-    metadata["sent_to"] = metadata["sent_to_primary"].fillna(metadata["sent_to_supplement"])
+    metadata["culture_result"] = metadata["culture_result_primary"].fillna(
+        metadata["culture_result_supplement"]
+    )
+    metadata["gram_stain"] = metadata["gram_stain_primary"].fillna(
+        metadata["gram_stain_supplement"]
+    )
+    metadata["sent_to"] = metadata["sent_to_primary"].fillna(
+        metadata["sent_to_supplement"]
+    )
 
     metadata["culture_date"] = pd.to_datetime(metadata["culture_date"])
     metadata["patient_id"] = metadata.index.str.slice(0, 2)
     metadata["sample_letter"] = metadata.index.str.slice(2, 3)
-    metadata["visit_id"] = metadata["patient_id"] + "_" + metadata["culture_date"].dt.strftime("%Y-%m-%d")
+    metadata["visit_id"] = (
+        metadata["patient_id"] + "_" + metadata["culture_date"].dt.strftime("%Y-%m-%d")
+    )
     metadata["batch_id"] = metadata["culture_date"].dt.strftime("%Y-%m-%d")
-    metadata["first_culture_date"] = metadata.groupby("patient_id")["culture_date"].transform("min")
+    metadata["first_culture_date"] = metadata.groupby("patient_id")[
+        "culture_date"
+    ].transform("min")
     metadata["days_since_first_sample"] = (
         metadata["culture_date"] - metadata["first_culture_date"]
     ).dt.days.astype(float)
@@ -572,12 +647,16 @@ def load_metadata(context: AnalysisContext, sample_ids: list[str]) -> pd.DataFra
     metadata["body_region"] = metadata["location"].map(infer_body_region)
     metadata["body_region_label"] = metadata["body_region"].map(BODY_REGION_LABELS)
     metadata["laterality"] = metadata["location"].map(infer_laterality)
-    metadata["clinical_correlates"] = metadata["clinical_correlates"].map(clean_free_text)
+    metadata["clinical_correlates"] = metadata["clinical_correlates"].map(
+        clean_free_text
+    )
     metadata["culture_result"] = metadata["culture_result"].map(clean_free_text)
     metadata["gram_stain"] = metadata["gram_stain"].map(clean_free_text)
     metadata["chronicity_group"] = metadata["clinical_correlates"].map(infer_chronicity)
     metadata["chronicity_label"] = metadata["chronicity_group"].map(CHRONICITY_LABELS)
-    metadata["clinical_infection_flag"] = metadata["clinical_correlates"].map(infer_clinical_infection)
+    metadata["clinical_infection_flag"] = metadata["clinical_correlates"].map(
+        infer_clinical_infection
+    )
     metadata["pmn_category"] = metadata["gram_stain"].map(infer_pmn_category)
     metadata["pseudomonas_flag"] = metadata["pseudomonas_flag"].notna()
     metadata["culture_positive"] = ~metadata["culture_result"].str.lower().isin(
@@ -586,13 +665,19 @@ def load_metadata(context: AnalysisContext, sample_ids: list[str]) -> pd.DataFra
 
     for config in CULTURE_GROUPS:
         pattern = "|".join(config["culture_patterns"])
-        metadata[f"culture_{config['group']}"] = metadata["culture_result"].str.lower().str.contains(
-            pattern,
-            regex=True,
-            na=False,
+        metadata[f"culture_{config['group']}"] = (
+            metadata["culture_result"]
+            .str.lower()
+            .str.contains(
+                pattern,
+                regex=True,
+                na=False,
+            )
         )
 
-    metadata["n_culture_groups"] = metadata[[f"culture_{config['group']}" for config in CULTURE_GROUPS]].sum(axis=1)
+    metadata["n_culture_groups"] = metadata[
+        [f"culture_{config['group']}" for config in CULTURE_GROUPS]
+    ].sum(axis=1)
     return metadata
 
 
@@ -603,9 +688,15 @@ def prepare_qc_table(
     species_bac: pd.DataFrame,
     metaphlan: pd.DataFrame,
 ) -> pd.DataFrame:
-    input_stats = parse_seqkit_stats(context.data_dir / "input.stats").rename(columns={"pairs": "raw_pairs"})
-    fastp_stats = parse_seqkit_stats(context.data_dir / "fastp.stats").rename(columns={"pairs": "trimmed_pairs"})
-    no_host_stats = parse_seqkit_stats(context.data_dir / "fastp_no_host.stats").rename(columns={"pairs": "non_host_pairs"})
+    input_stats = parse_seqkit_stats(context.data_dir / "input.stats").rename(
+        columns={"pairs": "raw_pairs"}
+    )
+    fastp_stats = parse_seqkit_stats(context.data_dir / "fastp.stats").rename(
+        columns={"pairs": "trimmed_pairs"}
+    )
+    no_host_stats = parse_seqkit_stats(context.data_dir / "fastp_no_host.stats").rename(
+        columns={"pairs": "non_host_pairs"}
+    )
 
     qc = metadata.join(input_stats[["raw_pairs"]], how="left")
     qc = qc.join(fastp_stats[["trimmed_pairs"]], how="left")
@@ -614,17 +705,31 @@ def prepare_qc_table(
     qc["trimmed_fraction"] = qc["trimmed_pairs"] / qc["raw_pairs"]
     qc["host_alignment_fraction"] = 1 - (qc["non_host_pairs"] / qc["trimmed_pairs"])
 
-    with_host_counts = load_bracken_with_host_counts(context).reindex(qc.index).fillna(0)
+    with_host_counts = (
+        load_bracken_with_host_counts(context).reindex(qc.index).fillna(0)
+    )
     qc["classified_species_reads"] = species_all.sum(axis=1)
-    qc["bracken_root_reads"] = with_host_counts.get("root", pd.Series(0, index=with_host_counts.index)).astype(float)
-    qc["human_species_reads"] = with_host_counts.get("Homo sapiens", pd.Series(0, index=with_host_counts.index)).astype(float)
+    qc["bracken_root_reads"] = with_host_counts.get(
+        "root", pd.Series(0, index=with_host_counts.index)
+    ).astype(float)
+    qc["human_species_reads"] = with_host_counts.get(
+        "Homo sapiens", pd.Series(0, index=with_host_counts.index)
+    ).astype(float)
     qc["bracken_total_reads"] = qc["bracken_root_reads"]
-    kraken_unclassified = load_kraken_unclassified_counts(context, report_subdir="kraken_with_host").reindex(qc.index).fillna(0)
+    kraken_unclassified = (
+        load_kraken_unclassified_counts(context, report_subdir="kraken_with_host")
+        .reindex(qc.index)
+        .fillna(0)
+    )
     qc["kraken_unclassified_reads"] = kraken_unclassified.astype(float)
     qc["bacterial_species_reads"] = species_bac.sum(axis=1)
-    qc["non_human_species_reads"] = (qc["bracken_total_reads"] - qc["human_species_reads"]).clip(lower=0)
+    qc["non_human_species_reads"] = (
+        qc["bracken_total_reads"] - qc["human_species_reads"]
+    ).clip(lower=0)
     qc["non_bacterial_non_human_reads"] = (
-        qc["bracken_total_reads"] - qc["human_species_reads"] - qc["bacterial_species_reads"]
+        qc["bracken_total_reads"]
+        - qc["human_species_reads"]
+        - qc["bacterial_species_reads"]
     ).clip(lower=0)
     qc["bacterial_richness"] = (species_bac > 0).sum(axis=1)
     qc["human_species_fraction"] = np.where(
@@ -645,9 +750,15 @@ def prepare_qc_table(
     # Primary host-burden definition uses pre-host-filter Bracken root composition.
     qc["host_removed_fraction"] = qc["human_species_fraction"]
 
-    metaphlan_species_cols = [column for column in metaphlan.columns if "|s__" in column and column.count("|") >= 6]
+    metaphlan_species_cols = [
+        column
+        for column in metaphlan.columns
+        if "|s__" in column and column.count("|") >= 6
+    ]
     qc["metaphlan_species_reads"] = metaphlan[metaphlan_species_cols].sum(axis=1)
-    qc["metaphlan_unclassified_reads"] = metaphlan.get("UNCLASSIFIED", pd.Series(0, index=metaphlan.index))
+    qc["metaphlan_unclassified_reads"] = metaphlan.get(
+        "UNCLASSIFIED", pd.Series(0, index=metaphlan.index)
+    )
     qc["metaphlan_unclassified_fraction"] = qc["metaphlan_unclassified_reads"] / (
         qc["metaphlan_unclassified_reads"] + qc["metaphlan_species_reads"]
     )
@@ -655,9 +766,14 @@ def prepare_qc_table(
     qc["community_qc_pass"] = qc["bacterial_species_reads"] >= 10_000
     qc["model_qc_pass"] = qc["bacterial_species_reads"] >= 10_000
     qc["very_low_depth"] = qc["bacterial_species_reads"] < 10_000
-    qc["host_logit"] = np.log(qc["host_removed_fraction"].clip(1e-4, 1 - 1e-4) / (1 - qc["host_removed_fraction"].clip(1e-4, 1 - 1e-4)))
+    qc["host_logit"] = np.log(
+        qc["host_removed_fraction"].clip(1e-4, 1 - 1e-4)
+        / (1 - qc["host_removed_fraction"].clip(1e-4, 1 - 1e-4))
+    )
     qc["log10_bacterial_reads"] = np.log10(qc["bacterial_species_reads"].clip(lower=1))
-    qc["culture_positive_label"] = np.where(qc["culture_positive"], "positive", "negative")
+    qc["culture_positive_label"] = np.where(
+        qc["culture_positive"], "positive", "negative"
+    )
     return qc
 
 
@@ -665,7 +781,9 @@ def bh_adjust(frame: pd.DataFrame, pvalue_column: str) -> pd.DataFrame:
     valid = frame[pvalue_column].notna()
     qvalues = np.full(frame.shape[0], np.nan)
     if valid.any():
-        qvalues[valid] = multipletests(frame.loc[valid, pvalue_column], method="fdr_bh")[1]
+        qvalues[valid] = multipletests(
+            frame.loc[valid, pvalue_column], method="fdr_bh"
+        )[1]
     frame = frame.copy()
     frame["qvalue"] = qvalues
     return frame
@@ -714,13 +832,17 @@ def fit_host_model(qc: pd.DataFrame) -> tuple[object, pd.DataFrame]:
     return fit, bh_adjust(results, "pvalue")
 
 
-def community_relative_abundance(species_bac: pd.DataFrame, sample_ids: list[str]) -> pd.DataFrame:
+def community_relative_abundance(
+    species_bac: pd.DataFrame, sample_ids: list[str]
+) -> pd.DataFrame:
     subset = species_bac.loc[sample_ids].copy()
     subset = subset.loc[:, subset.sum(axis=0) > 0]
     return subset.div(subset.sum(axis=1), axis=0)
 
 
-def summarize_pairwise_distances(rel_abundance: pd.DataFrame, metadata: pd.DataFrame) -> pd.DataFrame:
+def summarize_pairwise_distances(
+    rel_abundance: pd.DataFrame, metadata: pd.DataFrame
+) -> pd.DataFrame:
     distances = squareform(pdist(rel_abundance.values, metric="braycurtis"))
     samples = rel_abundance.index.tolist()
     rows = []
@@ -764,7 +886,9 @@ def summarize_pairwise_distance_groups(pairwise: pd.DataFrame) -> pd.DataFrame:
     )
 
     pvalue_rows = []
-    reference = pairwise.loc[pairwise["comparison_group"] == "Different patient", "distance"]
+    reference = pairwise.loc[
+        pairwise["comparison_group"] == "Different patient", "distance"
+    ]
     for group in order[:-1]:
         test = pairwise.loc[pairwise["comparison_group"] == group, "distance"]
         statistic = mannwhitneyu(test, reference, alternative="less")
@@ -791,7 +915,11 @@ def make_culture_abundance_table(
 
     for config in CULTURE_GROUPS:
         taxa = [taxon for taxon in config["taxa"] if taxon in rel_abundance.columns]
-        feature = rel_abundance[taxa].sum(axis=1) if taxa else pd.Series(0.0, index=rel_abundance.index)
+        feature = (
+            rel_abundance[taxa].sum(axis=1)
+            if taxa
+            else pd.Series(0.0, index=rel_abundance.index)
+        )
         positive_mask = qc[f"culture_{config['group']}"].fillna(False)
         negative_mask = ~positive_mask
         n_positive = int(positive_mask.sum())
@@ -836,7 +964,12 @@ def make_culture_abundance_table(
                 }
             )
 
-    summary = bh_adjust(pd.DataFrame(rows).sort_values(["n_culture_positive", "auroc"], ascending=[False, False]), "pvalue")
+    summary = bh_adjust(
+        pd.DataFrame(rows).sort_values(
+            ["n_culture_positive", "auroc"], ascending=[False, False]
+        ),
+        "pvalue",
+    )
     plot_df = pd.DataFrame(plot_rows)
     return summary, plot_df
 
@@ -851,8 +984,15 @@ def fit_species_models(qc: pd.DataFrame, species_bac: pd.DataFrame) -> pd.DataFr
     counts = species_bac.loc[sample_ids].copy()
     clr = clr_transform(counts)
 
-    model_df = qc.loc[sample_ids, ["patient_id", "body_region", "chronicity_group", "log10_bacterial_reads"]].copy()
-    body_regions = [region for region in BODY_REGION_ORDER if region in model_df["body_region"].unique()]
+    model_df = qc.loc[
+        sample_ids,
+        ["patient_id", "body_region", "chronicity_group", "log10_bacterial_reads"],
+    ].copy()
+    body_regions = [
+        region
+        for region in BODY_REGION_ORDER
+        if region in model_df["body_region"].unique()
+    ]
     if "lower_extremity" not in body_regions:
         return pd.DataFrame()
 
@@ -916,13 +1056,19 @@ def prepare_species_association_plot_df(results: pd.DataFrame) -> pd.DataFrame:
         return results
 
     plot_df = results.loc[
-        results["term"].str.contains("body_region") | results["term"].str.contains("chronicity_group")
+        results["term"].str.contains("body_region")
+        | results["term"].str.contains("chronicity_group")
     ].copy()
     plot_df = plot_df.loc[plot_df["qvalue"].fillna(1) <= 0.15].copy()
     if plot_df.empty:
-        plot_df = results.loc[
-            results["term"].str.contains("body_region") | results["term"].str.contains("chronicity_group")
-        ].head(12).copy()
+        plot_df = (
+            results.loc[
+                results["term"].str.contains("body_region")
+                | results["term"].str.contains("chronicity_group")
+            ]
+            .head(12)
+            .copy()
+        )
 
     plot_df["term_label"] = plot_df["term"].map(prettify_model_term)
     plot_df["species_label"] = plot_df["species"]
@@ -942,17 +1088,45 @@ def write_report(
 ) -> None:
     qc_samples = int(qc["community_qc_pass"].sum())
     low_depth = int((~qc["community_qc_pass"]).sum())
-    revisit_patients = int(qc.groupby("patient_id")["culture_date"].nunique().gt(1).sum())
-    host_region = host_results.loc[host_results["term"].str.contains("body_region")].sort_values("pvalue").head(1)
-    host_time = host_results.loc[host_results["term"].str.contains("years_since_first_sample")].sort_values("pvalue").head(1)
-    pair_top = pairwise_summary.loc[pairwise_summary["comparison_group"] == "Same patient, same batch date"].head(1)
-    pair_revisit = pairwise_summary.loc[pairwise_summary["comparison_group"] == "Same patient, different batch date"].head(1)
-    culture_top = culture_summary.sort_values(["n_culture_positive", "qvalue", "auroc"], ascending=[False, True, False]).head(4)
+    revisit_patients = int(
+        qc.groupby("patient_id")["culture_date"].nunique().gt(1).sum()
+    )
+    host_region = (
+        host_results.loc[host_results["term"].str.contains("body_region")]
+        .sort_values("pvalue")
+        .head(1)
+    )
+    host_time = (
+        host_results.loc[host_results["term"].str.contains("years_since_first_sample")]
+        .sort_values("pvalue")
+        .head(1)
+    )
+    pair_top = pairwise_summary.loc[
+        pairwise_summary["comparison_group"] == "Same patient, same batch date"
+    ].head(1)
+    pair_revisit = pairwise_summary.loc[
+        pairwise_summary["comparison_group"] == "Same patient, different batch date"
+    ].head(1)
+    culture_top = culture_summary.sort_values(
+        ["n_culture_positive", "qvalue", "auroc"], ascending=[False, True, False]
+    ).head(4)
     species_focus = [
-        ("Pseudomonas aeruginosa", "C(chronicity_group, Treatment('unknown'))[T.chronic_like]"),
-        ("Staphylococcus aureus", "C(body_region, Treatment('lower_extremity'))[T.head_neck]"),
-        ("Cutibacterium acnes", "C(body_region, Treatment('lower_extremity'))[T.head_neck]"),
-        ("Serratia marcescens", "C(chronicity_group, Treatment('unknown'))[T.acute_like]"),
+        (
+            "Pseudomonas aeruginosa",
+            "C(chronicity_group, Treatment('unknown'))[T.chronic_like]",
+        ),
+        (
+            "Staphylococcus aureus",
+            "C(body_region, Treatment('lower_extremity'))[T.head_neck]",
+        ),
+        (
+            "Cutibacterium acnes",
+            "C(body_region, Treatment('lower_extremity'))[T.head_neck]",
+        ),
+        (
+            "Serratia marcescens",
+            "C(chronicity_group, Treatment('unknown'))[T.acute_like]",
+        ),
     ]
 
     lines = [
@@ -1027,7 +1201,8 @@ def write_report(
         )
         for species, term in species_focus:
             match = species_plot_df.loc[
-                (species_plot_df["species"] == species) & (species_plot_df["term"] == term)
+                (species_plot_df["species"] == species)
+                & (species_plot_df["term"] == term)
             ]
             if match.empty:
                 continue
@@ -1047,7 +1222,9 @@ def ensure_output_dirs(context: AnalysisContext) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Analyze EB shotgun metagenomics summaries.")
+    parser = argparse.ArgumentParser(
+        description="Analyze EB shotgun metagenomics summaries."
+    )
     parser.add_argument(
         "--data-dir",
         type=Path,
@@ -1087,15 +1264,23 @@ def main() -> None:
     qc.to_csv(context.table_dir / "qc_metrics.tsv", sep="\t")
     host_results.to_csv(context.table_dir / "host_model.tsv", sep="\t", index=False)
     pairwise.to_csv(context.table_dir / "pairwise_distances.tsv", sep="\t", index=False)
-    pairwise_summary.to_csv(context.table_dir / "pairwise_distance_summary.tsv", sep="\t", index=False)
-    culture_summary.to_csv(context.table_dir / "culture_concordance.tsv", sep="\t", index=False)
-    species_results.to_csv(context.table_dir / "species_associations.tsv", sep="\t", index=False)
+    pairwise_summary.to_csv(
+        context.table_dir / "pairwise_distance_summary.tsv", sep="\t", index=False
+    )
+    culture_summary.to_csv(
+        context.table_dir / "culture_concordance.tsv", sep="\t", index=False
+    )
+    species_results.to_csv(
+        context.table_dir / "species_associations.tsv", sep="\t", index=False
+    )
 
     with (context.analysis_dir / "model_summary.txt").open("w") as handle:
         handle.write(str(host_fit.summary()))
         handle.write("\n")
 
-    write_report(context, qc, host_results, pairwise_summary, culture_summary, species_plot_df)
+    write_report(
+        context, qc, host_results, pairwise_summary, culture_summary, species_plot_df
+    )
 
 
 if __name__ == "__main__":

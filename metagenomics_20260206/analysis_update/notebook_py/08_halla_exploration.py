@@ -87,6 +87,7 @@ def patch_optional_r_imports():
 def import_halla_class():
     try:
         from halla import HAllA
+
         return HAllA
     except Exception as primary_exc:
         fallback_site = Path("/home/ubuntu/miniforge3/lib/python3.12/site-packages")
@@ -96,6 +97,7 @@ def import_halla_class():
         sys.modules.pop("halla", None)
         try:
             from halla import HAllA
+
             return HAllA
         except Exception as secondary_exc:
             raise ImportError(
@@ -175,10 +177,13 @@ def summarize_halla_results(output_dir):
             "best_adjusted_pvalue": "best_adjusted_pvalue",
         }
     )
-    sig_clusters["metadata_size"] = sig_clusters["metadata_features"].str.count(";").fillna(0).astype(int) + 1
-    sig_clusters["microbiome_size"] = sig_clusters["microbiome_features"].str.count(";").fillna(0).astype(int) + 1
+    sig_clusters["metadata_size"] = (
+        sig_clusters["metadata_features"].str.count(";").fillna(0).astype(int) + 1
+    )
+    sig_clusters["microbiome_size"] = (
+        sig_clusters["microbiome_features"].str.count(";").fillna(0).astype(int) + 1
+    )
     return top_pairs, sig_clusters
-
 
 
 # %% [markdown]
@@ -257,8 +262,12 @@ wc.save_table(sig_clusters, wc.table_path(context, 22, "halla_significant_cluste
 
 # %%
 method_status = pd.read_csv(wc.table_path(context, 20, "halla_method_status"), sep="\t")
-top_pairs = pd.read_csv(wc.table_path(context, 21, "halla_top_pairwise_associations"), sep="\t")
-sig_clusters = pd.read_csv(wc.table_path(context, 22, "halla_significant_clusters"), sep="\t")
+top_pairs = pd.read_csv(
+    wc.table_path(context, 21, "halla_top_pairwise_associations"), sep="\t"
+)
+sig_clusters = pd.read_csv(
+    wc.table_path(context, 22, "halla_significant_clusters"), sep="\t"
+)
 
 display(method_status)
 figure_file = wc.figure_path(context, 8, "halla_top25")
@@ -274,4 +283,3 @@ summary_lines = [
     "- Negative result: it is not the primary inferential layer here because it does not model patient and culture-date batch structure the way the mixed models do.",
 ]
 display(Markdown("## Working Interpretation\n" + "\n".join(summary_lines)))
-

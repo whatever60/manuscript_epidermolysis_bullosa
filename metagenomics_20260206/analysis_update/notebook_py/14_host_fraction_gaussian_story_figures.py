@@ -58,11 +58,13 @@ sns.set_theme(style="whitegrid", context="talk")
 host_effects = pd.read_csv(wc.table_path(context, 9, "host_mixed_effects"), sep="\t")
 host_status = pd.read_csv(wc.table_path(context, 10, "host_mixed_status"), sep="\t")
 
-host_model_effects = (
-    host_effects.loc[host_effects["model_name"] == advanced.HOST_MODEL_NAME]
-    .copy()
-)
-host_model_effects = host_model_effects.loc[host_model_effects["term"] != "Intercept"].copy()
+host_model_effects = host_effects.loc[
+    host_effects["model_name"] == advanced.HOST_MODEL_NAME
+].copy()
+host_model_effects = host_model_effects.loc[
+    host_model_effects["term"] != "Intercept"
+].copy()
+
 
 def factor_family(term: str) -> str:
     if "C(body_region" in term:
@@ -75,12 +77,17 @@ def factor_family(term: str) -> str:
         return "elapsed_time"
     return "other"
 
+
 host_model_effects["factor_family"] = host_model_effects["term"].map(factor_family)
-host_model_effects["term_label"] = host_model_effects["term"].map(base.prettify_model_term)
+host_model_effects["term_label"] = host_model_effects["term"].map(
+    base.prettify_model_term
+)
 host_model_effects["posthoc_qvalue"] = np.nan
 for family, idx in host_model_effects.groupby("factor_family").groups.items():
     pvals = host_model_effects.loc[list(idx), "pvalue"].to_numpy()
-    host_model_effects.loc[list(idx), "posthoc_qvalue"] = multipletests(pvals, method="fdr_bh")[1]
+    host_model_effects.loc[list(idx), "posthoc_qvalue"] = multipletests(
+        pvals, method="fdr_bh"
+    )[1]
 
 qc = base_data["qc"].copy()
 host_plot_df = qc.dropna(
@@ -110,6 +117,7 @@ METHODS = ["lbfgs", "powell", "bfgs"]
 HOST_MODEL_FORMULA = advanced.HOST_FORMULAS[advanced.HOST_MODEL_NAME]
 VC_FORMULA = {"patient": "0 + C(patient_id)", "batch": "0 + C(batch_id)"}
 
+
 def fit_best_gaussian_mixed_model(frame, formula):
     work = frame.copy()
     work["all_group"] = "all"
@@ -130,7 +138,9 @@ def fit_best_gaussian_mixed_model(frame, formula):
             last_error = exc
     if not candidates:
         raise RuntimeError(last_error)
-    converged = [item for item in candidates if bool(getattr(item[0], "converged", False))]
+    converged = [
+        item for item in candidates if bool(getattr(item[0], "converged", False))
+    ]
     pool = converged if converged else candidates
     fit, warning_messages, optimizer = min(pool, key=lambda item: item[0].aic)
     return fit, {
@@ -138,6 +148,7 @@ def fit_best_gaussian_mixed_model(frame, formula):
         "warning_count": len(warning_messages),
         "warnings": " | ".join(sorted(set(warning_messages)))[:2000],
     }
+
 
 fit, fit_meta = fit_best_gaussian_mixed_model(host_plot_df, HOST_MODEL_FORMULA)
 
@@ -150,13 +161,17 @@ no_chronicity_formula = (
     "+ C(culture_positive_label, Treatment('negative')) + years_since_first_sample"
 )
 no_body_fit, _ = fit_best_gaussian_mixed_model(host_plot_df, no_body_formula)
-no_chronicity_fit, _ = fit_best_gaussian_mixed_model(host_plot_df, no_chronicity_formula)
+no_chronicity_fit, _ = fit_best_gaussian_mixed_model(
+    host_plot_df, no_chronicity_formula
+)
+
 
 def likelihood_ratio(full_fit, reduced_fit):
     statistic = max(0.0, 2.0 * (full_fit.llf - reduced_fit.llf))
     df_diff = int(len(full_fit.params) - len(reduced_fit.params))
     pvalue = chi2.sf(statistic, df_diff)
     return statistic, df_diff, pvalue
+
 
 body_stat, body_df, body_p = likelihood_ratio(fit, no_body_fit)
 chronicity_stat, chronicity_df, chronicity_p = likelihood_ratio(fit, no_chronicity_fit)
@@ -216,7 +231,11 @@ omnibus_rows = pd.DataFrame(
 gaussian_followup = pd.concat([gaussian_followup, omnibus_rows], ignore_index=True)
 wc.save_table(gaussian_followup, wc.table_path(context, 36, "host_gaussian_followup"))
 
-re_series = fit.random_effects[next(iter(fit.random_effects))].rename("random_intercept").reset_index()
+re_series = (
+    fit.random_effects[next(iter(fit.random_effects))]
+    .rename("random_intercept")
+    .reset_index()
+)
 re_series = re_series.rename(columns={"index": "raw_label"})
 pattern = re.compile(r"^(batch|patient)\[C\((?:batch_id|patient_id)\)\[(.+)\]\]$")
 random_rows = []
@@ -232,7 +251,9 @@ for _, row in re_series.iterrows():
         }
     )
 random_effects_df = pd.DataFrame(random_rows).sort_values(["group", "random_intercept"])
-wc.save_table(random_effects_df, wc.table_path(context, 37, "host_gaussian_random_effects"))
+wc.save_table(
+    random_effects_df, wc.table_path(context, 37, "host_gaussian_random_effects")
+)
 
 
 # %% [markdown]
@@ -240,7 +261,9 @@ wc.save_table(random_effects_df, wc.table_path(context, 37, "host_gaussian_rando
 #
 
 # %%
-fig, axes = plt.subplots(1, 3, figsize=(21, 5.8), gridspec_kw={"width_ratios": [3.5, 1.0, 1.0]})
+fig, axes = plt.subplots(
+    1, 3, figsize=(21, 5.8), gridspec_kw={"width_ratios": [3.5, 1.0, 1.0]}
+)
 
 patient_order = (
     host_plot_df["patient_id"]
@@ -250,19 +273,29 @@ patient_order = (
     .sort_values(key=lambda s: pd.to_numeric(s, errors="coerce").fillna(9999))
     .tolist()
 )
-body_region_order = [region for region in ["lower_extremity", "head_neck", "upper_extremity", "trunk_perineum"] if region in set(host_plot_df["body_region"].astype(str))]
+body_region_order = [
+    region
+    for region in ["lower_extremity", "head_neck", "upper_extremity", "trunk_perineum"]
+    if region in set(host_plot_df["body_region"].astype(str))
+]
 if not body_region_order:
-    body_region_order = sorted(host_plot_df["body_region"].dropna().astype(str).unique().tolist())
+    body_region_order = sorted(
+        host_plot_df["body_region"].dropna().astype(str).unique().tolist()
+    )
 body_region_labels = {
     "lower_extremity": "Lower extremity",
     "head_neck": "Head/neck",
     "upper_extremity": "Upper extremity",
     "trunk_perineum": "Trunk/perineum",
 }
-body_palette = dict(zip(body_region_order, sns.color_palette("Set2", n_colors=len(body_region_order))))
+body_palette = dict(
+    zip(body_region_order, sns.color_palette("Set2", n_colors=len(body_region_order)))
+)
 patient_counts = host_plot_df["patient_id"].astype(str).value_counts()
 box_patients = set(patient_counts[patient_counts > 3].index.tolist())
-box_df = host_plot_df.loc[host_plot_df["patient_id"].astype(str).isin(box_patients)].copy()
+box_df = host_plot_df.loc[
+    host_plot_df["patient_id"].astype(str).isin(box_patients)
+].copy()
 
 if not box_df.empty:
     sns.boxplot(
@@ -353,7 +386,9 @@ sns.stripplot(
 axes[2].set_title("Host fraction by body region")
 axes[2].set_xlabel("")
 axes[2].set_ylabel("")
-axes[2].set_xticklabels(["Lower ext.", "Head/neck", "Upper ext.", "Trunk/perineum"], rotation=25)
+axes[2].set_xticklabels(
+    ["Lower ext.", "Head/neck", "Upper ext.", "Trunk/perineum"], rotation=25
+)
 axes[2].yaxis.set_major_formatter(PercentFormatter(1))
 
 for ax in axes:
@@ -383,7 +418,9 @@ plot_df = host_model_effects.copy().sort_values("estimate")
 y = np.arange(plot_df.shape[0])
 colors = np.where(plot_df["factor_family"] == "chronicity_group", "#bc4749", "#457b9d")
 ax_forest.axvline(0, color="grey", linestyle="--", linewidth=1)
-ax_forest.hlines(y, plot_df["conf_low"], plot_df["conf_high"], color=colors, linewidth=2)
+ax_forest.hlines(
+    y, plot_df["conf_low"], plot_df["conf_high"], color=colors, linewidth=2
+)
 ax_forest.scatter(plot_df["estimate"], y, color=colors, s=55, zorder=3)
 ax_forest.set_yticks(y)
 ax_forest.set_yticklabels(plot_df["term_label"])
@@ -403,7 +440,13 @@ var_df = pd.DataFrame(
 ax_var.hlines(var_df["component"], 0, var_df["variance"], color="#8d99ae", linewidth=2)
 ax_var.scatter(var_df["variance"], var_df["component"], color="#1d3557", s=70, zorder=3)
 for _, row in var_df.iterrows():
-    ax_var.text(row["variance"] + 0.03, row["component"], f"{row['variance']:.2f}", va="center", fontsize=11)
+    ax_var.text(
+        row["variance"] + 0.03,
+        row["component"],
+        f"{row['variance']:.2f}",
+        va="center",
+        fontsize=11,
+    )
 ax_var.set_title("Random-effect variance")
 ax_var.set_xlabel("Variance component")
 
@@ -421,10 +464,20 @@ lrt_df["test_label"] = lrt_df["tested_effect"].map(label_map)
 lrt_df["neglog10_p"] = -np.log10(lrt_df["pvalue_boundary"].clip(lower=1e-12))
 lrt_df = lrt_df.sort_values("neglog10_p")
 ax_lrt.axvline(-np.log10(0.05), color="grey", linestyle="--", linewidth=1)
-ax_lrt.hlines(lrt_df["test_label"], 0, lrt_df["neglog10_p"], color="#adb5bd", linewidth=2)
-ax_lrt.scatter(lrt_df["neglog10_p"], lrt_df["test_label"], color="#d62828", s=65, zorder=3)
+ax_lrt.hlines(
+    lrt_df["test_label"], 0, lrt_df["neglog10_p"], color="#adb5bd", linewidth=2
+)
+ax_lrt.scatter(
+    lrt_df["neglog10_p"], lrt_df["test_label"], color="#d62828", s=65, zorder=3
+)
 for _, row in lrt_df.iterrows():
-    ax_lrt.text(row["neglog10_p"] + 0.04, row["test_label"], f"p={row['pvalue_boundary']:.3g}", va="center", fontsize=11)
+    ax_lrt.text(
+        row["neglog10_p"] + 0.04,
+        row["test_label"],
+        f"p={row['pvalue_boundary']:.3g}",
+        va="center",
+        fontsize=11,
+    )
 ax_lrt.set_title("Random-effect LRTs")
 ax_lrt.set_xlabel("-log10(boundary-corrected p)")
 
@@ -442,13 +495,15 @@ display(SVG(filename=str(wc.figure_path(context, 19, "host_gaussian_mixed_summar
 # %%
 acute_q = float(
     host_model_effects.loc[
-        host_model_effects["term"] == "C(chronicity_group, Treatment('unknown'))[T.acute_like]",
+        host_model_effects["term"]
+        == "C(chronicity_group, Treatment('unknown'))[T.acute_like]",
         "posthoc_qvalue",
     ].iloc[0]
 )
 upper_q = float(
     host_model_effects.loc[
-        host_model_effects["term"] == "C(body_region, Treatment('lower_extremity'))[T.upper_extremity]",
+        host_model_effects["term"]
+        == "C(body_region, Treatment('lower_extremity'))[T.upper_extremity]",
         "posthoc_qvalue",
     ].iloc[0]
 )
@@ -478,7 +533,9 @@ sns.stripplot(
     size=5,
     ax=axes[0],
 )
-axes[0].set_title(f"Acute-like chronicity\nfull-model factor-specific q = {acute_q:.3f}")
+axes[0].set_title(
+    f"Acute-like chronicity\nfull-model factor-specific q = {acute_q:.3f}"
+)
 axes[0].set_xlabel("")
 axes[0].set_ylabel("Host genomic DNA fraction")
 axes[0].yaxis.set_major_formatter(PercentFormatter(1))
@@ -503,7 +560,9 @@ sns.stripplot(
     size=5,
     ax=axes[1],
 )
-axes[1].set_title(f"Upper-extremity location\nfull-model factor-specific q = {upper_q:.3f}")
+axes[1].set_title(
+    f"Upper-extremity location\nfull-model factor-specific q = {upper_q:.3f}"
+)
 axes[1].set_xlabel("")
 axes[1].set_ylabel("")
 axes[1].yaxis.set_major_formatter(PercentFormatter(1))
@@ -520,21 +579,39 @@ display(SVG(filename=str(wc.figure_path(context, 20, "host_gaussian_followup")))
 #
 
 # %%
-patient_df = random_effects_df.loc[random_effects_df["group"] == "patient"].sort_values("random_intercept")
-batch_df = random_effects_df.loc[random_effects_df["group"] == "batch"].sort_values("random_intercept")
+patient_df = random_effects_df.loc[random_effects_df["group"] == "patient"].sort_values(
+    "random_intercept"
+)
+batch_df = random_effects_df.loc[random_effects_df["group"] == "batch"].sort_values(
+    "random_intercept"
+)
 
-fig, axes = plt.subplots(1, 2, figsize=(16, 10), gridspec_kw={"width_ratios": [0.9, 1.6]})
+fig, axes = plt.subplots(
+    1, 2, figsize=(16, 10), gridspec_kw={"width_ratios": [0.9, 1.6]}
+)
 
 axes[0].axvline(0, color="grey", linestyle="--", linewidth=1)
-axes[0].hlines(patient_df["level"], 0, patient_df["random_intercept"], color="#adb5bd", linewidth=1.8)
-axes[0].scatter(patient_df["random_intercept"], patient_df["level"], color="#2a9d8f", s=45, zorder=3)
+axes[0].hlines(
+    patient_df["level"],
+    0,
+    patient_df["random_intercept"],
+    color="#adb5bd",
+    linewidth=1.8,
+)
+axes[0].scatter(
+    patient_df["random_intercept"], patient_df["level"], color="#2a9d8f", s=45, zorder=3
+)
 axes[0].set_title("Patient random intercepts")
 axes[0].set_xlabel("Conditional random intercept")
 axes[0].set_ylabel("Patient")
 
 axes[1].axvline(0, color="grey", linestyle="--", linewidth=1)
-axes[1].hlines(batch_df["level"], 0, batch_df["random_intercept"], color="#adb5bd", linewidth=1.5)
-axes[1].scatter(batch_df["random_intercept"], batch_df["level"], color="#f4a261", s=30, zorder=3)
+axes[1].hlines(
+    batch_df["level"], 0, batch_df["random_intercept"], color="#adb5bd", linewidth=1.5
+)
+axes[1].scatter(
+    batch_df["random_intercept"], batch_df["level"], color="#f4a261", s=30, zorder=3
+)
 axes[1].set_title("Culture-date random intercepts")
 axes[1].set_xlabel("Conditional random intercept")
 axes[1].set_ylabel("Batch")
@@ -543,7 +620,9 @@ fig.tight_layout()
 fig_14_04_path = wc.figure_path(context, 21, "host_gaussian_random_intercepts")
 fig.savefig(fig_14_04_path, bbox_inches="tight")
 fig.savefig(fig_14_04_path.with_suffix(".jpg"), bbox_inches="tight", dpi=300)
-display(SVG(filename=str(wc.figure_path(context, 21, "host_gaussian_random_intercepts"))))
+display(
+    SVG(filename=str(wc.figure_path(context, 21, "host_gaussian_random_intercepts")))
+)
 
 
 # %% [markdown]
@@ -552,5 +631,8 @@ display(SVG(filename=str(wc.figure_path(context, 21, "host_gaussian_random_inter
 
 # %%
 display(pd.read_csv(wc.table_path(context, 36, "host_gaussian_followup"), sep="\t"))
-display(pd.read_csv(wc.table_path(context, 37, "host_gaussian_random_effects"), sep="\t").head(20))
-
+display(
+    pd.read_csv(
+        wc.table_path(context, 37, "host_gaussian_random_effects"), sep="\t"
+    ).head(20)
+)

@@ -192,7 +192,9 @@ def plot_pairwise_effects(effects: pd.DataFrame, output_path: Path) -> None:
         axes = [axes]
 
     color_map = {True: "#b22222", False: "#3b6a8f"}
-    for idx_ax, (ax, model, model_label) in enumerate(zip(axes, model_order, model_labels)):
+    for idx_ax, (ax, model, model_label) in enumerate(
+        zip(axes, model_order, model_labels)
+    ):
         sub = effects.loc[effects["model"] == model].copy()
         ax.axvline(0.0, linestyle="--", color="#808080", linewidth=0.8)
         for _, row in sub.iterrows():
@@ -252,8 +254,6 @@ def plot_pairwise_effects(effects: pd.DataFrame, output_path: Path) -> None:
     fig.tight_layout()
     save_svg_and_jpg(fig, output_path)
     plt.close(fig)
-
-
 
 
 # %%
@@ -424,7 +424,9 @@ adjusted_margins_body["term_label"] = adjusted_margins_body["term_label"].map(
     lambda x: x.replace("Same ", "").capitalize()
 )
 fig_12_03 = wc.figure_path(context, 22, "pairwise_adjusted_margins")
-plot_adjusted_margins(adjusted_margins_body, fig_12_03, sharey=True, panel_size=(3.5, 5))
+plot_adjusted_margins(
+    adjusted_margins_body, fig_12_03, sharey=True, panel_size=(3.5, 5)
+)
 
 exact_effects = pairwise_effects_exact.copy()
 exact_effects["model"] = "exact_location_model"

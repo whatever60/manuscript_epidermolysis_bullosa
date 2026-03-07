@@ -157,7 +157,7 @@ def add_pvalue_bracket(
 group_to_x = {group_name: idx for idx, group_name in enumerate(order)}
 
 y_start = 1.02
-y_step = 0.08
+y_step = 0.1
 bracket_height = 0.02
 
 for idx, row in pvalues.reset_index(drop=True).iterrows():
@@ -172,9 +172,13 @@ for idx, row in pvalues.reset_index(drop=True).iterrows():
         y=y,
         h=bracket_height,
         text=f"q={row['qvalue']:.3g}",
+        fontsize=12,
     )
 
-ax.set_ylim(0, y_start + len(pvalues) * y_step + 0.06)
+ax.set_ylim(0, y_start + len(pvalues) * y_step)
+# Remove y ticks beyond 1
+ax.set_yticks([tick for tick in ax.get_yticks() if tick <= 1])
+
 
 fig.tight_layout()
 fig_path = wc.figure_path(context, 2, "pairwise_distance")
@@ -190,6 +194,7 @@ wc.save_table(summary, wc.table_path(context, 5, "pairwise_distance_summary"))
 
 
 # %% [markdown]
+#
 # ## Review Numbered Outputs
 #
 

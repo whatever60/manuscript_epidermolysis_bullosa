@@ -225,12 +225,19 @@ Rather than focusing entirely on bacterial reads, we used this fraction as a com
 > - table_14_02_host_gaussian_random_effects.tsv (random intercepts)
 >
 > Figures:
-> - ~~fig_06_01_host_model_compare.svg~~
-> - fig_14_01_host_fraction_overview.svg
-> - fig_14_02_host_gaussian_mixed_summary.svg
-> - fig_14_03_host_gaussian_followup.svg
-> - fig_14_04_host_gaussian_random_intercepts.svg
+> - fig_14_01_host_fraction_overview.svg left -> Fig. 1B
+> - fig_14_02_host_gaussian_mixed_summary.svg left -> Fig. 1D
+> - fig_14_02_host_gaussian_mixed_summary.svg middle & right -> Fig. S1B & Fig. S1C
+> - fig_14_03_host_gaussian_followup.svg -> Fig. 1C
+> - fig_14_04_host_gaussian_random_intercepts.svg -> Fig. S1D & Fig. S1E
 >
+
+
+#### Figure captions
+
+Figure 1. Host genomic DNA burden in EB wound swabs is structured by patient-level heterogeneity and wound-level biology. A) xxx. B) Host genomic DNA fraction across patients, with each point representing one sequenced swab and point color indicating body region; for patients with more than three samples, boxplots summarize within-patient distributions (center line, median; box, interquartile range [IQR]; whiskers, 1.5 x IQR). C) Focused host-fraction distributions for the two key wound-level signals retained in the adjusted model, comparing acute-like versus other chronicity states and upper-extremity versus other body regions; boxplots are defined as in panel B. D) Fixed-effect estimates from the Gaussian mixed model with patient and culture-date random intercepts, shown as coefficients with 95% confidence intervals on the logit host-fraction scale.
+
+Figure S1. Additional diagnostics for the host-fraction Gaussian mixed-model framework. A) xxx. B) Estimated variance components for patient and culture-date random effects, showing non-trivial structured variance from both sources. C) Boundary-corrected likelihood-ratio tests for random-effect inclusion across nested model contrasts. D) Estimated patient random intercepts from the fitted mixed model, showing broad patient-to-patient spread after fixed-effect adjustment. E) Estimated culture-date random intercepts, demonstrating residual batch-date heterogeneity in host genomic DNA carryover.
 
 ### Metagenomic similarity is associated with patient identity and wound chronicity.
 
@@ -242,10 +249,16 @@ To probe the functional relevance of wound microbiome, we sought to evaluate the
 > - table_12_04_pairwise_adjusted_margins.tsv
 >
 > Figures:
-> - fig_03_01_pairwise_distance.svg
-> - fig_12_02_pairwise_similarity_mixed.svg
-> - fig_12_03_pairwise_adjusted_margins.svg
+> - fig_03_01_pairwise_distance.svg -> Fig. 2A
+> - fig_12_02_pairwise_similarity_mixed.svg -> Fig. S2A
+> - fig_12_03_pairwise_adjusted_margins.svg -> Fig. 2B
 >
+
+#### Figure captions
+
+Figure 2. Wound microbiome similarity is most strongly associated with shared patient identity and shared chronicity. A) Descriptive Bray-Curtis distance distributions for same-patient/same-date, same-patient/different-date, and different-patient pairs, with BH-adjusted q values for pairwise contrasts against the different-patient reference; boxplots show median (center line), IQR (box), and 1.5 x IQR whiskers, with overlaid points representing pairwise comparisons. B) Covariate-adjusted marginal Bray-Curtis predictions from the pairwise mixed-effects model, comparing shared versus non-shared states for patient, chronicity, and body region while holding technical covariates and other pairwise indicators fixed.
+
+Figure S2. Adjusted pairwise mixed-effects coefficient summary for metagenomic similarity. A) Fixed-effect estimates (with 95% confidence intervals) from the body-region pairwise mixed model; negative coefficients indicate lower Bray-Curtis distance (greater similarity), and point color indicates BH-adjusted significance.
 
 ### Shotgun metagenomic detection agrees with culture in a nonparametric descriptive analysis and remains significant after rank-based technical adjustment
 
@@ -261,11 +274,14 @@ Taking samples with or without positive culture results and comparing the corres
 > - table_13_04_culture_venn_counts.tsv
 >
 > Figures:
-> - fig_13_04_culture_adjusted_concordance.svg
-> - ~~fig_13_01_culture_threshold_sweep.svg~~
-> - ~~fig_13_02_culture_venn_diagrams.svg~~
-> - fig_13_03_culture_abundance_density.svg
+> - fig_13_04_culture_adjusted_concordance.svg -> Fig. 3A
+> - fig_13_03_culture_abundance_density.svg -> Fig. 3B
 >
+
+#### Figure captions
+
+Figure 3. Shotgun metagenomic abundance is concordant with culture positivity in both descriptive and adjusted analyses. A) Technical/nuisance-adjusted rank-based mixed-model effect sizes for culture-positive versus culture-negative status across all nine organism groups, shown with 95% confidence intervals; colors indicate BH-adjusted significance and marker shape distinguishes regular versus singular fits. B) Organism-level abundance distributions (log10 relative abundance) stratified by culture status, with panel titles reporting BH-adjusted Mann-Whitney q values; boxplots show median (center line), IQR (box), and 1.5 x IQR whiskers, with outliers plotted individually. These descriptive distributions show strongest separation for major wound-associated taxa, including *Pseudomonas aeruginosa*, *Staphylococcus aureus*, *Klebsiella* spp., *Serratia*, and Group A *Streptococcus* (GAS).
+
 
 ## Third party packaged used (including both python and R packages)
 

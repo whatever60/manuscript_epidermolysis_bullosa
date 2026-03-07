@@ -68,7 +68,9 @@ def summarize_pairwise_groups(pairwise):
         .reindex(BODY_REGION_COMPARISON_ORDER)
         .reset_index()
     )
-    reference = pairwise.loc[pairwise["comparison_group"] == "Different patient", "distance"]
+    reference = pairwise.loc[
+        pairwise["comparison_group"] == "Different patient", "distance"
+    ]
     rows = []
     for group in BODY_REGION_COMPARISON_ORDER[:-1]:
         test = pairwise.loc[pairwise["comparison_group"] == group, "distance"]
@@ -130,7 +132,16 @@ def fit_method_species_models(qc, counts, species_list):
             )
     if not rows:
         return pd.DataFrame(
-            columns=["species", "term", "estimate", "conf_low", "conf_high", "pvalue", "prevalence", "qvalue"]
+            columns=[
+                "species",
+                "term",
+                "estimate",
+                "conf_low",
+                "conf_high",
+                "pvalue",
+                "prevalence",
+                "qvalue",
+            ]
         )
     return base.bh_adjust(pd.DataFrame(rows).sort_values("pvalue"), "pvalue")
 
@@ -147,14 +158,21 @@ def build_bracken_metaphlan_tables():
             "visit_id": qc["visit_id"].values,
             "host_removed_fraction": qc["host_removed_fraction"].values,
             "bracken_bacterial_species_reads": qc["bacterial_species_reads"].values,
-            "metaphlan_species_reads": metaphlan_species.sum(axis=1).reindex(qc.index).fillna(0).values,
+            "metaphlan_species_reads": metaphlan_species.sum(axis=1)
+            .reindex(qc.index)
+            .fillna(0)
+            .values,
             "bracken_qc_pass": qc["community_qc_pass"].values,
         }
     )
     sample_depth["metaphlan_nonzero"] = sample_depth["metaphlan_species_reads"] > 0
-    sample_depth["shared_method_qc"] = sample_depth["bracken_qc_pass"] & sample_depth["metaphlan_nonzero"]
+    sample_depth["shared_method_qc"] = (
+        sample_depth["bracken_qc_pass"] & sample_depth["metaphlan_nonzero"]
+    )
 
-    shared_samples = sample_depth.loc[sample_depth["shared_method_qc"], "sample_id"].tolist()
+    shared_samples = sample_depth.loc[
+        sample_depth["shared_method_qc"], "sample_id"
+    ].tolist()
     metadata_subset = base_data["metadata"].loc[shared_samples]
 
     bracken_rel = species_bac.loc[shared_samples].copy()
@@ -166,11 +184,19 @@ def build_bracken_metaphlan_tables():
     metaphlan_rel = metaphlan_rel.div(metaphlan_rel.sum(axis=1), axis=0)
 
     bracken_pairwise = base.summarize_pairwise_distances(bracken_rel, metadata_subset)
-    metaphlan_pairwise = base.summarize_pairwise_distances(metaphlan_rel, metadata_subset)
+    metaphlan_pairwise = base.summarize_pairwise_distances(
+        metaphlan_rel, metadata_subset
+    )
 
-    bracken_summary = summarize_pairwise_groups(bracken_pairwise).assign(method="Bracken")
-    metaphlan_summary = summarize_pairwise_groups(metaphlan_pairwise).assign(method="MetaPhlAn")
-    distance_summary = pd.concat([bracken_summary, metaphlan_summary], ignore_index=True)
+    bracken_summary = summarize_pairwise_groups(bracken_pairwise).assign(
+        method="Bracken"
+    )
+    metaphlan_summary = summarize_pairwise_groups(metaphlan_pairwise).assign(
+        method="MetaPhlAn"
+    )
+    distance_summary = pd.concat(
+        [bracken_summary, metaphlan_summary], ignore_index=True
+    )
 
     shared_species = [
         species
@@ -191,11 +217,17 @@ def build_bracken_metaphlan_tables():
                 "metaphlan_prevalence": float((metaphlan_rel[species] > 0).mean()),
             }
         )
-    taxon_correlations = base.bh_adjust(pd.DataFrame(taxon_rows).sort_values("pvalue"), "pvalue")
+    taxon_correlations = base.bh_adjust(
+        pd.DataFrame(taxon_rows).sort_values("pvalue"), "pvalue"
+    )
 
     qc_subset = qc.loc[shared_samples].copy()
-    bracken_models = fit_method_species_models(qc_subset, species_bac.loc[shared_samples], shared_species)
-    metaphlan_models = fit_method_species_models(qc_subset, metaphlan_species.loc[shared_samples], shared_species)
+    bracken_models = fit_method_species_models(
+        qc_subset, species_bac.loc[shared_samples], shared_species
+    )
+    metaphlan_models = fit_method_species_models(
+        qc_subset, metaphlan_species.loc[shared_samples], shared_species
+    )
 
     model_comparison = bracken_models.merge(
         metaphlan_models,
@@ -203,10 +235,12 @@ def build_bracken_metaphlan_tables():
         suffixes=("_bracken", "_metaphlan"),
         how="inner",
     )
-    model_comparison["same_direction"] = np.sign(model_comparison["estimate_bracken"]) == np.sign(
-        model_comparison["estimate_metaphlan"]
+    model_comparison["same_direction"] = np.sign(
+        model_comparison["estimate_bracken"]
+    ) == np.sign(model_comparison["estimate_metaphlan"])
+    model_comparison["term_label"] = model_comparison["term"].map(
+        base.prettify_model_term
     )
-    model_comparison["term_label"] = model_comparison["term"].map(base.prettify_model_term)
     return {
         "sample_depth": sample_depth,
         "distance_summary": distance_summary,
@@ -285,12 +319,24 @@ def make_bracken_metaphlan_figure(comparison_data):
             s=75,
             ax=ax,
         )
-        low = np.nanmin(
-            [model_comparison["estimate_bracken"].min(), model_comparison["estimate_metaphlan"].min()]
-        ) - 0.2
-        high = np.nanmax(
-            [model_comparison["estimate_bracken"].max(), model_comparison["estimate_metaphlan"].max()]
-        ) + 0.2
+        low = (
+            np.nanmin(
+                [
+                    model_comparison["estimate_bracken"].min(),
+                    model_comparison["estimate_metaphlan"].min(),
+                ]
+            )
+            - 0.2
+        )
+        high = (
+            np.nanmax(
+                [
+                    model_comparison["estimate_bracken"].max(),
+                    model_comparison["estimate_metaphlan"].max(),
+                ]
+            )
+            + 0.2
+        )
         ax.plot([low, high], [low, high], linestyle="--", color="black", linewidth=1)
         ax.set_xlim(low, high)
         ax.set_ylim(low, high)
@@ -307,7 +353,6 @@ def make_bracken_metaphlan_figure(comparison_data):
     plt.close(fig)
 
 
-
 # %% [markdown]
 # ## Run The Sensitivity Analysis And Save Numbered Outputs
 #
@@ -316,12 +361,30 @@ def make_bracken_metaphlan_figure(comparison_data):
 comparison_data = build_bracken_metaphlan_tables()
 make_bracken_metaphlan_figure(comparison_data)
 
-wc.save_table(comparison_data["sample_depth"], wc.table_path(context, 14, "bracken_metaphlan_sample_depth"))
-wc.save_table(comparison_data["distance_summary"], wc.table_path(context, 15, "bracken_metaphlan_distance_summary"))
-wc.save_table(comparison_data["taxon_correlations"], wc.table_path(context, 16, "bracken_metaphlan_taxon_correlations"))
-wc.save_table(comparison_data["bracken_models"], wc.table_path(context, 17, "bracken_species_models_shared_samples"))
-wc.save_table(comparison_data["metaphlan_models"], wc.table_path(context, 18, "metaphlan_species_models"))
-wc.save_table(comparison_data["model_comparison"], wc.table_path(context, 19, "bracken_metaphlan_model_comparison"))
+wc.save_table(
+    comparison_data["sample_depth"],
+    wc.table_path(context, 14, "bracken_metaphlan_sample_depth"),
+)
+wc.save_table(
+    comparison_data["distance_summary"],
+    wc.table_path(context, 15, "bracken_metaphlan_distance_summary"),
+)
+wc.save_table(
+    comparison_data["taxon_correlations"],
+    wc.table_path(context, 16, "bracken_metaphlan_taxon_correlations"),
+)
+wc.save_table(
+    comparison_data["bracken_models"],
+    wc.table_path(context, 17, "bracken_species_models_shared_samples"),
+)
+wc.save_table(
+    comparison_data["metaphlan_models"],
+    wc.table_path(context, 18, "metaphlan_species_models"),
+)
+wc.save_table(
+    comparison_data["model_comparison"],
+    wc.table_path(context, 19, "bracken_metaphlan_model_comparison"),
+)
 
 
 # %% [markdown]
@@ -329,10 +392,18 @@ wc.save_table(comparison_data["model_comparison"], wc.table_path(context, 19, "b
 #
 
 # %%
-sample_depth = pd.read_csv(wc.table_path(context, 14, "bracken_metaphlan_sample_depth"), sep="\t")
-distance_summary = pd.read_csv(wc.table_path(context, 15, "bracken_metaphlan_distance_summary"), sep="\t")
-taxon_correlations = pd.read_csv(wc.table_path(context, 16, "bracken_metaphlan_taxon_correlations"), sep="\t")
-model_comparison = pd.read_csv(wc.table_path(context, 19, "bracken_metaphlan_model_comparison"), sep="\t")
+sample_depth = pd.read_csv(
+    wc.table_path(context, 14, "bracken_metaphlan_sample_depth"), sep="\t"
+)
+distance_summary = pd.read_csv(
+    wc.table_path(context, 15, "bracken_metaphlan_distance_summary"), sep="\t"
+)
+taxon_correlations = pd.read_csv(
+    wc.table_path(context, 16, "bracken_metaphlan_taxon_correlations"), sep="\t"
+)
+model_comparison = pd.read_csv(
+    wc.table_path(context, 19, "bracken_metaphlan_model_comparison"), sep="\t"
+)
 
 display(SVG(filename=str(wc.figure_path(context, 7, "bracken_metaphlan_sensitivity"))))
 display(distance_summary)
@@ -340,12 +411,17 @@ display(taxon_correlations)
 display(model_comparison.head(20))
 
 shared_n = int(sample_depth["shared_method_qc"].sum())
-same_direction = model_comparison["same_direction"].mean() if not model_comparison.empty else float("nan")
+same_direction = (
+    model_comparison["same_direction"].mean()
+    if not model_comparison.empty
+    else float("nan")
+)
 summary_lines = [
     f"- Samples retained for direct method comparison: {shared_n}.",
     "- Positive result: the major sample-structure pattern can be compared on a matched sample set rather than by memory or intuition.",
-    f"- Positive / negative result: matched Bracken-vs-MetaPhlAn coefficient directions agreed in {same_direction:.1%} of shared terms." if pd.notna(same_direction) else "- No matched model terms were available for direction comparison.",
+    f"- Positive / negative result: matched Bracken-vs-MetaPhlAn coefficient directions agreed in {same_direction:.1%} of shared terms."
+    if pd.notna(same_direction)
+    else "- No matched model terms were available for direction comparison.",
     "- Negative result: MetaPhlAn is sparser here, so some Bracken-supported signals are expected to attenuate rather than replicate perfectly.",
 ]
 display(Markdown("## Working Interpretation\n" + "\n".join(summary_lines)))
-

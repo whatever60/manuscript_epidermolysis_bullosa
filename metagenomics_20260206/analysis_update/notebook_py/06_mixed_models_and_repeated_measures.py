@@ -50,7 +50,9 @@ from scipy.stats import chi2
 
 
 def _best_mixed_fit(candidates):
-    converged = [item for item in candidates if bool(getattr(item[0], "converged", False))]
+    converged = [
+        item for item in candidates if bool(getattr(item[0], "converged", False))
+    ]
     pool = converged if converged else candidates
     return min(pool, key=lambda item: item[0].aic)
 
@@ -138,8 +140,20 @@ def collect_optimizer_attempts(
                 "aic": float(fit.aic),
                 "bic": float(fit.bic),
                 "llf": float(fit.llf),
-                "patient_var": float(fit.params.get("patient Var", np.nan)) if vc_formula is not None else (float(fit.params.get("Group Var", np.nan)) if structure_name == "patient_only" else np.nan),
-                "batch_var": float(fit.params.get("batch Var", np.nan)) if vc_formula is not None else (float(fit.params.get("Group Var", np.nan)) if structure_name == "batch_only" else np.nan),
+                "patient_var": float(fit.params.get("patient Var", np.nan))
+                if vc_formula is not None
+                else (
+                    float(fit.params.get("Group Var", np.nan))
+                    if structure_name == "patient_only"
+                    else np.nan
+                ),
+                "batch_var": float(fit.params.get("batch Var", np.nan))
+                if vc_formula is not None
+                else (
+                    float(fit.params.get("Group Var", np.nan))
+                    if structure_name == "batch_only"
+                    else np.nan
+                ),
                 "warning_count": len(warning_messages),
                 "warnings": " | ".join(sorted(set(warning_messages)))[:2000],
                 "error": "",
@@ -296,7 +310,15 @@ def fit_best_single_group_model(data, formula, group_col):
     return fit, status
 
 
-def build_random_effect_test_row(model_name, n_samples, tested_effect, full_model, reduced_model, full_llf, reduced_llf):
+def build_random_effect_test_row(
+    model_name,
+    n_samples,
+    tested_effect,
+    full_model,
+    reduced_model,
+    full_llf,
+    reduced_llf,
+):
     lrt_stat = max(0.0, 2.0 * (full_llf - reduced_llf))
     p_chisq = chi2.sf(lrt_stat, 1)
     return {
@@ -391,7 +413,6 @@ def fit_host_random_effect_tests(qc):
     return pd.DataFrame(rows)
 
 
-
 # %% [markdown]
 # ## Fit The Mixed Models And Save The Numbered Outputs
 #
@@ -418,7 +439,9 @@ host_status = host_status.assign(
     pvalue_chisq=np.nan,
     pvalue_boundary=np.nan,
 )
-host_status = pd.concat([host_status, fit_host_random_effect_tests(qc)], ignore_index=True)
+host_status = pd.concat(
+    [host_status, fit_host_random_effect_tests(qc)], ignore_index=True
+)
 species_effects, species_status = advanced.fit_species_models(qc, species_bac)
 comparison = advanced.build_comparison_table(
     host_effects,
@@ -467,11 +490,17 @@ if advanced_context.input_dir.exists():
 #
 
 # %%
-diagnostics = pd.read_csv(wc.table_path(context, 8, "patient_structure_diagnostics"), sep="\t")
+diagnostics = pd.read_csv(
+    wc.table_path(context, 8, "patient_structure_diagnostics"), sep="\t"
+)
 host_effects = pd.read_csv(wc.table_path(context, 9, "host_mixed_effects"), sep="\t")
 host_status = pd.read_csv(wc.table_path(context, 10, "host_mixed_status"), sep="\t")
-species_effects = pd.read_csv(wc.table_path(context, 11, "species_mixed_effects"), sep="\t")
-comparison = pd.read_csv(wc.table_path(context, 13, "mixed_vs_cluster_comparison"), sep="\t")
+species_effects = pd.read_csv(
+    wc.table_path(context, 11, "species_mixed_effects"), sep="\t"
+)
+comparison = pd.read_csv(
+    wc.table_path(context, 13, "mixed_vs_cluster_comparison"), sep="\t"
+)
 
 display(diagnostics)
 display(SVG(filename=str(wc.figure_path(context, 5, "host_model_compare"))))
@@ -505,4 +534,3 @@ summary_lines = [
     "- Negative result: single-group random-intercept fits were less informative than the joint patient-plus-batch specification.",
 ]
 display(Markdown("## Working Interpretation\n" + "\n".join(summary_lines)))
-

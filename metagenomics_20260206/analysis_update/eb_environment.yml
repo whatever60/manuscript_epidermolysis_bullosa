@@ -13,6 +13,7 @@ dependencies:
   - seaborn
   - matplotlib
   - openpyxl
+  - ruff
   - jupyterlab
   - ipykernel
   # bioconda::maaslin2 currently resolves cleanly with r-base 4.3 builds

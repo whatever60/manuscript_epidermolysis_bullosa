@@ -70,9 +70,7 @@ optimal_thresholds = pd.read_csv(
 mixed_concordance = pd.read_csv(
     wc.table_path(context, 34, "culture_mixed_concordance"), sep="\t"
 )
-venn_counts = pd.read_csv(
-    wc.table_path(context, 35, "culture_venn_counts"), sep="\t"
-)
+venn_counts = pd.read_csv(wc.table_path(context, 35, "culture_venn_counts"), sep="\t")
 descriptive_concordance = pd.read_csv(
     wc.table_path(context, 42, "culture_concordance_descriptive"), sep="\t"
 )
@@ -631,10 +629,28 @@ def plot_adjusted_concordance(
     plt.close(fig)
 
 
-
 # %% [markdown]
 # ## Render Figure 13 Panels From Numbered Tables
 #
+
+# %%
+fig_threshold = wc.figure_path(context, 14, "culture_threshold_sweep")
+plot_threshold_sweep(threshold_sweep, optimal_thresholds, fig_threshold)
+
+fig_venn = wc.figure_path(context, 15, "culture_venn_diagrams")
+plot_venn_grid(venn_counts, fig_venn)
+
+fig_abundance = wc.figure_path(context, 16, "culture_abundance_density")
+plot_abundance_boxplot(abundance_plot_df, descriptive_concordance, fig_abundance)
+
+fig_adjusted = wc.figure_path(context, 17, "culture_adjusted_concordance")
+plot_adjusted_concordance(mixed_concordance, fig_adjusted)
+
+display(SVG(filename=str(fig_threshold)))
+display(SVG(filename=str(fig_venn)))
+display(SVG(filename=str(fig_abundance)))
+display(SVG(filename=str(fig_adjusted)))
+
 
 # %%
 fig_threshold = wc.figure_path(context, 14, "culture_threshold_sweep")

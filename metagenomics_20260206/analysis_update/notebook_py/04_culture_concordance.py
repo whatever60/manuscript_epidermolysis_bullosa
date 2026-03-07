@@ -53,8 +53,12 @@ import numpy as np
 
 top_labels = culture_summary.head(6)["label"].tolist()
 culture_plot_df = culture_plot_df.loc[culture_plot_df["label"].isin(top_labels)].copy()
-culture_plot_df["culture_status"] = np.where(culture_plot_df["culture_positive"], "Culture positive", "Culture negative")
-culture_plot_df["log10_relative_abundance"] = np.log10(culture_plot_df["relative_abundance"] + 1e-6)
+culture_plot_df["culture_status"] = np.where(
+    culture_plot_df["culture_positive"], "Culture positive", "Culture negative"
+)
+culture_plot_df["log10_relative_abundance"] = np.log10(
+    culture_plot_df["relative_abundance"] + 1e-6
+)
 
 fig, axes = plt.subplots(2, 3, figsize=(12, 7), sharey=True)
 axes = axes.ravel()
@@ -79,11 +83,13 @@ for ax, label in zip(axes, top_labels):
         ax=ax,
     )
     metrics = culture_summary.loc[culture_summary["label"] == label].iloc[0]
-    ax.set_title(f"{label}\nU-test q={metrics['qvalue']:.3g}; AUROC={metrics['auroc']:.2f}")
+    ax.set_title(
+        f"{label}\nU-test q={metrics['qvalue']:.3g}; AUROC={metrics['auroc']:.2f}"
+    )
     ax.set_xlabel("")
     ax.set_ylabel("log10(relative abundance + 1e-6)")
     ax.tick_params(axis="x", rotation=20)
-for ax in axes[len(top_labels):]:
+for ax in axes[len(top_labels) :]:
     ax.axis("off")
 fig.tight_layout()
 fig_path = wc.figure_path(context, 3, "culture_concordance")
@@ -99,7 +105,9 @@ wc.save_table(culture_summary, wc.table_path(context, 6, "culture_concordance"))
 #
 
 # %%
-culture_summary = pd.read_csv(wc.table_path(context, 6, "culture_concordance"), sep="\t")
+culture_summary = pd.read_csv(
+    wc.table_path(context, 6, "culture_concordance"), sep="\t"
+)
 
 display(SVG(filename=str(wc.figure_path(context, 3, "culture_concordance"))))
 display(culture_summary)
@@ -112,4 +120,3 @@ summary_lines = [
     "- Culture agreement is organism-group level, not strain-level or resistance-level agreement.",
 ]
 display(Markdown("## Working Interpretation\n" + "\n".join(summary_lines)))
-

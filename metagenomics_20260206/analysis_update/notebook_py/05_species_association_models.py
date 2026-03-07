@@ -51,13 +51,19 @@ import numpy as np
 
 if not species_results.empty:
     plot_df = species_results.loc[
-        species_results["term"].str.contains("body_region") | species_results["term"].str.contains("chronicity_group")
+        species_results["term"].str.contains("body_region")
+        | species_results["term"].str.contains("chronicity_group")
     ].copy()
     plot_df = plot_df.loc[plot_df["qvalue"].fillna(1) <= 0.15].copy()
     if plot_df.empty:
-        plot_df = species_results.loc[
-            species_results["term"].str.contains("body_region") | species_results["term"].str.contains("chronicity_group")
-        ].head(12).copy()
+        plot_df = (
+            species_results.loc[
+                species_results["term"].str.contains("body_region")
+                | species_results["term"].str.contains("chronicity_group")
+            ]
+            .head(12)
+            .copy()
+        )
     plot_df["term_label"] = plot_df["term"].map(base.prettify_model_term)
     plot_df["species_label"] = plot_df["species"]
     plot_df = plot_df.sort_values(["estimate", "species_label"])
@@ -96,7 +102,9 @@ wc.save_table(species_results, wc.table_path(context, 7, "species_associations")
 #
 
 # %%
-species_results = pd.read_csv(wc.table_path(context, 7, "species_associations"), sep="\t")
+species_results = pd.read_csv(
+    wc.table_path(context, 7, "species_associations"), sep="\t"
+)
 
 display(SVG(filename=str(wc.figure_path(context, 4, "species_associations"))))
 display(species_results.head(20))
@@ -108,4 +116,3 @@ summary_lines = [
     "- Negative result: weaker effects were sensitive to model choice and were treated as provisional until the mixed-model notebook.",
 ]
 display(Markdown("## Working Interpretation\n" + "\n".join(summary_lines)))
-

@@ -64,10 +64,14 @@ def save_svg_and_jpg(fig: plt.Figure, svg_path: Path, **kwargs) -> None:
     fig.savefig(svg_path, bbox_inches="tight", **kwargs)
     jpg_kwargs = dict(kwargs)
     jpg_kwargs.pop("format", None)
-    fig.savefig(svg_path.with_suffix(".jpg"), bbox_inches="tight", dpi=300, **jpg_kwargs)
+    fig.savefig(
+        svg_path.with_suffix(".jpg"), bbox_inches="tight", dpi=300, **jpg_kwargs
+    )
 
 
-def prepare_base_data(data_dir: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def prepare_base_data(
+    data_dir: Path,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     base_context = base.AnalysisContext(
         data_dir=data_dir,
         analysis_dir=data_dir / "analysis_update",
@@ -78,7 +82,9 @@ def prepare_base_data(data_dir: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.Da
     metaphlan = base.load_metaphlan_table(base_context)
     sample_ids = sorted(species_all.index)
     metadata = base.load_metadata(base_context, sample_ids)
-    qc = base.prepare_qc_table(base_context, metadata, species_all, species_bac, metaphlan)
+    qc = base.prepare_qc_table(
+        base_context, metadata, species_all, species_bac, metaphlan
+    )
     qc["patient_id"] = qc["patient_id"].astype(str)
     qc["visit_id"] = qc["visit_id"].astype(str)
     qc["batch_id"] = qc["batch_id"].astype(str)
@@ -117,7 +123,9 @@ def fit_variance_component_model(
             f"Mixed model failed for {outcome_name} [{model_name}]: {last_error!r}"
         ) from last_error
 
-    converged_candidates = [item for item in candidates if bool(getattr(item[0], "converged", False))]
+    converged_candidates = [
+        item for item in candidates if bool(getattr(item[0], "converged", False))
+    ]
     pool = converged_candidates if converged_candidates else candidates
     fit, warning_messages, optimizer = min(pool, key=lambda item: item[0].aic)
 
@@ -170,16 +178,22 @@ def fit_host_models(qc: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     effect_tables = []
     status_rows = []
     for model_name, formula in HOST_FORMULAS.items():
-        effects, status = fit_variance_component_model(model_df, formula, "host_logit", model_name)
+        effects, status = fit_variance_component_model(
+            model_df, formula, "host_logit", model_name
+        )
         effect_tables.append(effects)
         status_rows.append(status)
     effects_df = pd.concat(effect_tables, ignore_index=True)
-    effects_df = base.bh_adjust(effects_df.sort_values(["model_name", "pvalue"]), "pvalue")
+    effects_df = base.bh_adjust(
+        effects_df.sort_values(["model_name", "pvalue"]), "pvalue"
+    )
     status_df = pd.DataFrame(status_rows)
     return effects_df, status_df
 
 
-def fit_species_models(qc: pd.DataFrame, species_bac: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+def fit_species_models(
+    qc: pd.DataFrame, species_bac: pd.DataFrame
+) -> tuple[pd.DataFrame, pd.DataFrame]:
     sample_ids = qc.index[qc["model_qc_pass"]].tolist()
     counts = species_bac.loc[sample_ids].copy()
     clr = base.clr_transform(counts)
@@ -207,7 +221,9 @@ def fit_species_models(qc: pd.DataFrame, species_bac: pd.DataFrame) -> tuple[pd.
             continue
         frame = metadata.copy()
         frame["response"] = clr[species]
-        effects, status = fit_variance_component_model(frame, SPECIES_FORMULA, species, "species_mixedlm")
+        effects, status = fit_variance_component_model(
+            frame, SPECIES_FORMULA, species, "species_mixedlm"
+        )
         effects["prevalence"] = prevalence
         status["prevalence"] = prevalence
         effect_tables.append(effects)
@@ -249,7 +265,9 @@ def prepare_external_tool_inputs(
     metadata.index.name = "sample_id"
 
     rel_ab.to_csv(context.input_dir / "maaslin2_samples_by_features.tsv", sep="\t")
-    rel_ab.transpose().to_csv(context.input_dir / "maaslin2_features_by_samples.tsv", sep="\t")
+    rel_ab.transpose().to_csv(
+        context.input_dir / "maaslin2_features_by_samples.tsv", sep="\t"
+    )
     metadata.to_csv(context.input_dir / "maaslin2_metadata.tsv", sep="\t")
 
     halla_meta = pd.get_dummies(
@@ -258,10 +276,14 @@ def prepare_external_tool_inputs(
         dtype=float,
     )
     halla_meta.to_csv(context.input_dir / "halla_metadata_numeric.tsv", sep="\t")
-    rel_ab.to_csv(context.input_dir / "halla_microbiome_samples_by_features.tsv", sep="\t")
+    rel_ab.to_csv(
+        context.input_dir / "halla_microbiome_samples_by_features.tsv", sep="\t"
+    )
 
     top_taxa = rel_ab.mean(axis=0).sort_values(ascending=False).head(50).index.tolist()
-    lefse = pd.DataFrame(index=["class", "subclass", "subject"] + top_taxa, columns=sample_ids)
+    lefse = pd.DataFrame(
+        index=["class", "subclass", "subject"] + top_taxa, columns=sample_ids
+    )
     lefse.loc["class"] = metadata["body_region"]
     lefse.loc["subclass"] = metadata["chronicity_group"]
     lefse.loc["subject"] = metadata["patient_id"]
@@ -356,7 +378,10 @@ def load_cluster_results(data_dir: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
     host_cluster["model_name"] = "cluster_ols"
 
     species_cluster = pd.read_csv(
-        data_dir / "analysis_update" / "tables" / "table_05_01_species_associations.tsv",
+        data_dir
+        / "analysis_update"
+        / "tables"
+        / "table_05_01_species_associations.tsv",
         sep="\t",
     )
     species_cluster["model_name"] = "cluster_ols"
@@ -371,14 +396,20 @@ def build_comparison_table(
 ) -> pd.DataFrame:
     mixed = pd.concat(
         [
-            host_mixed.loc[:, ["outcome", "term", "estimate", "pvalue", "qvalue"]].assign(model_family="mixedlm"),
-            species_mixed.loc[:, ["outcome", "term", "estimate", "pvalue", "qvalue"]].assign(model_family="mixedlm"),
+            host_mixed.loc[
+                :, ["outcome", "term", "estimate", "pvalue", "qvalue"]
+            ].assign(model_family="mixedlm"),
+            species_mixed.loc[
+                :, ["outcome", "term", "estimate", "pvalue", "qvalue"]
+            ].assign(model_family="mixedlm"),
         ],
         ignore_index=True,
     )
     cluster = pd.concat(
         [
-            host_cluster.loc[:, ["outcome", "term", "estimate", "pvalue", "qvalue"]].assign(model_family="cluster_ols"),
+            host_cluster.loc[
+                :, ["outcome", "term", "estimate", "pvalue", "qvalue"]
+            ].assign(model_family="cluster_ols"),
             species_cluster.loc[:, ["species", "term", "estimate", "pvalue", "qvalue"]]
             .rename(columns={"species": "outcome"})
             .assign(model_family="cluster_ols"),
@@ -391,8 +422,12 @@ def build_comparison_table(
         suffixes=("_mixed", "_cluster"),
         how="outer",
     )
-    comparison["same_direction"] = np.sign(comparison["estimate_mixed"]) == np.sign(comparison["estimate_cluster"])
-    comparison["estimate_shift"] = comparison["estimate_mixed"] - comparison["estimate_cluster"]
+    comparison["same_direction"] = np.sign(comparison["estimate_mixed"]) == np.sign(
+        comparison["estimate_cluster"]
+    )
+    comparison["estimate_shift"] = (
+        comparison["estimate_mixed"] - comparison["estimate_cluster"]
+    )
     return comparison.sort_values(["outcome", "term"])
 
 
@@ -423,8 +458,16 @@ def make_host_comparison_figure(
             color="#9eb6d8",
             linewidth=2,
         )
-    ax.scatter(data["estimate_cluster"], y, color="#7f7f7f", label="Cluster-robust OLS", s=60)
-    ax.scatter(data["estimate"], y, color="#1f4e79", label="Variance-component mixed model", s=60)
+    ax.scatter(
+        data["estimate_cluster"], y, color="#7f7f7f", label="Cluster-robust OLS", s=60
+    )
+    ax.scatter(
+        data["estimate"],
+        y,
+        color="#1f4e79",
+        label="Variance-component mixed model",
+        s=60,
+    )
     ax.set_yticks(y)
     ax.set_yticklabels(data["term_label"])
     ax.set_xlabel("Coefficient estimate")
@@ -436,9 +479,12 @@ def make_host_comparison_figure(
     plt.close(fig)
 
 
-def make_species_mixed_figure(species_mixed: pd.DataFrame, context: AdvancedContext) -> pd.DataFrame:
+def make_species_mixed_figure(
+    species_mixed: pd.DataFrame, context: AdvancedContext
+) -> pd.DataFrame:
     plot_df = species_mixed.loc[
-        species_mixed["term"].str.contains("body_region") | species_mixed["term"].str.contains("chronicity_group")
+        species_mixed["term"].str.contains("body_region")
+        | species_mixed["term"].str.contains("chronicity_group")
     ].copy()
     plot_df = plot_df.loc[plot_df["qvalue"].fillna(1) <= 0.15].copy()
     if plot_df.empty:
@@ -484,9 +530,13 @@ def write_report(
     species_plot_df: pd.DataFrame,
 ) -> None:
     host_model = host_effects.loc[host_effects["model_name"] == HOST_MODEL_NAME].copy()
-    host_best = host_model.loc[host_model["term"] != "Intercept"].sort_values("pvalue").head(1)
+    host_best = (
+        host_model.loc[host_model["term"] != "Intercept"].sort_values("pvalue").head(1)
+    )
     species_hits = species_effects.sort_values("qvalue").head(6)
-    mixed_status = species_status.loc[:, ["outcome", "aic", "patient_var", "batch_var", "warning_count"]]
+    mixed_status = species_status.loc[
+        :, ["outcome", "aic", "patient_var", "batch_var", "warning_count"]
+    ]
     agree = comparison["same_direction"].dropna().mean()
 
     lines = [
@@ -513,7 +563,9 @@ def write_report(
             f"- Host mixed model: no fixed-effect term reached q <= 0.1; the largest signal was `{base.prettify_model_term(row['term'])}` with estimate {row['estimate']:.2f} (q={row['qvalue']:.3g})."
         )
 
-    host_status_row = host_status.loc[host_status["model_name"] == HOST_MODEL_NAME].iloc[0]
+    host_status_row = host_status.loc[
+        host_status["model_name"] == HOST_MODEL_NAME
+    ].iloc[0]
     lines.append(
         f"- Host model variance components: patient {host_status_row['patient_var']:.3g}, batch {host_status_row['batch_var']:.3g}."
     )
@@ -569,7 +621,9 @@ def write_report(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Run advanced mixed-effects models for EB metagenomics.")
+    parser = argparse.ArgumentParser(
+        description="Run advanced mixed-effects models for EB metagenomics."
+    )
     parser.add_argument(
         "--data-dir",
         type=Path,
@@ -609,11 +663,21 @@ def main() -> None:
     make_host_comparison_figure(host_effects, host_cluster, context)
     species_plot_df = make_species_mixed_figure(species_effects, context)
 
-    host_effects.to_csv(context.table_dir / "host_mixed_effects.tsv", sep="\t", index=False)
-    host_status.to_csv(context.table_dir / "host_mixed_status.tsv", sep="\t", index=False)
-    species_effects.to_csv(context.table_dir / "species_mixed_effects.tsv", sep="\t", index=False)
-    species_status.to_csv(context.table_dir / "species_mixed_status.tsv", sep="\t", index=False)
-    comparison.to_csv(context.table_dir / "mixed_vs_cluster_comparison.tsv", sep="\t", index=False)
+    host_effects.to_csv(
+        context.table_dir / "host_mixed_effects.tsv", sep="\t", index=False
+    )
+    host_status.to_csv(
+        context.table_dir / "host_mixed_status.tsv", sep="\t", index=False
+    )
+    species_effects.to_csv(
+        context.table_dir / "species_mixed_effects.tsv", sep="\t", index=False
+    )
+    species_status.to_csv(
+        context.table_dir / "species_mixed_status.tsv", sep="\t", index=False
+    )
+    comparison.to_csv(
+        context.table_dir / "mixed_vs_cluster_comparison.tsv", sep="\t", index=False
+    )
     method_status.to_csv(context.table_dir / "method_status.tsv", sep="\t", index=False)
 
     write_report(

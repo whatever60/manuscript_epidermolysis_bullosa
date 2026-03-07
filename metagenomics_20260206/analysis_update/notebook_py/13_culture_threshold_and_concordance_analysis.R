@@ -1,9 +1,9 @@
 # ---
 # jupyter:
 #   jupytext:
-#     formats: ipynb,notebook_py//py:percent
+#     formats: ipynb,notebook_py//R:percent
 #     text_representation:
-#       extension: .py
+#       extension: .R
 #       format_name: percent
 #       format_version: '1.3'
 #       jupytext_version: 1.18.1

@@ -23,10 +23,12 @@ Inline deletion requests may be marked by italic text with single asterisks.
 Block deletion requests may be marked as block quotes.
 
 Notebook editing workflow:
-Use Jupytext paired notebooks with formats `ipynb,notebook_py//py:percent`.
+Use Jupytext paired notebooks in `analysis_update/notebook_py/`.
+For Python-kernel notebooks, use `ipynb,notebook_py//py:percent`.
+For R-kernel notebooks, use `ipynb,notebook_py//R:percent`.
 Treat `.ipynb` notebooks as user-edited source documents that must not be overwritten by generated notebook scripts.
 For agent edits, modify the paired files in `analysis_update/notebook_py/` and sync with Jupytext.
-Assume the collaborator may directly edit `.ipynb` files and will not directly edit `notebook_py/*.py`.
+Assume the collaborator may directly edit `.ipynb` files and will not directly edit paired files in `notebook_py/`.
 If Jupytext sync detects inconsistent edits or conflicts, stop and let the collaborator resolve before continuing.
 
 Commit/push hygiene:

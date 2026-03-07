@@ -42,6 +42,7 @@ context, base_data, base, advanced = wc.bootstrap_notebook()
 # These helper functions are kept inside this notebook because they are only used here.
 #
 
+
 # %%
 def metadata_export_frame(metadata):
     return metadata.reset_index().rename(columns={"index": "sample_id"})
@@ -65,13 +66,17 @@ def load_full_primary_metadata():
     primary["sample_id"] = primary["code"].map(base.normalize_sample_id)
     primary = primary.loc[primary["sample_id"].astype(str).str.strip() != ""].copy()
     primary["patient_id"] = primary["sample_id"].str.slice(0, 2)
-    primary = primary.loc[primary["patient_id"].str.fullmatch(r"\d{2}", na=False)].copy()
+    primary = primary.loc[
+        primary["patient_id"].str.fullmatch(r"\d{2}", na=False)
+    ].copy()
     primary["culture_date"] = pd.to_datetime(primary["culture_date"], errors="coerce")
     primary = primary.loc[primary["culture_date"].notna()].copy()
     primary["location"] = primary["location_raw"].map(base.standardize_location)
     primary["body_region"] = primary["location"].map(base.infer_body_region)
     primary["laterality"] = primary["location"].map(base.infer_laterality)
-    primary["visit_id"] = primary["patient_id"] + "_" + primary["culture_date"].dt.strftime("%Y-%m-%d")
+    primary["visit_id"] = (
+        primary["patient_id"] + "_" + primary["culture_date"].dt.strftime("%Y-%m-%d")
+    )
     return primary
 
 
@@ -87,7 +92,10 @@ def full_metadata_site_visit_summary():
             n_body_regions=("body_region", "nunique"),
         )
         .reset_index()
-        .sort_values(["n_records", "n_clean_locations", "n_dates"], ascending=[False, False, False])
+        .sort_values(
+            ["n_records", "n_clean_locations", "n_dates"],
+            ascending=[False, False, False],
+        )
     )
     visit_sites = (
         primary.groupby(["patient_id", "visit_id"])["location"]
@@ -106,14 +114,20 @@ def full_metadata_site_visit_summary():
             {
                 "n_rows": int(primary.shape[0]),
                 "n_patients": int(primary["patient_id"].nunique()),
-                "n_patient_visit_pairs": int(primary[["patient_id", "visit_id"]].drop_duplicates().shape[0]),
-                "n_patient_site_pairs": int(primary[["patient_id", "location"]].drop_duplicates().shape[0]),
+                "n_patient_visit_pairs": int(
+                    primary[["patient_id", "visit_id"]].drop_duplicates().shape[0]
+                ),
+                "n_patient_site_pairs": int(
+                    primary[["patient_id", "location"]].drop_duplicates().shape[0]
+                ),
                 "multisite_visits": int((visit_sites["n_sites"] > 1).sum()),
                 "total_visits": int(visit_sites.shape[0]),
                 "revisited_sites": int((revisited_sites["n_visits"] > 1).sum()),
                 "total_patient_sites": int(revisited_sites.shape[0]),
                 "median_dates_per_patient": float(per_patient["n_dates"].median()),
-                "median_sites_per_patient": float(per_patient["n_clean_locations"].median()),
+                "median_sites_per_patient": float(
+                    per_patient["n_clean_locations"].median()
+                ),
             }
         ]
     )
@@ -134,8 +148,9 @@ def repeated_measure_summary(metadata):
         n_dates=("culture_date", "nunique"),
     ).reset_index()
     summary["multi_date"] = summary["n_dates"] > 1
-    return summary.sort_values(["n_dates", "n_samples", "patient_id"], ascending=[False, False, True])
-
+    return summary.sort_values(
+        ["n_dates", "n_samples", "patient_id"], ascending=[False, False, True]
+    )
 
 
 # %% [markdown]
@@ -150,24 +165,26 @@ metadata = base_data["metadata"]
 metadata_table = metadata_export_frame(metadata)
 wc.save_table(metadata_table, wc.table_path(context, 1, "cleaned_metadata"))
 
-display(metadata_table[
-    [
-        "sample_id",
-        "patient_id",
-        "visit_id",
-        "batch_id",
-        "culture_date",
-        "days_since_first_sample",
-        "years_since_first_sample",
-        "location_raw",
-        "location",
-        "body_region",
-        "laterality",
-        "chronicity_group",
-        "clinical_infection_flag",
-        "culture_result",
-    ]
-].head(20))
+display(
+    metadata_table[
+        [
+            "sample_id",
+            "patient_id",
+            "visit_id",
+            "batch_id",
+            "culture_date",
+            "days_since_first_sample",
+            "years_since_first_sample",
+            "location_raw",
+            "location",
+            "body_region",
+            "laterality",
+            "chronicity_group",
+            "clinical_infection_flag",
+            "culture_result",
+        ]
+    ].head(20)
+)
 
 
 # %% [markdown]
@@ -197,10 +214,26 @@ display(metadata_table[
 visit_summary = repeated_measure_summary(metadata)
 full_meta = full_metadata_site_visit_summary()
 full_overall = full_meta["overall"].iloc[0]
-multisite_examples = full_meta["visit_sites"].loc[full_meta["visit_sites"]["n_sites"] > 1].head(10)
-revisited_examples = full_meta["revisited_sites"].loc[full_meta["revisited_sites"]["n_visits"] > 1].head(10)
-body_region_counts = metadata_table["body_region"].value_counts(dropna=False).rename_axis("body_region").reset_index(name="n_samples")
-chronicity_counts = metadata_table["chronicity_group"].value_counts(dropna=False).rename_axis("chronicity_group").reset_index(name="n_samples")
+multisite_examples = (
+    full_meta["visit_sites"].loc[full_meta["visit_sites"]["n_sites"] > 1].head(10)
+)
+revisited_examples = (
+    full_meta["revisited_sites"]
+    .loc[full_meta["revisited_sites"]["n_visits"] > 1]
+    .head(10)
+)
+body_region_counts = (
+    metadata_table["body_region"]
+    .value_counts(dropna=False)
+    .rename_axis("body_region")
+    .reset_index(name="n_samples")
+)
+chronicity_counts = (
+    metadata_table["chronicity_group"]
+    .value_counts(dropna=False)
+    .rename_axis("chronicity_group")
+    .reset_index(name="n_samples")
+)
 
 display(body_region_counts)
 display(chronicity_counts)
@@ -222,4 +255,3 @@ summary_lines = [
     "- Clinical free text was parsed into chronicity and infection-status categories; these are rule-based and remain approximate.",
 ]
 display(Markdown("## Working Summary\n" + "\n".join(summary_lines)))
-

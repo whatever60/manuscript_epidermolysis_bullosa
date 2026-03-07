@@ -59,17 +59,19 @@ wc.save_table(host_table, wc.table_path(context, 3, "host_model"))
 qc_table = pd.read_csv(wc.table_path(context, 2, "qc_metrics"), sep="\t")
 host_table = pd.read_csv(wc.table_path(context, 3, "host_model"), sep="\t")
 
-display(qc_table[
-    [
-        "sample_id",
-        "patient_id",
-        "visit_id",
-        "host_removed_fraction",
-        "bacterial_species_reads",
-        "metaphlan_species_reads",
-        "community_qc_pass",
-    ]
-].head(20))
+display(
+    qc_table[
+        [
+            "sample_id",
+            "patient_id",
+            "visit_id",
+            "host_removed_fraction",
+            "bacterial_species_reads",
+            "metaphlan_species_reads",
+            "community_qc_pass",
+        ]
+    ].head(20)
+)
 display(host_table)
 
 summary_lines = [
@@ -80,4 +82,3 @@ summary_lines = [
     "- Negative result: this notebook still uses a Gaussian working model for host fraction and handles repeated structure only through patient-clustered standard errors.",
 ]
 display(Markdown("## Positive / Negative Takeaways\n" + "\n".join(summary_lines)))
-
