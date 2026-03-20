@@ -40,6 +40,10 @@ figure_dir <- file.path(root, "figures")
 table_dir <- file.path(root, "tables")
 dir.create(figure_dir, showWarnings = FALSE, recursive = TRUE)
 dir.create(table_dir, showWarnings = FALSE, recursive = TRUE)
+species_bac_path <- file.path(table_dir, "table_00_02_read_count_species_bac.csv")
+if (!file.exists(species_bac_path)) {
+  species_bac_path <- file.path(data_dir, "read_count_species_bac.csv")
+}
 
 table_id_map <- c(
   `1` = "01_01", `2` = "02_01", `3` = "02_02", `4` = "03_01", `5` = "03_02",
@@ -96,7 +100,7 @@ qc <- read_tsv(table_file(2, "qc_metrics"), show_col_types = FALSE) |>
     culture_positive = factor(if_else(as.logical(culture_positive), "positive", "negative"),
                               levels = c("negative", "positive")),
     patient_id = factor(sprintf("%02d", as.integer(patient_id))),
-    body_region = factor(body_region, levels = c("lower_extremity", "head_neck", "upper_extremity", "trunk_perineum", "unknown")),
+    body_region = factor(body_region, levels = c("lower_extremity", "head_neck", "upper_extremity", "trunk_perineum", "others")),
     chronicity_group = factor(chronicity_group, levels = c("unknown", "acute_like", "chronic_like", "mixed"))
   ) |>
   filter(model_qc_pass) |>
@@ -114,7 +118,7 @@ qc <- read_tsv(table_file(2, "qc_metrics"), show_col_types = FALSE) |>
     log10_bacterial_reads
   )
 
-counts <- read_csv(file.path(data_dir, "read_count_species_bac.csv"), show_col_types = FALSE)
+counts <- read_csv(species_bac_path, show_col_types = FALSE)
 colnames(counts)[1] <- "sample_id"
 counts <- counts |>
   filter(sample_id %in% qc$sample_id)
@@ -382,4 +386,3 @@ outputs <- tibble(
   )
 )
 print(outputs)
-

@@ -57,42 +57,56 @@ site_map = metadata["body_region"].to_dict()
 pairwise["same_body_site"] = pairwise["sample_i"].map(site_map).eq(
     pairwise["sample_j"].map(site_map)
 )
+date_map = pd.to_datetime(metadata["culture_date"]).to_dict()
+pairwise["date_i"] = pairwise["sample_i"].map(date_map)
+pairwise["date_j"] = pairwise["sample_j"].map(date_map)
+pairwise["date_gap_days"] = (pairwise["date_i"] - pairwise["date_j"]).abs().dt.days
+pairwise["close_date"] = pairwise["date_gap_days"] < 183
 
 order = [
-    "Same patient, same batch date",
+    "Same patient, same site, close date",
+    "Same patient, close date",
     "Same patient, same body site",
     "Same patient, different date/site",
     "Different patient",
 ]
 new_tick_labels = [
-    "Same patient,\nsame date",
+    "Same patient,\nsame site,\n<6 months",
+    "Same patient,\n<6 months",
     "Same patient,\nsame site",
     "Same patient,\ndiff date/site",
     "Diff patient",
 ]
 
-same_date_mask = pairwise["same_patient"] & pairwise["same_batch"]
-same_site_mask = (
-    pairwise["same_patient"] & pairwise["same_body_site"] & ~same_date_mask
+same_site_close_date_mask = (
+    pairwise["same_patient"] & pairwise["same_body_site"] & pairwise["close_date"]
 )
-diff_date_site_mask = pairwise["same_patient"] & ~(same_date_mask | same_site_mask)
+same_close_date_mask = pairwise["same_patient"] & pairwise["close_date"]
+same_site_mask = pairwise["same_patient"] & pairwise["same_body_site"]
+diff_date_site_mask = (
+    pairwise["same_patient"] & ~pairwise["close_date"] & ~pairwise["same_body_site"]
+)
 
 plot_pairwise = pd.concat(
     [
         pairwise.loc[
-            same_date_mask,
+            same_site_close_date_mask,
             ["distance"],
         ].assign(comparison_group=order[0]),
         pairwise.loc[
-            same_site_mask,
+            same_close_date_mask,
             ["distance"],
         ].assign(comparison_group=order[1]),
         pairwise.loc[
-            diff_date_site_mask,
+            same_site_mask,
             ["distance"],
         ].assign(comparison_group=order[2]),
+        pairwise.loc[
+            diff_date_site_mask,
+            ["distance"],
+        ].assign(comparison_group=order[3]),
         pairwise.loc[~pairwise["same_patient"], ["distance"]].assign(
-            comparison_group=order[3]
+            comparison_group=order[4]
         ),
     ],
     ignore_index=True,
@@ -123,7 +137,7 @@ for group in order[:-1]:
 pvalues = base.bh_adjust(pd.DataFrame(pvalue_rows), "pvalue")
 
 
-fig, ax = plt.subplots(figsize=(4.5, 5))
+fig, ax = plt.subplots(figsize=(7, 5))
 
 sns.boxplot(
     data=plot_pairwise,
@@ -206,7 +220,7 @@ for idx, row in pvalues.reset_index(drop=True).iterrows():
         x2=max(x1, x2),
         y=y,
         h=bracket_height,
-        text=f"q={row['qvalue']:.3g}",
+        text=f"q={wc.format_sig(row['qvalue'])}",
         fontsize=12,
     )
 
@@ -240,8 +254,11 @@ summary = pd.read_csv(wc.table_path(context, 5, "pairwise_distance_summary"), se
 display(SVG(filename=str(wc.figure_path(context, 2, "pairwise_distance"))))
 display(summary)
 
-same_visit = summary.loc[
-    summary["comparison_group"] == "Same patient, same batch date"
+same_site_close = summary.loc[
+    summary["comparison_group"] == "Same patient, same site, close date"
+].iloc[0]
+same_close = summary.loc[
+    summary["comparison_group"] == "Same patient, close date"
 ].iloc[0]
 same_site = summary.loc[
     summary["comparison_group"] == "Same patient, same body site"
@@ -251,10 +268,11 @@ diff_date_site = summary.loc[
 ].iloc[0]
 different = summary.loc[summary["comparison_group"] == "Different patient"].iloc[0]
 summary_lines = [
-    f"- Positive result: same-patient same-batch-date swabs were much closer than unrelated swabs (median Bray-Curtis {same_visit['median']:.3f} vs {different['median']:.3f}).",
+    f"- Positive result: same-patient same-site pairs sampled <6 months apart were much closer than unrelated pairs (median Bray-Curtis {same_site_close['median']:.3f} vs {different['median']:.3f}).",
+    f"- Positive result: same-patient pairs sampled <6 months apart were also closer than unrelated pairs (median {same_close['median']:.3f} vs {different['median']:.3f}).",
     f"- Positive result: same-patient same-site pairs also showed lower dissimilarity than unrelated pairs (median {same_site['median']:.3f} vs {different['median']:.3f}).",
     f"- Negative result: same-patient different date/site pairs were closer to unrelated pairs (median {diff_date_site['median']:.3f}).",
-    "- Interpretation: descriptive patient-date grouping is informative, but later models treat absolute date as technical batch rather than biology.",
+    "- Interpretation: short patient-level temporal proximity and shared site both track lower dissimilarity, while broad different-date/site pairs are much less distinct from unrelated pairs.",
 ]
 display(Markdown("## Working Interpretation\n" + "\n".join(summary_lines)))
 

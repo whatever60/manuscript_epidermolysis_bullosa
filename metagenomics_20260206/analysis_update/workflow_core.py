@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import importlib.util
+import math
 import sys
 from dataclasses import dataclass
 from functools import lru_cache
@@ -176,6 +177,27 @@ def figure_path(context: WorkflowContext, figure_number: int, slug: str) -> Path
 def save_table(frame: pd.DataFrame, path: Path) -> Path:
     frame.to_csv(path, sep="\t", index=False)
     return path
+
+
+def format_sig(value: float, sig: int = 2) -> str:
+    if pd.isna(value):
+        return "nan"
+    value = float(value)
+    if value == 0:
+        if sig <= 1:
+            return "0"
+        return f"0.{''.join(['0'] * (sig - 1))}"
+
+    abs_value = abs(value)
+    exponent = math.floor(math.log10(abs_value))
+    decimals = max(sig - exponent - 1, 0)
+
+    if exponent <= -4 or exponent >= sig:
+        mantissa = value / (10**exponent)
+        mantissa_decimals = max(sig - 1, 0)
+        return f"{mantissa:.{mantissa_decimals}f}e{exponent:+d}".replace("e+", "e")
+
+    return f"{value:.{decimals}f}"
 
 
 def extract_metaphlan_species_matrix(metaphlan: pd.DataFrame) -> pd.DataFrame:

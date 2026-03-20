@@ -84,7 +84,7 @@ for ax, label in zip(axes, top_labels):
     )
     metrics = culture_summary.loc[culture_summary["label"] == label].iloc[0]
     ax.set_title(
-        f"{label}\nU-test q={metrics['qvalue']:.3g}; AUROC={metrics['auroc']:.2f}"
+        f"{label}\nU-test q={wc.format_sig(metrics['qvalue'])}; AUROC={wc.format_sig(metrics['auroc'])}"
     )
     ax.set_xlabel("")
     ax.set_ylabel("log10(relative abundance + 1e-6)")
@@ -115,8 +115,8 @@ display(culture_summary)
 top_hit = culture_summary.sort_values("qvalue").iloc[0]
 weakest = culture_summary.sort_values("qvalue", ascending=False).iloc[0]
 summary_lines = [
-    f"- Positive result: strongest descriptive agreement was {top_hit['label']} (Mann-Whitney U={top_hit['u_statistic']:.1f}, q={top_hit['qvalue']:.3g}, AUROC={top_hit['auroc']:.2f}).",
-    f"- Negative result: weakest supported target here was {weakest['label']} (Mann-Whitney q={weakest['qvalue']:.3g}, AUROC={weakest['auroc']:.2f}).",
+    f"- Positive result: strongest descriptive agreement was {top_hit['label']} (Mann-Whitney U={top_hit['u_statistic']:.1f}, q={wc.format_sig(top_hit['qvalue'])}, AUROC={wc.format_sig(top_hit['auroc'])}).",
+    f"- Negative result: weakest supported target here was {weakest['label']} (Mann-Whitney q={wc.format_sig(weakest['qvalue'])}, AUROC={wc.format_sig(weakest['auroc'])}).",
     "- Culture agreement is organism-group level, not strain-level or resistance-level agreement.",
 ]
 display(Markdown("## Working Interpretation\n" + "\n".join(summary_lines)))

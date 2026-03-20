@@ -274,7 +274,13 @@ patient_order = (
 )
 body_region_order = [
     region
-    for region in ["lower_extremity", "head_neck", "upper_extremity", "trunk_perineum"]
+    for region in [
+        "lower_extremity",
+        "head_neck",
+        "upper_extremity",
+        "trunk_perineum",
+        "others",
+    ]
     if region in set(host_plot_df["body_region"].astype(str))
 ]
 if not body_region_order:
@@ -286,6 +292,7 @@ body_region_labels = {
     "head_neck": "Head/neck",
     "upper_extremity": "Upper extremity",
     "trunk_perineum": "Trunk/perineum",
+    "others": "Others",
 }
 body_palette = dict(
     zip(body_region_order, sns.color_palette("Set2", n_colors=len(body_region_order)))
@@ -363,7 +370,13 @@ axes[1].set_ylabel("Host genomic DNA fraction")
 axes[1].tick_params(axis="x", rotation=25)
 axes[1].yaxis.set_major_formatter(PercentFormatter(1))
 
-body_order = ["lower_extremity", "head_neck", "upper_extremity", "trunk_perineum"]
+body_order = [
+    "lower_extremity",
+    "head_neck",
+    "upper_extremity",
+    "trunk_perineum",
+    "others",
+]
 sns.boxplot(
     data=host_plot_df,
     x="body_region",
@@ -385,8 +398,15 @@ sns.stripplot(
 axes[2].set_title("Host fraction by body region")
 axes[2].set_xlabel("")
 axes[2].set_ylabel("")
+body_tick_labels = {
+    "lower_extremity": "Lower ext.",
+    "head_neck": "Head/neck",
+    "upper_extremity": "Upper ext.",
+    "trunk_perineum": "Trunk/perineum",
+    "others": "Others",
+}
 axes[2].set_xticklabels(
-    ["Lower ext.", "Head/neck", "Upper ext.", "Trunk/perineum"], rotation=25
+    [body_tick_labels.get(label, label) for label in body_order], rotation=25
 )
 axes[2].yaxis.set_major_formatter(PercentFormatter(1))
 

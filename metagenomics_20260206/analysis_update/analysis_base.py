@@ -32,6 +32,7 @@ BODY_REGION_ORDER = [
     "upper_extremity",
     "trunk_perineum",
     "lower_extremity",
+    "others",
 ]
 
 BODY_REGION_LABELS = {
@@ -39,7 +40,7 @@ BODY_REGION_LABELS = {
     "upper_extremity": "Upper extremity",
     "trunk_perineum": "Trunk / perineum",
     "lower_extremity": "Lower extremity",
-    "unknown": "Unknown",
+    "others": "Others",
 }
 
 CHRONICITY_ORDER = ["acute_like", "chronic_like", "mixed", "unknown"]
@@ -62,7 +63,7 @@ CULTURE_GROUPS = [
         "group": "p_aeruginosa",
         "label": "P. aeruginosa",
         "culture_patterns": [r"pseudomonas aeruginosa"],
-        "taxa": ["Pseudomonas aeruginosa"],
+        "taxa": ["Pseudomonas aeruginosa", "Pseudomonas sp. B111"],
     },
     {
         "group": "serratia_marcescens",
@@ -126,6 +127,15 @@ class AnalysisContext:
     table_dir: Path
 
 
+def _count_table_path(
+    context: AnalysisContext, analysis_filename: str, legacy_filename: str
+) -> Path:
+    analysis_path = context.table_dir / analysis_filename
+    if analysis_path.exists():
+        return analysis_path
+    return context.data_dir / legacy_filename
+
+
 def normalize_sample_id(name: str) -> str:
     text = str(name).strip()
     if not text:
@@ -181,7 +191,7 @@ def standardize_location(value: object) -> str:
 def infer_body_region(location: str) -> str:
     text = location.lower()
     if not text:
-        return "unknown"
+        return "others"
 
     def contains_any_word(words: list[str]) -> bool:
         return any(re.search(rf"\b{re.escape(word)}\b", text) for word in words)
@@ -216,7 +226,7 @@ def infer_body_region(location: str) -> str:
         return "trunk_perineum"
     if contains_any_word(lower_extremity):
         return "lower_extremity"
-    return "unknown"
+    return "others"
 
 
 def infer_laterality(location: str) -> str:
@@ -453,21 +463,24 @@ def parse_bracken_reports(
     return abundance_df, read_count_df, tax_df
 
 
-def load_bracken_with_host_counts(context: AnalysisContext) -> pd.DataFrame:
-    _, read_count_df, _ = parse_bracken_reports(
-        str(context.data_dir / "kraken_with_host")
-    )
-    read_count_df.index = read_count_df.index.map(rename_sample)
-    read_count_df = read_count_df.groupby(level=0).sum().sort_index()
-    return read_count_df
-
-
 def load_bracken_tables(context: AnalysisContext) -> tuple[pd.DataFrame, pd.DataFrame]:
+    species_all_path = _count_table_path(
+        context,
+        "table_00_01_read_count_species_all.csv",
+        "read_count_species_all.csv",
+    )
+    species_bac_path = _count_table_path(
+        context,
+        "table_00_02_read_count_species_bac.csv",
+        "read_count_species_bac.csv",
+    )
     species_all = pd.read_csv(
-        context.data_dir / "read_count_species_all.csv", index_col=0
+        species_all_path,
+        index_col=0,
     )
     species_bac = pd.read_csv(
-        context.data_dir / "read_count_species_bac.csv", index_col=0
+        species_bac_path,
+        index_col=0,
     )
     species_all.index = species_all.index.map(normalize_sample_id)
     species_bac.index = species_bac.index.map(normalize_sample_id)
@@ -514,8 +527,15 @@ def load_kraken_unclassified_counts(
 
 
 def load_metaphlan_table(context: AnalysisContext) -> pd.DataFrame:
+    metaphlan_path = _count_table_path(
+        context,
+        "table_00_03_read_count_metaphlan.tsv",
+        "read_count_metaphlan.tsv",
+    )
     metaphlan = pd.read_csv(
-        context.data_dir / "read_count_metaphlan.tsv", sep="\t", index_col=0
+        metaphlan_path,
+        sep="\t",
+        index_col=0,
     )
     metaphlan.index = metaphlan.index.map(normalize_sample_id)
     metaphlan = metaphlan.groupby(level=0).sum().sort_index()
@@ -705,17 +725,16 @@ def prepare_qc_table(
     qc["trimmed_fraction"] = qc["trimmed_pairs"] / qc["raw_pairs"]
     qc["host_alignment_fraction"] = 1 - (qc["non_host_pairs"] / qc["trimmed_pairs"])
 
-    with_host_counts = (
-        load_bracken_with_host_counts(context).reindex(qc.index).fillna(0)
+    qc["classified_species_reads"] = species_all.sum(axis=1).astype(float)
+    qc["human_species_reads"] = (
+        species_all.get("Homo sapiens", pd.Series(0, index=species_all.index))
+        .reindex(qc.index)
+        .fillna(0)
+        .astype(float)
     )
-    qc["classified_species_reads"] = species_all.sum(axis=1)
-    qc["bracken_root_reads"] = with_host_counts.get(
-        "root", pd.Series(0, index=with_host_counts.index)
-    ).astype(float)
-    qc["human_species_reads"] = with_host_counts.get(
-        "Homo sapiens", pd.Series(0, index=with_host_counts.index)
-    ).astype(float)
-    qc["bracken_total_reads"] = qc["bracken_root_reads"]
+    # The canonical host fraction is now derived directly from the species-all matrix.
+    qc["bracken_total_reads"] = qc["classified_species_reads"]
+    qc["bracken_root_reads"] = qc["bracken_total_reads"]
     kraken_unclassified = (
         load_kraken_unclassified_counts(context, report_subdir="kraken_with_host")
         .reindex(qc.index)
@@ -1040,7 +1059,7 @@ def prettify_model_term(term: str) -> str:
         "C(body_region, Treatment('lower_extremity'))[T.head_neck]": "Head / neck vs lower extremity",
         "C(body_region, Treatment('lower_extremity'))[T.upper_extremity]": "Upper extremity vs lower extremity",
         "C(body_region, Treatment('lower_extremity'))[T.trunk_perineum]": "Trunk / perineum vs lower extremity",
-        "C(body_region, Treatment('lower_extremity'))[T.unknown]": "Unknown site vs lower extremity",
+        "C(body_region, Treatment('lower_extremity'))[T.others]": "Other sites vs lower extremity",
         "C(chronicity_group, Treatment('unknown'))[T.acute_like]": "Acute-like vs unknown",
         "C(chronicity_group, Treatment('unknown'))[T.chronic_like]": "Chronic-like vs unknown",
         "C(chronicity_group, Treatment('unknown'))[T.mixed]": "Mixed vs unknown",

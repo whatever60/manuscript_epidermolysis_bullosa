@@ -76,7 +76,7 @@ qc <- read_tsv(table_file(2, "qc_metrics"), show_col_types = FALSE) |>
     patient_id = factor(sprintf("%02d", as.integer(patient_id))),
     body_region = factor(
       body_region,
-      levels = c("lower_extremity", "head_neck", "upper_extremity", "trunk_perineum", "unknown")
+      levels = c("lower_extremity", "head_neck", "upper_extremity", "trunk_perineum", "others")
     ),
     chronicity_group = factor(
       chronicity_group,

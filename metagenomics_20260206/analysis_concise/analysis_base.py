@@ -32,6 +32,7 @@ BODY_REGION_ORDER = [
     "upper_extremity",
     "trunk_perineum",
     "lower_extremity",
+    "others",
 ]
 
 BODY_REGION_LABELS = {
@@ -39,7 +40,7 @@ BODY_REGION_LABELS = {
     "upper_extremity": "Upper extremity",
     "trunk_perineum": "Trunk / perineum",
     "lower_extremity": "Lower extremity",
-    "unknown": "Unknown",
+    "others": "Others",
 }
 
 CHRONICITY_ORDER = ["acute_like", "chronic_like", "mixed", "unknown"]
@@ -62,7 +63,7 @@ CULTURE_GROUPS = [
         "group": "p_aeruginosa",
         "label": "P. aeruginosa",
         "culture_patterns": [r"pseudomonas aeruginosa"],
-        "taxa": ["Pseudomonas aeruginosa"],
+        "taxa": ["Pseudomonas aeruginosa", "Pseudomonas sp. B111"],
     },
     {
         "group": "serratia_marcescens",
@@ -181,7 +182,7 @@ def standardize_location(value: object) -> str:
 def infer_body_region(location: str) -> str:
     text = location.lower()
     if not text:
-        return "unknown"
+        return "others"
 
     def contains_any_word(words: list[str]) -> bool:
         return any(re.search(rf"\b{re.escape(word)}\b", text) for word in words)
@@ -216,7 +217,7 @@ def infer_body_region(location: str) -> str:
         return "trunk_perineum"
     if contains_any_word(lower_extremity):
         return "lower_extremity"
-    return "unknown"
+    return "others"
 
 
 def infer_laterality(location: str) -> str:
@@ -1040,7 +1041,7 @@ def prettify_model_term(term: str) -> str:
         "C(body_region, Treatment('lower_extremity'))[T.head_neck]": "Head / neck vs lower extremity",
         "C(body_region, Treatment('lower_extremity'))[T.upper_extremity]": "Upper extremity vs lower extremity",
         "C(body_region, Treatment('lower_extremity'))[T.trunk_perineum]": "Trunk / perineum vs lower extremity",
-        "C(body_region, Treatment('lower_extremity'))[T.unknown]": "Unknown site vs lower extremity",
+        "C(body_region, Treatment('lower_extremity'))[T.others]": "Other sites vs lower extremity",
         "C(chronicity_group, Treatment('unknown'))[T.acute_like]": "Acute-like vs unknown",
         "C(chronicity_group, Treatment('unknown'))[T.chronic_like]": "Chronic-like vs unknown",
         "C(chronicity_group, Treatment('unknown'))[T.mixed]": "Mixed vs unknown",

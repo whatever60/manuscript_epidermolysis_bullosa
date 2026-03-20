@@ -509,7 +509,7 @@ def plot_abundance_boxplot(
         )
         qvalue = q_lookup.get(label, np.nan)
         if pd.notna(qvalue):
-            ax.set_title(f"{label} U-test q={qvalue:.3f}", fontsize=10)
+            ax.set_title(f"{label} U-test q={wc.format_sig(qvalue)}", fontsize=10)
         else:
             ax.set_title(label, fontsize=10)
         ax.set_xlabel("")

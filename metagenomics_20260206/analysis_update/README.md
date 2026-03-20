@@ -13,17 +13,26 @@
 
 ## Methods
 
+### Definition of body region
+
+To facilitate statistical analysis, we aggregated specific wound-location annotations into broader body regions and used body region as a key covariate in host-fraction modeling, metagenomic similarity analysis, and culture-concordance analysis.
+Body region was derived from wound location in the following manner: head/neck (ear, earlobe, eye, nose, neck, forehead, antihelix), upper extremity (shoulder, arm, axilla, elbow, hand, finger, forearm), trunk/perineum (back, chest, abdomen, buttock, buttocks, groin, perineum, trunk), and lower extremity (knee, shin, ankle, foot, thigh, leg).
+If multiple region keywords were present in one entry, assignment followed a fixed precedence order (head/neck, then upper extremity, then trunk/perineum, then lower extremity), and entries with no matched keyword were labeled others.
+Assignments to the others category occurred for sample 01J (right posterior thight), sample 10F (right heel), and sample 10I (left antecubital fossa).
+One sample (12F, left thigh/buttock) had wound location spanning more than one predefined body region (lower extremity and trunk/perineum), which was assigned to trunk/perineum by the fixed precedence rule.
+No sequenced sample included in the final analysis set was assigned to the others body-region category.
+
 ### Modeling of host genomic DNA fraction
 
 #### Host fraction definition
 
-Taking the advantage that the Kraken standard database contains human (*Homo sapiens*), we applied Kraken/Bracken to the pre-host-filter reads for coherent quantifications of both human and bacterial species. The fraction of reads assigned to *Homo sapiens* was defined as:
+Taking the advantage that the Kraken standard database contains human (*Homo sapiens*), we applied Kraken/Bracken to the pre-host-filter reads for coherent quantifications of both human and bacterial species. The fraction of reads assigned to *Homo sapiens* was defined from the species-all count matrix as:
 
 $$
-h_i \;=\; \frac{\text{Homo\_sapiens\_reads}_i}{\text{root\_reads}_i}.
+h_i \;=\; \frac{\text{Homo\_sapiens\_reads}_i}{\sum_{s \in \text{species-all}} \text{reads}_{is}}.
 $$
 
-Under this root-based denominator, the classified non-bacterial/non-human residual (primarily fungi, archaea, viral, and other non-human eukaryotic assignments) was usually small, with median 0.0029% and 95th percentile 1.66%; therefore, this quantity was also approximately equivalent to human / (human + bacterial) for most samples in this cohort.
+Under this species-total denominator, the classified non-bacterial/non-human residual (primarily fungi, archaea, viral, and other non-human eukaryotic assignments) was usually small, with median 0.0029% and 95th percentile 1.7%; therefore, this quantity was also approximately equivalent to human / (human + bacterial) for most samples in this cohort.
 To obtain an approximately unbounded response for Gaussian modeling, host fraction was logit-transformed after truncation away from 0 and 1:
 $$
 y_i \;=\; \log\!\left(\frac{\tilde h_i}{1-\tilde h_i}\right),
@@ -104,8 +113,8 @@ All community-level analyses in this section were restricted to the QC-passing s
 
 #### Descriptive pairwise comparisons
 
-As an initial descriptive analysis, all sample pairs were partitioned into three groups: same patient, same batch date; same patient, different batch date; and different patient.
-Median Bray-Curtis distances for the two within-patient groups were compared against the different-patient reference group using one-sided Mann-Whitney tests with the alternative hypothesis that within-group distances were smaller.
+As an initial descriptive analysis, all sample pairs were partitioned into five descriptive groups: same patient/same site/close date (<6 months apart), same patient/close date, same patient/same site, same patient/different date-site, and different patient.
+Median Bray-Curtis distances for the four within-patient groups were compared against the different-patient reference group using one-sided Mann-Whitney tests with the alternative hypothesis that within-group distances were smaller.
 Resulting p values were adjusted with BH-FDR.
 
 #### Pairwise mixed-effects similarity models
@@ -155,9 +164,13 @@ Significance for FDR-controlled inference was interpreted at $q < 0.10$, while n
 
 #### Organism-group abundance definition
 
-We compared culture results against Bracken-derived bacterial relative abundances aggregated at clinically relevant organism-group level.
-For each sample $i$, species-level Bracken bacterial counts $x_{is}$ were converted to relative abundances and organism-group abundance was defined as the sum across the species assigned to that group: $A_i^{(g)} = \sum_{s \in g} p_{is}.$
-For example, *S. aureus* was represented by *Staphylococcus aureus*, GAS was represented by *Streptococcus pyogenes*, and Klebsiella spp. was represented by the sum of *Klebsiella pneumoniae* and *Klebsiella oxytoca*.
+To compare culture results with metagenomic profiling, nine clinically relevant organism groups were evaluated: *S. aureus*, *P. aeruginosa*, Serratia, Proteus, group A Streptococcus (GAS), Klebsiella spp., *E. coli*, *A. baumannii*, and *E. faecalis*.
+
+Culture positivity for each group was assigned as follows: *S. aureus* was defined by the presence of methicillin-sensitive Staphylococcus aureus, methicillin-resistant Staphylococcus aureus, or Staphylococcus aureus; *P. aeruginosa* by Pseudomonas aeruginosa; Serratia by Serratia marcescens; Proteus by Proteus mirabilis; GAS by GAS, Streptococcus pyogenes, or Strep pyogenes; Klebsiella spp. by Klebsiella; *E. coli* by Escherichia coli or E. coli; *A. baumannii* by Acinetobacter baumannii; and *E. faecalis* by Enterococcus faecalis.
+
+The corresponding metagenomic features were mapped at the species level as follows: Staphylococcus aureus for *S. aureus*, the sum of Pseudomonas aeruginosa and Pseudomonas sp. B111 for *P. aeruginosa*, Serratia marcescens for Serratia, Proteus mirabilis for Proteus, Streptococcus pyogenes for GAS, Escherichia coli for *E. coli*, Acinetobacter baumannii for *A. baumannii*, and Enterococcus faecalis for *E. faecalis*. For Klebsiella spp., the metagenomic abundance was defined as the sum of Klebsiella pneumoniae and Klebsiella oxytoca.
+
+For each sample $i$ and organism group $g$, the metagenomic abundance was defined as the sum of the relative abundances of all species assigned to that group: $A_i^{(g)} = \sum_{s \in g} p_{is}$.
 
 #### Nonparametric concordance
 
@@ -214,10 +227,14 @@ Singular mixed-model fits were explicitly flagged as boundary random-effect solu
 The metagenomic sequencing also revealed the presence of bacterial genera other than *Pseudomonas* containing species capable of producing flagella, including *Serratia*, *Escherichia*, and *Citrobacter*.
 
 Skin swabs are known to contain heterogenous and substantial host genomic DNA.
-In our shotgun metagenomic sequencing, host fraction was high and variable across samples (range 0.003 to 1.000; median 0.947) (Fig. 1B, Fig. S1B, S1C).
-Rather than focusing entirely on bacterial reads, we used this fraction as a complementary signal of wound microenvironment and host carryover. We modeled logit-transformed host fraction in a Gaussian mixed model with patient and culture-date as random effects and body region, chronicity group, culture positivity, and years since first patient sample as fixed effects. Both random effects contributed materially to model fit: relative to a fixed-effects-only model, adding patient improved fit (LRT = 7.11, p = 0.00384) and adding culture-date improved fit (LRT = 3.42, p = 0.0323) respectively; when added sequentially, patient remained informative on top of culture-date (LRT = 5.31, p = 0.0106), whereas the additional culture-date contribution on top of patient was weaker (LRT = 1.62, p = 0.102), indicating stronger patient-level than incremental culture-date contribution in the fully adjusted setting. For fixed effects, no term remained FDR-significant after global BH adjustment, although acute-like chronicity had the lowest q value (q = 0.236), followed by upper-extremity body region (q = 0.327) (Fig. 1C, 1D). Culture positivity, elapsed time since first visit, and the remaining chronicity/location categories were weaker (q >= 0.891). The fitted random intercepts showed broad spread across both culture dates and patients (Fig. S1D, S1E), reinforcing that variation from these sources remained large even after fixed-effect adjustment. These findings support the use of host fraction as a complementary quantitative signal in wound metagenomic profiling.
+In our shotgun metagenomic sequencing, host fraction was high and variable across samples (range 0.0030 to 1.0; median 0.95) (Fig. 1B, Fig. S1B, S1C).
+Rather than focusing entirely on bacterial reads, we used this fraction as a complementary signal of wound microenvironment and host carryover. We modeled logit-transformed host fraction in a Gaussian mixed model with patient and culture-date as random effects and body region, chronicity group, culture positivity, and years since first patient sample as fixed effects. Both random effects contributed materially to model fit: relative to a fixed-effects-only model, adding patient improved fit (LRT = 7.1, p = 0.0038) and adding culture-date improved fit (LRT = 3.4, p = 0.032) respectively; when added sequentially, patient remained informative on top of culture-date (LRT = 5.3, p = 0.011), whereas the additional culture-date contribution on top of patient was weaker (LRT = 1.6, p = 0.10), indicating stronger patient-level than incremental culture-date contribution in the fully adjusted setting. For fixed effects, no term remained significant after global BH adjustment, although acute-like chronicity had the lowest q value (q = 0.24), followed by upper-extremity body region (q = 0.33) (Fig. 1C, 1D). Culture positivity, elapsed time since first visit, and the remaining chronicity/location categories were weaker (q >= 0.89). The fitted random intercepts showed broad spread across both culture dates and patients (Fig. S1D, S1E), reinforcing that variation from these sources remained large even after fixed-effect adjustment. These findings support the use of host fraction as a complementary quantitative signal in wound metagenomic profiling.
 
 > Tables:
+> - table_00_01_read_count_species_all.csv (canonical Bracken species-all counts)
+> - table_00_02_read_count_species_bac.csv (canonical Bracken bacterial species counts)
+> - table_00_03_read_count_metaphlan.tsv (canonical MetaPhlAn clade counts)
+> - table_00_04_count_matrix_equivalence.tsv (equivalence checks vs legacy top-level matrices)
 > - table_02_01_qc_metrics.tsv (host ratio)
 > - table_06_01_patient_structure_diagnostics.tsv (optimizer selection)
 > - table_06_02_host_mixed_effects.tsv (beta and Wald p)
@@ -225,23 +242,25 @@ Rather than focusing entirely on bacterial reads, we used this fraction as a com
 > - table_14_02_host_gaussian_random_effects.tsv (random intercepts)
 >
 > Figures:
+> - fig_15_02_bacterial_genus_by_patient.svg -> Fig. 1A
 > - fig_14_01_host_fraction_overview.svg left -> Fig. 1B
 > - fig_14_02_host_gaussian_mixed_summary.svg left -> Fig. 1D
-> - fig_14_02_host_gaussian_mixed_summary.svg middle & right -> Fig. S1B & Fig. S1C
+> - fig_15_01_host_fraction_by_patient.svg -> Fig. S1B
+> - fig_14_02_host_gaussian_mixed_summary.svg middle & right -> Fig. S1C & Fig. S1D
 > - fig_14_03_host_gaussian_followup.svg -> Fig. 1C
-> - fig_14_04_host_gaussian_random_intercepts.svg -> Fig. S1D & Fig. S1E
+> - fig_14_04_host_gaussian_random_intercepts.svg -> Fig. S1E & Fig. S1F
 >
 
 
 #### Figure captions
 
-Figure 1. Host genomic DNA burden in EB wound swabs is structured by patient-level heterogeneity and wound-level biology. A) xxx. B) Host genomic DNA fraction across patients, with each point representing one sequenced swab and point color indicating body region; for patients with more than three samples, boxplots summarize within-patient distributions (center line, median; box, interquartile range [IQR]; whiskers, 1.5 x IQR). C) Focused host-fraction distributions for the two key wound-level signals retained in the adjusted model, comparing acute-like versus other chronicity states and upper-extremity versus other body regions; boxplots are defined as in panel B. D) Fixed-effect estimates from the Gaussian mixed model with patient and culture-date random intercepts, shown as coefficients with 95% confidence intervals on the logit host-fraction scale.
+Figure 1. Host genomic DNA burden in EB wound swabs is structured by patient-level heterogeneity and wound-level biology. A) Bacterial-genus composition by sample and patient, shown as stacked relative-abundance bars (top genera plus Others) within bacterial-domain reads. B) Host genomic DNA fraction across patients, with each point representing one sequenced swab and point color indicating body region; for patients with more than three samples, boxplots summarize within-patient distributions (center line, median; box, interquartile range [IQR]; whiskers, 1.5 x IQR). C) Focused host-fraction distributions for the two key wound-level signals retained in the adjusted model, comparing acute-like versus other chronicity states and upper-extremity versus other body regions; boxplots are defined as in panel B. D) Fixed-effect estimates from the Gaussian mixed model with patient and culture-date random intercepts, shown as coefficients with 95% confidence intervals on the logit host-fraction scale.
 
-Figure S1. Additional diagnostics for the host-fraction Gaussian mixed-model framework. A) xxx. B) Estimated variance components for patient and culture-date random effects, showing non-trivial structured variance from both sources. C) Boundary-corrected likelihood-ratio tests for random-effect inclusion across nested model contrasts. D) Estimated patient random intercepts from the fitted mixed model, showing broad patient-to-patient spread after fixed-effect adjustment. E) Estimated culture-date random intercepts, demonstrating residual batch-date heterogeneity in host genomic DNA carryover.
+Figure S1. Additional diagnostics for the host-fraction Gaussian mixed-model framework. A) xxx. B) Host-fraction barplot by patient, where host fraction is defined as Homo sapiens reads divided by total Bracken species-level reads for each sample; bar color indicates body region. C) Estimated variance components for patient and culture-date random effects, showing non-trivial structured variance from both sources. D) Boundary-corrected likelihood-ratio tests for random-effect inclusion across nested model contrasts. E) Estimated patient random intercepts from the fitted mixed model, showing broad patient-to-patient spread after fixed-effect adjustment. F) Estimated culture-date random intercepts, demonstrating residual culture-date heterogeneity in host genomic DNA carryover.
 
 ### Metagenomic similarity is associated with patient identity and wound chronicity.
 
-To probe the functional relevance of wound microbiome, we sought to evaluate the similarity of the microbial profiles across samples. We found that samples collected from the same patient on the same visit were substantially more similar than samples from different patients by Bray-Curtis distances (median distance 0.5897 vs 0.8777, BH-adjusted q = 0.000158), and this similarity weakened across different visits for the same patient (median distance 0.8660, q = 0.112), indicating the variability of wound microbiome across individuals and time course (Fig. 2A). We then applied a pairwise mixed-effect model to control for potential batch effect sources during sample collection and sequencing library preparation. In this adjusted model, same-patient pairing (q = 0.0310) and same chronicity (q = 9.76e-8) remained associated with higher similarity, while same body region was weaker but still suggestive (q = 0.0903) (Fig. 2B, Fig. S2). Technical factors also contributed, with mean host fraction (q = 5.43e-4) and bacterial read depth (q = 0.0903), whereas same batch date (q = 0.647) and elapsed-time gap (q = 0.510) were not independently significant (Fig. S2). Model-adjusted margins were directionally consistent, with lower predicted Bray-Curtis distance for shared vs non-shared patient (0.740 vs 0.801), chronicity (0.732 vs 0.801), and body region (0.778 vs 0.801), supporting residual biological structuring after technical adjustment (Fig. 2B).
+To probe the functional relevance of wound microbiome, we sought to evaluate the similarity of the microbial profiles across samples. In descriptive Bray-Curtis analysis, same-patient/same-site/close-date pairs (<6 months apart) were more similar than different-patient pairs (median distance 0.76 vs 0.88, BH-adjusted q = 0.026). Same-patient/close-date pairs (median 0.83, q = 0.0062) and same-patient/same-site pairs (median 0.74, q = 0.0073) were also significantly closer than different-patient pairs, whereas same-patient/different-date-site pairs (median 0.91, q = 0.70) were not (Fig. 2A). We then applied a pairwise mixed-effect model to control for potential batch effect sources during sample collection and sequencing library preparation. In this adjusted model, same-patient pairing (q = 0.031) and same chronicity (q = 9.8e-8) remained associated with higher similarity, while same body region was weaker but still suggestive (q = 0.090) (Fig. 2B, Fig. S2). Technical factors also contributed, with mean host fraction (q = 5.4e-4) and bacterial read depth (q = 0.090), whereas same batch date (q = 0.65) and elapsed-time gap (q = 0.51) were not independently significant (Fig. S2). Model-adjusted margins were directionally consistent, with lower predicted Bray-Curtis distance for shared vs non-shared patient (0.74 vs 0.80), chronicity (0.73 vs 0.80), and body region (0.78 vs 0.80), supporting residual biological structuring after technical adjustment (Fig. 2B).
 
 > Tables:
 > - table_03_02_pairwise_distance_summary.tsv (distance average)
@@ -256,15 +275,15 @@ To probe the functional relevance of wound microbiome, we sought to evaluate the
 
 #### Figure captions
 
-Figure 2. Wound microbiome similarity is most strongly associated with shared patient identity and shared chronicity. A) Descriptive Bray-Curtis distance distributions for same-patient/same-date, same-patient/different-date, and different-patient pairs, with BH-adjusted q values for pairwise contrasts against the different-patient reference; boxplots show median (center line), IQR (box), and 1.5 x IQR whiskers, with overlaid points representing pairwise comparisons. B) Covariate-adjusted marginal Bray-Curtis predictions from the pairwise mixed-effects model, comparing shared versus non-shared states for patient, chronicity, and body region while holding technical covariates and other pairwise indicators fixed.
+Figure 2. Wound microbiome similarity is most strongly associated with shared patient identity and shared chronicity. A) Descriptive Bray-Curtis distance distributions across five pairwise groups: same patient/same site/close date (<6 months), same patient/close date, same patient/same site, same patient/different date-site, and different patient; BH-adjusted q values are shown for four one-sided contrasts against the different-patient reference. Boxplots show median (center line), IQR (box), and 1.5 x IQR whiskers, with overlaid points representing pairwise comparisons. B) Covariate-adjusted marginal Bray-Curtis predictions from the pairwise mixed-effects model, comparing shared versus non-shared states for patient, chronicity, and body region while holding technical covariates and other pairwise indicators fixed.
 
 Figure S2. Adjusted pairwise mixed-effects coefficient summary for metagenomic similarity. A) Fixed-effect estimates (with 95% confidence intervals) from the body-region pairwise mixed model; negative coefficients indicate lower Bray-Curtis distance (greater similarity), and point color indicates BH-adjusted significance.
 
 ### Shotgun metagenomic detection agrees with culture in a nonparametric descriptive analysis and remains significant after rank-based technical adjustment
 
-Comparing metagenomic sequencing and bacterial culture results, 10/22 samples with PA in abundances over 50% by sequencing had cultures negative for PA. Of the 18 samples with PA detected by culture-based methods, 17 underwent metagenomic sequencing; most of the sequenced samples (12/17) had the species *Pseudomonas aeruginosa* assigned to more than 50% of the sequencing counts. 
+Comparing metagenomic sequencing and bacterial culture results, 10/22 samples with *P. aeruginosa* group abundance over 50% by sequencing had cultures negative for *P. aeruginosa*. Of the 18 samples with *P. aeruginosa* detected by culture-based methods, 17 underwent metagenomic sequencing; most of the sequenced samples (12/17) had the corresponding metagenomic *Pseudomonas* group abundance above 50%.
 
-Taking samples with or without positive culture results and comparing the corresponding microbial abundance in the shotgun metagenomic sequencing data, we found strong descriptive agreements for 7 of 9 organism groups by one-sided Mann-Whitney U test (BH q < 0.1), including *Pseudomonas aeruginosa* (q = 2.43e-5), *Staphylococcus aureus* (q = 5.54e-4), *Klebsiella* spp. (q = 0.00210), *Serratia* (q = 0.00146), GAS (q = 7.27e-5), *Acinetobacter baumannii* (q = 0.0305), and *E. faecalis* (q = 0.0661), whereas *E. coli* (q = 0.440) and *Proteus mirabilis* (q = 0.151) did not pass the descriptive significance threshold (Fig. 3C). To further verify agreement between culture and metagenomics while accounting for technical and repeated-measures structure, we fit a rank-based mixed model correcting for host fraction, sequencing depth, patient, and batch. In this adjusted force-all-target analysis, culture-positive status remained significant for 8 of 9 groups (BH q < 0.1), with strongest support for GAS (q = 1.15e-7), *Klebsiella* spp. (q = 2.04e-5), and *Pseudomonas aeruginosa* (q = 2.53e-6), while *E. faecalis* was not significant (q = 0.721) (Fig. 3B). Together, these results indicate that shotgun metagenomic detection is concordant with culture for major wound-associated organisms, while low-prevalence targets remain less stable and require larger culture-positive sample counts for robust inference.
+Taking samples with or without positive culture results and comparing the corresponding microbial abundance in the shotgun metagenomic sequencing data, we found strong descriptive agreements for 7 of 9 organism groups by one-sided Mann-Whitney U test (BH q < 0.1), including the *P. aeruginosa* group (q = 5.0e-5), *Staphylococcus aureus* (q = 5.5e-4), *Klebsiella* spp. (q = 0.0021), *Serratia* (q = 0.0015), GAS (q = 7.3e-5), *Acinetobacter baumannii* (q = 0.031), and *E. faecalis* (q = 0.066), whereas *E. coli* (q = 0.44) and *Proteus mirabilis* (q = 0.15) did not pass the descriptive significance threshold (Fig. 3C). To further verify agreement between culture and metagenomics while accounting for technical and repeated-measures structure, we fit a rank-based mixed model correcting for host fraction, sequencing depth, patient, and batch. In this adjusted force-all-target analysis, culture-positive status remained significant for 8 of 9 groups (BH q < 0.1), with strongest support for GAS (q = 1.2e-7), *Klebsiella* spp. (q = 2.0e-5), and the *P. aeruginosa* group (q = 7.8e-6), while *E. faecalis* was not significant (q = 0.72) (Fig. 3B). Together, these results indicate that shotgun metagenomic detection is concordant with culture for major wound-associated organisms, while low-prevalence targets remain less stable and require larger culture-positive sample counts for robust inference.
 
 > Tables:
 > - table_04_01_culture_concordance.tsv
@@ -274,13 +293,13 @@ Taking samples with or without positive culture results and comparing the corres
 > - table_13_04_culture_venn_counts.tsv
 >
 > Figures:
-> - fig_13_03_culture_abundance_density.svg -> Fig. 3B
-> - fig_13_04_culture_adjusted_concordance.svg -> Fig. 3C
+> - fig_13_04_culture_adjusted_concordance.svg -> Fig. 3B
+> - fig_13_03_culture_abundance_density.svg -> Fig. 3C
 >
 
 #### Figure captions
 
-Figure 3. Shotgun metagenomic abundance is concordant with culture positivity in both descriptive and adjusted analyses. A) xxx. B) Technical/nuisance-adjusted rank-based mixed-model effect sizes for culture-positive versus culture-negative status across all nine organism groups, shown with 95% confidence intervals; colors indicate BH-adjusted significance and marker shape distinguishes regular versus singular fits. C) Organism-level abundance distributions (log10 relative abundance) stratified by culture status, with panel titles reporting BH-adjusted Mann-Whitney q values; boxplots show median (center line), IQR (box), and 1.5 x IQR whiskers, with outliers plotted individually. These descriptive distributions show strongest separation for major wound-associated taxa, including *Pseudomonas aeruginosa*, *Staphylococcus aureus*, *Klebsiella* spp., *Serratia*, and Group A *Streptococcus* (GAS).
+Figure 3. Shotgun metagenomic abundance is concordant with culture positivity in both descriptive and adjusted analyses. A) xxx. B) Technical/nuisance-adjusted rank-based mixed-model effect sizes for culture-positive versus culture-negative status across all nine organism groups, shown with 95% confidence intervals; colors indicate BH-adjusted significance and marker shape distinguishes regular versus singular fits. C) Organism-level abundance distributions (log10 relative abundance) stratified by culture status, with panel titles reporting BH-adjusted Mann-Whitney q values; boxplots show median (center line), IQR (box), and 1.5 x IQR whiskers, with outliers plotted individually. These descriptive distributions show strongest separation for major wound-associated taxa, including the *P. aeruginosa* group, *Staphylococcus aureus*, *Klebsiella* spp., *Serratia*, and Group A *Streptococcus* (GAS).
 
 
 ## Third party packaged used (including both python and R packages)
@@ -318,6 +337,7 @@ The following notebooks generate the figures and tables for the 3 results sectio
 - `06_mixed_models_and_repeated_measures.ipynb` -> `fig_06_01_host_model_compare.svg`, `table_06_01_patient_structure_diagnostics.tsv`, `table_06_02_host_mixed_effects.tsv`, `table_06_03_host_mixed_status.tsv`
 - `11_host_fraction_beta_binomial.ipynb` -> `table_11_01_host_beta_binomial_effects.tsv`, `table_11_02_host_beta_binomial_status.tsv`
 - `14_host_fraction_gaussian_story_figures.ipynb` -> `fig_14_01_host_fraction_overview.svg`, `fig_14_02_host_gaussian_mixed_summary.svg`, `fig_14_03_host_gaussian_followup.svg`, `fig_14_04_host_gaussian_random_intercepts.svg`, `table_14_01_host_gaussian_followup.tsv`, `table_14_02_host_gaussian_random_effects.tsv`
+- `15_barplots.ipynb` -> `fig_15_01_host_fraction_by_patient.svg`, `fig_15_02_bacterial_genus_by_patient.svg`
 
 ### Question 2: Metagenomic similarity by shared covariates
 
@@ -333,6 +353,7 @@ The following notebooks generate the figures and tables for the 3 results sectio
 
 ### Shared or Supporting Workflow Components
 
+- `00_get_count_matrix.ipynb` -> `table_00_01_read_count_species_all.csv`, `table_00_02_read_count_species_bac.csv`, `table_00_03_read_count_metaphlan.tsv`, `table_00_04_count_matrix_equivalence.tsv`
 - `06_mixed_models_and_repeated_measures.ipynb` -> `fig_06_02_species_mixed_effects.svg`, `table_06_04_species_mixed_effects.tsv`, `table_06_05_species_mixed_status.tsv`, `table_06_06_mixed_vs_cluster_comparison.tsv`
 - `07_bracken_vs_metaphlan_sensitivity.ipynb` -> `table_07_01_bracken_metaphlan_sample_depth.tsv`, `table_07_02_bracken_metaphlan_distance_summary.tsv`, `table_07_03_bracken_metaphlan_taxon_correlations.tsv`, `table_07_04_bracken_species_models_shared_samples.tsv`, `table_07_05_metaphlan_species_models.tsv`, `table_07_06_bracken_metaphlan_model_comparison.tsv`
 - `08_halla_exploration.ipynb` -> `fig_08_01_halla_top25.svg`, `table_08_01_halla_method_status.tsv`, `table_08_02_halla_top_pairwise_associations.tsv`, `table_08_03_halla_significant_clusters.tsv`

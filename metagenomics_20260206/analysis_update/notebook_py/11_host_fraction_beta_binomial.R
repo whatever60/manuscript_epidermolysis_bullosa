@@ -96,7 +96,7 @@ qc <- read_tsv(table_file(2, "qc_metrics"), show_col_types = FALSE) |>
                               levels = c("negative", "positive")),
     patient_id = factor(sprintf("%02d", as.integer(patient_id))),
     batch_id = factor(batch_id),
-    body_region = factor(body_region, levels = c("lower_extremity", "head_neck", "upper_extremity", "trunk_perineum", "unknown")),
+    body_region = factor(body_region, levels = c("lower_extremity", "head_neck", "upper_extremity", "trunk_perineum", "others")),
     chronicity_group = factor(chronicity_group, levels = c("unknown", "acute_like", "chronic_like", "mixed")),
     upper_extremity_binary = factor(if_else(body_region == "upper_extremity", "upper_extremity", "other"),
                                     levels = c("other", "upper_extremity")),
@@ -447,7 +447,7 @@ host_effects <- tidy(host_model, effects = "fixed", component = "cond") |>
       term == "body_regionhead_neck" ~ "Body site: head / neck",
       term == "body_regionupper_extremity" ~ "Body site: upper extremity",
       term == "body_regiontrunk_perineum" ~ "Body site: trunk / perineum",
-      term == "body_regionunknown" ~ "Body site: unknown",
+      term == "body_regionothers" ~ "Body site: others",
       term == "chronicity_groupacute_like" ~ "Chronicity: acute-like",
       term == "chronicity_groupchronic_like" ~ "Chronicity: chronic-like",
       term == "chronicity_groupmixed" ~ "Chronicity: mixed",
@@ -538,4 +538,3 @@ host_findings <- tibble(
 )
 
 print(host_findings)
-

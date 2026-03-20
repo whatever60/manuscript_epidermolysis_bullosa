@@ -39,6 +39,10 @@ figure_dir <- file.path(root, "figures")
 table_dir <- file.path(root, "tables")
 dir.create(figure_dir, showWarnings = FALSE, recursive = TRUE)
 dir.create(table_dir, showWarnings = FALSE, recursive = TRUE)
+species_bac_path <- file.path(table_dir, "table_00_02_read_count_species_bac.csv")
+if (!file.exists(species_bac_path)) {
+  species_bac_path <- file.path(data_dir, "read_count_species_bac.csv")
+}
 
 table_id_map <- c(
   `1` = "01_01", `2` = "02_01", `3` = "02_02", `4` = "03_01", `5` = "03_02",
@@ -85,7 +89,7 @@ library(Maaslin2)
 qc <- read_tsv(table_file(2, "qc_metrics"), show_col_types = FALSE) |>
   mutate(model_qc_pass = tolower(as.character(model_qc_pass)) %in% c("true", "t", "1"))
 
-counts <- read_csv(file.path(data_dir, "read_count_species_bac.csv"), show_col_types = FALSE)
+counts <- read_csv(species_bac_path, show_col_types = FALSE)
 colnames(counts)[1] <- "sample_id"
 
 model_samples <- qc |>
@@ -263,4 +267,3 @@ maaslin_findings <- tibble(
 )
 
 print(maaslin_findings)
-

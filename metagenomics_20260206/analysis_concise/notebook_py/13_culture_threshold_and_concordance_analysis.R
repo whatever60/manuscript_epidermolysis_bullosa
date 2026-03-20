@@ -88,7 +88,7 @@ culture_groups <- tibble(
   culture_col = c("culture_s_aureus", "culture_p_aeruginosa", "culture_serratia_marcescens", "culture_proteus_mirabilis", "culture_gas", "culture_klebsiella_spp", "culture_e_coli", "culture_acinetobacter_baumannii", "culture_e_faecalis"),
   taxa = list(
     c("Staphylococcus aureus"),
-    c("Pseudomonas aeruginosa"),
+    c("Pseudomonas aeruginosa", "Pseudomonas sp. B111"),
     c("Serratia marcescens"),
     c("Proteus mirabilis"),
     c("Streptococcus pyogenes"),
@@ -103,7 +103,7 @@ qc <- read_tsv(table_file(2, "qc_metrics"), show_col_types = FALSE) |>
   mutate(
     culture_date = as.Date(culture_date),
     batch_id = factor(batch_id),
-    body_region = factor(body_region, levels = c("lower_extremity", "head_neck", "upper_extremity", "trunk_perineum", "unknown")),
+    body_region = factor(body_region, levels = c("lower_extremity", "head_neck", "upper_extremity", "trunk_perineum", "others")),
     chronicity_group = factor(chronicity_group, levels = c("unknown", "acute_like", "chronic_like", "mixed")),
     patient_id = factor(sprintf("%02d", as.integer(patient_id)))
   )
