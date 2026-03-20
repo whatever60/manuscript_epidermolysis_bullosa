@@ -40,7 +40,6 @@ context, base_data, base, advanced = wc.bootstrap_notebook()
 #
 
 # %%
-analysis_context = wc.base_analysis_context(context)
 metadata = base_data["metadata"]
 qc = base_data["qc"]
 species_bac = base_data["species_bac"]
@@ -53,64 +52,24 @@ from scipy.stats import mannwhitneyu
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-site_map = metadata["body_region"].to_dict()
-pairwise["same_body_site"] = pairwise["sample_i"].map(site_map).eq(
-    pairwise["sample_j"].map(site_map)
-)
-
 order = [
     "Same patient, same batch date",
-    "Same patient, same body site",
-    "Same patient, different date/site",
+    "Same patient, different batch date",
     "Different patient",
 ]
-new_tick_labels = [
-    "Same patient,\nsame date",
-    "Same patient,\nsame site",
-    "Same patient,\ndiff date/site",
-    "Diff patient",
-]
-
-same_date_mask = pairwise["same_patient"] & pairwise["same_batch"]
-same_site_mask = (
-    pairwise["same_patient"] & pairwise["same_body_site"] & ~same_date_mask
-)
-diff_date_site_mask = pairwise["same_patient"] & ~(same_date_mask | same_site_mask)
-
-plot_pairwise = pd.concat(
-    [
-        pairwise.loc[
-            same_date_mask,
-            ["distance"],
-        ].assign(comparison_group=order[0]),
-        pairwise.loc[
-            same_site_mask,
-            ["distance"],
-        ].assign(comparison_group=order[1]),
-        pairwise.loc[
-            diff_date_site_mask,
-            ["distance"],
-        ].assign(comparison_group=order[2]),
-        pairwise.loc[~pairwise["same_patient"], ["distance"]].assign(
-            comparison_group=order[3]
-        ),
-    ],
-    ignore_index=True,
-)
-
 summary = (
-    plot_pairwise.groupby("comparison_group")["distance"]
+    pairwise.groupby("comparison_group")["distance"]
     .agg(["count", "median", "mean"])
     .reindex(order)
     .reset_index()
 )
 
 pvalue_rows = []
-reference = plot_pairwise.loc[
-    plot_pairwise["comparison_group"] == "Different patient", "distance"
+reference = pairwise.loc[
+    pairwise["comparison_group"] == "Different patient", "distance"
 ]
 for group in order[:-1]:
-    test = plot_pairwise.loc[plot_pairwise["comparison_group"] == group, "distance"]
+    test = pairwise.loc[pairwise["comparison_group"] == group, "distance"]
     statistic = mannwhitneyu(test, reference, alternative="less")
     pvalue_rows.append(
         {
@@ -126,7 +85,7 @@ pvalues = base.bh_adjust(pd.DataFrame(pvalue_rows), "pvalue")
 fig, ax = plt.subplots(figsize=(4.5, 5))
 
 sns.boxplot(
-    data=plot_pairwise,
+    data=pairwise,
     x="comparison_group",
     y="distance",
     order=order,
@@ -136,7 +95,7 @@ sns.boxplot(
     ax=ax,
 )
 sns.stripplot(
-    data=plot_pairwise.sample(min(plot_pairwise.shape[0], 4000), random_state=7),
+    data=pairwise.sample(min(pairwise.shape[0], 4000), random_state=7),
     x="comparison_group",
     y="distance",
     order=order,
@@ -149,6 +108,11 @@ sns.stripplot(
 ax.set_xlabel("")
 ax.set_ylabel("Bray-Curtis distance")
 # ax.set_title("Descriptive Bray-Curtis similarity by patient and batch-date grouping")
+new_tick_labels = [
+    "Same patient,\nsame date",
+    "Same patient,\ndiff date",
+    "Diff patient",
+]
 ax.set_xticklabels(new_tick_labels, rotation=30, ha="right")
 
 
@@ -224,7 +188,6 @@ plt.close(fig)
 
 summary = summary.merge(pvalues, on="comparison_group", how="left")
 
-wc.save_table(pairwise, wc.table_path(context, 4, "pairwise_distances"))
 wc.save_table(summary, wc.table_path(context, 5, "pairwise_distance_summary"))
 
 
@@ -234,7 +197,6 @@ wc.save_table(summary, wc.table_path(context, 5, "pairwise_distance_summary"))
 #
 
 # %%
-pairwise = pd.read_csv(wc.table_path(context, 4, "pairwise_distances"), sep="\t")
 summary = pd.read_csv(wc.table_path(context, 5, "pairwise_distance_summary"), sep="\t")
 
 display(SVG(filename=str(wc.figure_path(context, 2, "pairwise_distance"))))
@@ -243,17 +205,13 @@ display(summary)
 same_visit = summary.loc[
     summary["comparison_group"] == "Same patient, same batch date"
 ].iloc[0]
-same_site = summary.loc[
-    summary["comparison_group"] == "Same patient, same body site"
-].iloc[0]
-diff_date_site = summary.loc[
-    summary["comparison_group"] == "Same patient, different date/site"
+revisit = summary.loc[
+    summary["comparison_group"] == "Same patient, different batch date"
 ].iloc[0]
 different = summary.loc[summary["comparison_group"] == "Different patient"].iloc[0]
 summary_lines = [
     f"- Positive result: same-patient same-batch-date swabs were much closer than unrelated swabs (median Bray-Curtis {same_visit['median']:.3f} vs {different['median']:.3f}).",
-    f"- Positive result: same-patient same-site pairs also showed lower dissimilarity than unrelated pairs (median {same_site['median']:.3f} vs {different['median']:.3f}).",
-    f"- Negative result: same-patient different date/site pairs were closer to unrelated pairs (median {diff_date_site['median']:.3f}).",
+    f"- Negative result: same-patient different-batch-date swabs were nearly as dissimilar as unrelated swabs (median {revisit['median']:.3f}).",
     "- Interpretation: descriptive patient-date grouping is informative, but later models treat absolute date as technical batch rather than biology.",
 ]
 display(Markdown("## Working Interpretation\n" + "\n".join(summary_lines)))

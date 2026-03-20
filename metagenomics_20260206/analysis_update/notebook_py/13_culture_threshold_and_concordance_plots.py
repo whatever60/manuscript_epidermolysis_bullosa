@@ -478,16 +478,34 @@ def plot_abundance_boxplot(
     for idx, label in enumerate(label_order):
         ax = axes[idx]
         sub = abundance_df.loc[abundance_df["label"] == label].copy()
-        sns.boxplot(
+        status_counts = (
+            sub["culture_status"].value_counts().reindex(status_order).fillna(0).astype(int)
+        )
+        show_box = int(status_counts.min()) > 3
+        if show_box:
+            sns.boxplot(
+                data=sub,
+                x="culture_status",
+                y="log10_rel_abundance",
+                order=status_order,
+                palette=palette,
+                width=0.62,
+                fliersize=0.0,
+                linewidth=1.0,
+                ax=ax,
+            )
+        sns.stripplot(
             data=sub,
             x="culture_status",
             y="log10_rel_abundance",
             order=status_order,
             palette=palette,
-            width=0.62,
-            fliersize=3.0,
-            linewidth=1.0,
+            dodge=False,
+            jitter=0.22,
+            size=3.5,
+            alpha=0.70,
             ax=ax,
+            zorder=3,
         )
         qvalue = q_lookup.get(label, np.nan)
         if pd.notna(qvalue):
@@ -506,6 +524,17 @@ def plot_abundance_boxplot(
             [tick.get_text() for tick in ax.get_yticklabels()],
             fontsize=8,
         )
+        if not show_box:
+            ax.text(
+                0.5,
+                0.98,
+                f"dots only (n-={status_counts.iloc[0]}, n+={status_counts.iloc[1]})",
+                transform=ax.transAxes,
+                ha="center",
+                va="top",
+                fontsize=7,
+                color="#555555",
+            )
 
     for ax in axes[len(label_order) :]:
         ax.set_axis_off()

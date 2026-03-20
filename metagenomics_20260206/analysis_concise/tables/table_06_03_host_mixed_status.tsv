@@ -1,0 +1,6 @@
+outcome	model_name	n_samples	converged	aic	bic	llf	patient_var	batch_var	optimizer	warning_count	warnings	record_type	tested_effect	full_model	reduced_model	lrt_statistic	df_diff	pvalue_chisq	pvalue_boundary
+host_logit	host_model	74	True	389.1617272535467	416.8105083719968	-182.58086362677335	0.5927171088931188	1.0981976367291264	powell	0.0		model_fit							
+host_logit	host_model	74										random_effect_test	patient_only_vs_fixed	patient_only	fixed_only	7.105717463317092	1.0	0.007683846349469006	0.003841923174734503
+host_logit	host_model	74										random_effect_test	batch_only_vs_fixed	batch_only	fixed_only	3.4193900112110214	1.0	0.06443481785343749	0.032217408926718746
+host_logit	host_model	74										random_effect_test	batch_added_to_patient	patient_plus_batch	patient_only	1.6197054075396409	1.0	0.2031328691806729	0.10156643459033644
+host_logit	host_model	74										random_effect_test	patient_added_to_batch	patient_plus_batch	batch_only	5.306032859645711	1.0	0.021251695641986566	0.010625847820993283

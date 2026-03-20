@@ -1,0 +1,10 @@
+outcome	model_name	structure	optimizer	status	converged	aic	bic	llf	patient_var	batch_var	warning_count	warnings	error	selected
+host_logit	host_model	patient_only	lbfgs	failed	False						0		LinAlgError('Singular matrix')	False
+host_logit	host_model	patient_only	powell	ok	True	388.78143266108634	414.1261486863322	-183.39071633054317	0.36594229227835406		0			True
+host_logit	host_model	patient_only	bfgs	ok	True	388.7814326611108	414.12614868635666	-183.3907163305554	0.365943957786115		0			False
+host_logit	host_model	batch_only	lbfgs	ok	True	392.46776011458985	417.8124761398357	-185.23388005729493		1.1720361443691818	0			False
+host_logit	host_model	batch_only	powell	ok	True	392.46776011402164	417.8124761392675	-185.23388005701082		1.1720439883548917	0			False
+host_logit	host_model	batch_only	bfgs	ok	True	392.4677601131924	417.8124761384383	-185.2338800565962		1.172064307795658	0			True
+host_logit	host_model	patient_plus_batch	lbfgs	ok	True	389.16172725355534	416.8105083720054	-182.58086362677767	0.5927177244248607	1.0981954385152848	0			False
+host_logit	host_model	patient_plus_batch	powell	ok	True	389.1617272535467	416.8105083719968	-182.58086362677335	0.5927171088931188	1.0981976367291264	0			True
+host_logit	host_model	patient_plus_batch	bfgs	ok	True	389.16172725594345	416.8105083743935	-182.58086362797172	0.592716510474607	1.0981513067605746	0			False
