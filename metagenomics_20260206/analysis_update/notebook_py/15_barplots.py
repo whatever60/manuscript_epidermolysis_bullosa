@@ -19,8 +19,8 @@
 # This notebook reuses the existing Bracken parsing/QC pipeline and reproduces
 # patient-faceted barplot views:
 # 1) host fraction per sample, defined as Homo sapiens reads / total Bracken species-level reads
-# 2) bacterial-genus relative abundance per sample, with top-N genera retained
-#    and all remaining genera collapsed into Others.
+# 2) bacterial-genus relative abundance per sample, removing missing-genus assignments,
+#    renormalizing, retaining genera with >=10% in at least one sample, and collapsing the rest into Others.
 #
 
 # %%
@@ -57,7 +57,7 @@ common_samples = qc.index.intersection(species_bac_counts.index)
 qc = qc.loc[common_samples].copy()
 species_bac_counts = species_bac_counts.loc[common_samples].copy()
 
-N_TOP_GENUS = 20
+GENUS_KEEP_THRESHOLD = 0.10
 
 FIG_HOST = context.figure_dir / "fig_15_01_host_fraction_by_patient.svg"
 FIG_GENUS = context.figure_dir / "fig_15_02_bacterial_genus_by_patient.svg"
@@ -198,8 +198,8 @@ plt.close(fig)
 # %% [markdown]
 # ## Build Bacterial-Genus Relative-Abundance Plot Data
 #
-# Reuse the same top-N + Others strategy from the original Bracken visualization
-# workflow, but at genus level within bacterial-domain counts.
+# Apply the manuscript genus-filtering rule at bacterial-domain genus level:
+# remove missing-genus assignments, renormalize, keep genera with max >= 10% in any sample, and collapse the rest into Others.
 #
 
 # %%
@@ -210,53 +210,67 @@ _, _, tax_df = base.parse_bracken_reports(str(context.data_dir / "kraken"))
 genus_cols = [col for col in tax_df.columns if re.fullmatch(r"G\\d*", col)]
 
 
-def fallback_genus(species_name: str) -> str:
+def fallback_genus(species_name: str) -> str | float:
     cleaned = species_name.replace("[", "").replace("]", "").strip()
     tokens = cleaned.split()
     if not tokens:
-        return "Unknown"
+        return np.nan
     first = tokens[0].lower()
-    if first in {"uncultured", "unclassified", "unidentified"} and len(tokens) >= 2:
-        return tokens[1]
-    if first == "candidatus" and len(tokens) >= 2:
-        return f"Candidatus {tokens[1]}"
+    # Treat non-genus placeholders as missing genus labels.
+    if first in {
+        "uncultured",
+        "unclassified",
+        "unidentified",
+        "endosymbiotic",
+        "endosymbiont",
+        "bacterium",
+    }:
+        return np.nan
+    if first == "candidatus":
+        if len(tokens) >= 2:
+            return f"Candidatus {tokens[1]}"
+        return np.nan
     return tokens[0]
 
 
-def infer_genus(species_name: str) -> str:
+def infer_genus(species_name: str) -> str | float:
     if species_name in tax_df.index and genus_cols:
         values = tax_df.loc[species_name, genus_cols]
         if isinstance(values, pd.DataFrame):
             values = values.iloc[0]
         for col in genus_cols:
             value = values[col]
-            if pd.notna(value):
+            if pd.notna(value) and str(value).strip() != "":
                 return str(value)
     return fallback_genus(species_name)
 
 
-species_to_genus = {species: infer_genus(species) for species in species_rel.columns}
-genus_rel = species_rel.T.groupby(species_to_genus).sum().T
+species_to_genus = pd.Series({species: infer_genus(species) for species in species_rel.columns})
+missing_genus_species = species_to_genus[species_to_genus.isna()].index.tolist()
 
-top_genera = (
-    genus_rel.mean(axis=0).sort_values(ascending=False).head(N_TOP_GENUS).index.tolist()
-)
-minor_genera = [g for g in genus_rel.columns if g not in top_genera]
-
-genus_plot = genus_rel[top_genera].copy()
-if minor_genera:
-    genus_plot["Others"] = genus_rel[minor_genera].sum(axis=1)
+if missing_genus_species:
+    missing_genus_fraction_by_sample = species_rel[missing_genus_species].sum(axis=1)
 else:
-    genus_plot["Others"] = 0.0
+    missing_genus_fraction_by_sample = pd.Series(0.0, index=species_rel.index)
 
-# Stack order requested: bottom -> top follows decreasing mean abundance,
-# with Others forced to the top of the stack.
+missing_genus_mean_fraction = float(missing_genus_fraction_by_sample.mean())
+
+species_rel_labeled = species_rel.drop(columns=missing_genus_species, errors="ignore").copy()
+renorm_denom = species_rel_labeled.sum(axis=1)
+species_rel_labeled = species_rel_labeled.div(renorm_denom.replace(0, np.nan), axis=0).fillna(0.0)
+
+species_to_genus_labeled = species_to_genus.dropna().astype(str)
+genus_rel = species_rel_labeled.T.groupby(species_to_genus_labeled).sum().T
+
+keep_genera = genus_rel.columns[genus_rel.max(axis=0) >= GENUS_KEEP_THRESHOLD].tolist()
+minor_genera = [g for g in genus_rel.columns if g not in keep_genera]
+
+genus_plot = genus_rel[keep_genera].copy() if keep_genera else pd.DataFrame(index=genus_rel.index)
+genus_plot["Others"] = genus_rel[minor_genera].sum(axis=1) if minor_genera else 0.0
+
+# Stack order: decreasing mean abundance (bottom to top), Others on top.
 genus_mean = genus_plot.mean(axis=0)
-non_other_desc = [
-    genus
-    for genus in genus_mean.sort_values(ascending=False).index.tolist()
-    if genus != "Others"
-]
+non_other_desc = [g for g in genus_mean.sort_values(ascending=False).index.tolist() if g != "Others"]
 stack_order = non_other_desc + ["Others"]
 genus_plot = genus_plot[stack_order]
 
@@ -343,7 +357,7 @@ fig.legend(
     ncol=1,
 )
 fig.suptitle(
-    "Bacterial-genus composition by sample and patient\n(Top genera + Others, within bacterial-domain reads)",
+    "Bacterial-genus composition by sample and patient\n(Genera with >=10% in >=1 sample + Others, after removing missing-genus assignments)",
     y=1.02,
     fontsize=13,
 )
@@ -368,7 +382,7 @@ summary = pd.DataFrame(
         ],
         "description": [
             "Host-fraction barplot by patient facets (Homo sapiens / root Bracken)",
-            "Bacterial-genus stacked barplot by patient facets (top genera + Others)",
+            "Bacterial-genus stacked barplot by patient facets (>=10% in >=1 sample + Others)",
         ],
     }
 )
@@ -379,9 +393,27 @@ top_preview = (
     .drop(columns=["Others"], errors="ignore")
     .mean(axis=0)
     .sort_values(ascending=False)
-    .head(15)
     .rename("mean_relative_abundance")
     .to_frame()
 )
-display(Markdown("### Top genera by mean relative abundance (for reference)"))
+
+filter_summary = pd.DataFrame(
+    {
+        "metric": [
+            "Missing-genus species removed (count)",
+            "Average relative abundance removed before renormalization",
+            "Genera retained by max >= 0.10 rule",
+        ],
+        "value": [
+            len(missing_genus_species),
+            missing_genus_mean_fraction,
+            len(non_other_desc),
+        ],
+    }
+)
+
+display(Markdown("### Genus-filtering summary"))
+display(filter_summary)
+
+display(Markdown("### Retained genera by mean relative abundance (for reference)"))
 display(top_preview)
