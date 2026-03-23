@@ -70,7 +70,9 @@ metagenomics_20260206/analysis_update/lefse/
 
 # analysis_update generated artifacts (regenerable)
 metagenomics_20260206/analysis_update/figures/
+metagenomics_20260206/analysis_update/figures_used/
 metagenomics_20260206/analysis_update/tables/
+metagenomics_20260206/analysis_update/yq_*.md
 
 # -----------------------------
 # Logs / transient files

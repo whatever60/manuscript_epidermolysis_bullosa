@@ -307,11 +307,16 @@ print(pairwise_status)
 
 # %%
 margin_specs <- tribble(
-  ~model_key, ~focal_term, ~term_label,
-  "body_region_model", "same_patient", "Same patient",
-  "body_region_model", "same_chronicity", "Same chronicity",
-  "body_region_model", "same_body_region", "Same body region",
-  "exact_location_model", "same_location", "Same exact location"
+  ~model_key, ~focal_term, ~term_label, ~term_type, ~low_label, ~high_label,
+  "body_region_model", "same_patient", "Same patient", "binary", "Not shared", "Shared",
+  "body_region_model", "same_chronicity", "Same chronicity", "binary", "Not shared", "Shared",
+  "body_region_model", "same_body_region", "Same body region", "binary", "Not shared", "Shared",
+  "body_region_model", "same_batch", "Same batch date", "binary", "Not shared", "Shared",
+  "body_region_model", "same_culture_positive", "Same culture positivity", "binary", "Not shared", "Shared",
+  "body_region_model", "delta_years_since_first_sample", "Elapsed-time gap (years)", "continuous", "Shorter gap", "Longer gap",
+  "body_region_model", "mean_host_fraction", "Mean host fraction", "continuous", "Lower", "Higher",
+  "body_region_model", "mean_log10_bacterial_reads", "Mean bacterial read depth", "continuous", "Lower", "Higher",
+  "exact_location_model", "same_location", "Same exact location", "binary", "Not shared", "Shared"
 )
 
 model_lookup <- list(
@@ -319,7 +324,7 @@ model_lookup <- list(
   exact_location_model = pair_model_exact_location
 )
 
-make_margin_table <- function(model, focal_term, term_label, model_key) {
+make_margin_table <- function(model, focal_term, term_label, model_key, term_type, low_label, high_label) {
   at_list <- list(
     same_patient = 0,
     same_batch = 0,
@@ -331,20 +336,44 @@ make_margin_table <- function(model, focal_term, term_label, model_key) {
     mean_host_fraction = mean(pair_df$mean_host_fraction),
     mean_log10_bacterial_reads = mean(pair_df$mean_log10_bacterial_reads)
   )
-  at_list[[focal_term]] <- c(0, 1)
+  focal_values <- if (term_type == "binary") {
+    c(0, 1)
+  } else {
+    as.numeric(quantile(pair_df[[focal_term]], probs = c(0.25, 0.75), na.rm = TRUE))
+  }
+  at_list[[focal_term]] <- focal_values
   em <- emmeans(model, specs = as.formula(paste("~", focal_term)), at = at_list)
-  out <- as_tibble(summary(em, infer = c(TRUE, TRUE)))
+  out <- as_tibble(summary(em, infer = c(TRUE, TRUE))) |>
+    arrange(.data[[focal_term]])
   out$focal_level_value <- out[[focal_term]]
+  coeff_row <- pairwise_effects_all |>
+    filter(model == model_key, term == focal_term) |>
+    slice_head(n = 1)
+  coeff_pvalue <- if (nrow(coeff_row) > 0) coeff_row$p.value[[1]] else NA_real_
+  coeff_qvalue <- if (nrow(coeff_row) > 0) coeff_row$qvalue[[1]] else NA_real_
   out |>
+    mutate(
+      level = c(low_label, high_label),
+      focal_value = focal_level_value,
+      comparison_basis = if_else(term_type == "binary", "0_vs_1", "q25_vs_q75"),
+      pvalue = coeff_pvalue,
+      qvalue = coeff_qvalue,
+      term_type = term_type
+    ) |>
     transmute(
       model = model_key,
       focal_term = focal_term,
       term_label = term_label,
-      level = if_else(focal_level_value == 1, "Shared", "Not shared"),
+      term_type = term_type,
+      level = level,
+      focal_value = focal_value,
+      comparison_basis = comparison_basis,
       emmean = emmean,
       std.error = SE,
       conf.low = lower.CL,
       conf.high = upper.CL,
+      pvalue = pvalue,
+      qvalue = qvalue,
       held_same_batch = 0,
       held_same_culture_positive = 0,
       held_elapsed_time_gap = mean(pair_df$delta_years_since_first_sample),
@@ -358,7 +387,10 @@ adjusted_margins_all <- bind_rows(lapply(seq_len(nrow(margin_specs)), function(i
     model_lookup[[margin_specs$model_key[[i]]]],
     margin_specs$focal_term[[i]],
     margin_specs$term_label[[i]],
-    margin_specs$model_key[[i]]
+    margin_specs$model_key[[i]],
+    margin_specs$term_type[[i]],
+    margin_specs$low_label[[i]],
+    margin_specs$high_label[[i]]
   )
 }))
 

@@ -66,15 +66,17 @@ pairwise["close_date"] = pairwise["date_gap_days"] < 183
 order = [
     "Same patient, same site, close date",
     "Same patient, close date",
+    "Same patient, same date",
     "Same patient, same body site",
-    "Same patient, different date/site",
+    "Same patient, different site",
     "Different patient",
 ]
 new_tick_labels = [
     "Same patient,\nsame site,\n<6 months",
     "Same patient,\n<6 months",
+    "Same patient,\nsame date",
     "Same patient,\nsame site",
-    "Same patient,\ndiff date/site",
+    "Same patient,\ndiff site",
     "Diff patient",
 ]
 
@@ -82,10 +84,9 @@ same_site_close_date_mask = (
     pairwise["same_patient"] & pairwise["same_body_site"] & pairwise["close_date"]
 )
 same_close_date_mask = pairwise["same_patient"] & pairwise["close_date"]
+same_date_mask = pairwise["same_patient"] & pairwise["date_gap_days"].eq(0)
 same_site_mask = pairwise["same_patient"] & pairwise["same_body_site"]
-diff_date_site_mask = (
-    pairwise["same_patient"] & ~pairwise["close_date"] & ~pairwise["same_body_site"]
-)
+diff_site_mask = pairwise["same_patient"] & ~pairwise["same_body_site"]
 
 plot_pairwise = pd.concat(
     [
@@ -98,15 +99,19 @@ plot_pairwise = pd.concat(
             ["distance"],
         ].assign(comparison_group=order[1]),
         pairwise.loc[
-            same_site_mask,
+            same_date_mask,
             ["distance"],
         ].assign(comparison_group=order[2]),
         pairwise.loc[
-            diff_date_site_mask,
+            same_site_mask,
             ["distance"],
         ].assign(comparison_group=order[3]),
+        pairwise.loc[
+            diff_site_mask,
+            ["distance"],
+        ].assign(comparison_group=order[4]),
         pairwise.loc[~pairwise["same_patient"], ["distance"]].assign(
-            comparison_group=order[4]
+            comparison_group=order[5]
         ),
     ],
     ignore_index=True,
@@ -163,6 +168,7 @@ sns.stripplot(
 ax.set_xlabel("")
 ax.set_ylabel("Bray-Curtis distance")
 # ax.set_title("Descriptive Bray-Curtis similarity by patient and batch-date grouping")
+ax.set_xticks(range(len(order)))
 ax.set_xticklabels(new_tick_labels, rotation=30, ha="right")
 
 
@@ -260,19 +266,23 @@ same_site_close = summary.loc[
 same_close = summary.loc[
     summary["comparison_group"] == "Same patient, close date"
 ].iloc[0]
+same_date = summary.loc[
+    summary["comparison_group"] == "Same patient, same date"
+].iloc[0]
 same_site = summary.loc[
     summary["comparison_group"] == "Same patient, same body site"
 ].iloc[0]
-diff_date_site = summary.loc[
-    summary["comparison_group"] == "Same patient, different date/site"
+diff_site = summary.loc[
+    summary["comparison_group"] == "Same patient, different site"
 ].iloc[0]
 different = summary.loc[summary["comparison_group"] == "Different patient"].iloc[0]
 summary_lines = [
     f"- Positive result: same-patient same-site pairs sampled <6 months apart were much closer than unrelated pairs (median Bray-Curtis {same_site_close['median']:.3f} vs {different['median']:.3f}).",
     f"- Positive result: same-patient pairs sampled <6 months apart were also closer than unrelated pairs (median {same_close['median']:.3f} vs {different['median']:.3f}).",
+    f"- Positive result: same-patient pairs collected on the same date were especially close (median {same_date['median']:.3f} vs {different['median']:.3f}).",
     f"- Positive result: same-patient same-site pairs also showed lower dissimilarity than unrelated pairs (median {same_site['median']:.3f} vs {different['median']:.3f}).",
-    f"- Negative result: same-patient different date/site pairs were closer to unrelated pairs (median {diff_date_site['median']:.3f}).",
-    "- Interpretation: short patient-level temporal proximity and shared site both track lower dissimilarity, while broad different-date/site pairs are much less distinct from unrelated pairs.",
+    f"- Null result: same-patient different-site pairs were close to unrelated pairs (median {diff_site['median']:.3f}).",
+    "- Interpretation: shared patient identity, tighter temporal alignment, and shared site all track lower dissimilarity, whereas different-site comparisons remain much less distinct from unrelated pairs.",
 ]
 display(Markdown("## Working Interpretation\n" + "\n".join(summary_lines)))
 

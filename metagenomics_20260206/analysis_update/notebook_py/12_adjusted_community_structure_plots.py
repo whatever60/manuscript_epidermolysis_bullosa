@@ -88,6 +88,18 @@ MODEL_LABELS = {
     "exact_location_model": "Exact-location model",
 }
 
+TERM_TITLE_MAP = {
+    "Same patient": "Patient",
+    "Same batch date": "Culture date",
+    "Same body region": "Body region",
+    "Same chronicity": "Chronicity",
+    "Same culture positivity": "Culture positivity",
+    "Elapsed-time gap (years)": "Time gap",
+    "Mean host fraction": "Host fraction",
+    "Mean bacterial read depth": "Read depth",
+    "Same exact location": "Exact location",
+}
+
 
 def save_svg_and_jpg(fig: plt.Figure, output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -260,9 +272,10 @@ def plot_pairwise_effects(effects: pd.DataFrame, output_path: Path) -> None:
 def plot_adjusted_margins(
     margins: pd.DataFrame,
     output_path: Path,
-    panel_size: tuple[float | int, float | int] = (4.2, 4.8),
+    panel_size: tuple[float | int, float | int] = (3.0, 3.5),
     sharey: bool = False,
     term_order: list[str] | None = None,
+    ncols: int | None = None,
 ) -> None:
     """Plot adjusted predicted Bray-Curtis distances by term in a single-row layout.
 
@@ -300,19 +313,18 @@ def plot_adjusted_margins(
     if term_order is None:
         term_order = margins["term_label"].dropna().unique().tolist()
 
-    ncols = max(1, len(term_order))
+    if ncols is None:
+        ncols = min(4, max(1, len(term_order)))
+    ncols = max(1, min(ncols, len(term_order)))
+    nrows = int(math.ceil(len(term_order) / ncols))
     fig, axes = plt.subplots(
-        1,
+        nrows,
         ncols,
-        figsize=(max(panel_size[0] * ncols, 6.0), panel_size[1]),
+        figsize=(max(panel_size[0] * ncols, 7.0), max(panel_size[1] * nrows, 3.5)),
         squeeze=False,
         sharey=sharey,
     )
     axes_flat = [ax for row in axes for ax in row]
-
-    level_order = ["Not shared", "Shared"]
-    level_colors = {"Not shared": "#6c757d", "Shared": "#b22222"}
-    x_map = {level: idx for idx, level in enumerate(level_order)}
 
     for idx_ax, (ax, term) in enumerate(zip(axes_flat, term_order)):
         sub = margins.loc[margins["term_label"] == term].copy()
@@ -320,10 +332,20 @@ def plot_adjusted_margins(
             ax.set_axis_off()
             continue
 
-        sub["level"] = pd.Categorical(
-            sub["level"], categories=level_order, ordered=True
-        )
-        sub = sub.sort_values("level")
+        if "focal_value" in sub.columns:
+            sub = sub.sort_values("focal_value")
+        else:
+            sub = sub.reset_index(drop=True)
+
+        level_order = sub["level"].astype(str).tolist()
+        x_map = {level: idx for idx, level in enumerate(level_order)}
+        level_colors = {
+            level_order[idx]: color
+            for idx, color in enumerate(
+                ["#6c757d", "#b22222"][: len(level_order)]
+                + ["#b22222"] * max(0, len(level_order) - 2)
+            )
+        }
 
         xs: list[float] = []
         ys: list[float] = []
@@ -358,48 +380,33 @@ def plot_adjusted_margins(
         if len(xs) >= 2:
             ax.plot(xs, ys, color="#a0a0a0", linewidth=0.9)
 
-        ax.set_title(term)
+        qvalue = sub["qvalue"].dropna().iloc[0] if "qvalue" in sub.columns and sub["qvalue"].notna().any() else np.nan
+        title = TERM_TITLE_MAP.get(term, term)
+        if pd.notna(qvalue):
+            title = f"{title}\nq={wc.format_sig(float(qvalue))}"
+        ax.set_title(title, fontsize=10)
         ax.set_xticks([x_map[level] for level in level_order])
         ax.set_xticklabels(level_order, rotation=20, ha="right")
         ax.set_xlabel("")
-        if idx_ax == 0:
+        if idx_ax % ncols == 0:
             ax.set_ylabel("Adjusted Bray-Curtis distance")
 
-        if idx_ax == len(term_order) - 1:
-            legend_handles = [
-                Line2D(
-                    [0],
-                    [0],
-                    marker="o",
-                    color="none",
-                    markerfacecolor=level_colors["Not shared"],
-                    markeredgecolor=level_colors["Not shared"],
-                    label="Not shared",
-                ),
-                Line2D(
-                    [0],
-                    [0],
-                    marker="o",
-                    color="none",
-                    markerfacecolor=level_colors["Shared"],
-                    markeredgecolor=level_colors["Shared"],
-                    label="Shared",
-                ),
-            ]
-            # Add legend to the last subplot
-            ax.legend(
-                handles=legend_handles,
-                frameon=False,
-                loc="upper left",
-                # ncol=2,
-                bbox_to_anchor=(1.05, 1.0),
-            )
-    # fig.suptitle(
-    #     "Adjusted predicted Bray-Curtis distance from pairwise mixed models\n"
-    #     "Other pairwise indicators held at 0; technical covariates fixed at cohort means",
-    #     y=1.08,
-    # )
-    fig.tight_layout()
+    for ax in axes_flat[len(term_order) :]:
+        ax.set_axis_off()
+
+    if "term_type" in margins.columns and (margins["term_type"] == "continuous").any():
+        fig.text(
+            0.5,
+            0.01,
+            "Binary terms compare not shared vs shared. Continuous terms compare cohort 25th vs 75th percentile. Titles show BH-adjusted q values.",
+            ha="center",
+            fontsize=9,
+        )
+        tight_rect = (0, 0.04, 1, 1)
+    else:
+        tight_rect = (0, 0, 1, 1)
+
+    fig.tight_layout(rect=tight_rect)
     save_svg_and_jpg(fig, output_path)
     plt.close(fig)
 
@@ -420,12 +427,23 @@ body_effects["model"] = "body_region_model"
 fig_12_02 = wc.figure_path(context, 13, "pairwise_similarity_mixed")
 plot_pairwise_effects(body_effects, fig_12_02)
 
-adjusted_margins_body["term_label"] = adjusted_margins_body["term_label"].map(
-    lambda x: x.replace("Same ", "").capitalize()
-)
 fig_12_03 = wc.figure_path(context, 22, "pairwise_adjusted_margins")
 plot_adjusted_margins(
-    adjusted_margins_body, fig_12_03, sharey=True, panel_size=(3.5, 5)
+    adjusted_margins_body,
+    fig_12_03,
+    sharey=True,
+    panel_size=(3.0, 3.4),
+    term_order=[
+        "Same patient",
+        "Same chronicity",
+        "Same body region",
+        "Same culture positivity",
+        "Same batch date",
+        "Elapsed-time gap (years)",
+        "Mean host fraction",
+        "Mean bacterial read depth",
+    ],
+    ncols=4,
 )
 
 exact_effects = pairwise_effects_exact.copy()

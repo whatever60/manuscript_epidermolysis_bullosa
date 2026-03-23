@@ -115,6 +115,31 @@ def axes_grid(
     return fig, flat_axes
 
 
+def draw_single_group_boxplot(
+    ax: plt.Axes,
+    values: np.ndarray,
+    position: float,
+    color: str,
+    width: float = 0.62,
+) -> bool:
+    if values.size <= 3:
+        return False
+
+    ax.boxplot(
+        [values],
+        positions=[position],
+        widths=width,
+        showfliers=False,
+        patch_artist=True,
+        manage_ticks=False,
+        boxprops={"facecolor": "white", "edgecolor": color, "linewidth": 1.0},
+        medianprops={"color": color, "linewidth": 1.3},
+        whiskerprops={"color": color, "linewidth": 1.0},
+        capprops={"color": color, "linewidth": 1.0},
+    )
+    return True
+
+
 def plot_threshold_sweep(
     threshold_data: pd.DataFrame,
     optimal_data: pd.DataFrame,
@@ -481,24 +506,30 @@ def plot_abundance_boxplot(
         status_counts = (
             sub["culture_status"].value_counts().reindex(status_order).fillna(0).astype(int)
         )
-        show_box = int(status_counts.min()) > 3
-        if show_box:
-            sns.boxplot(
-                data=sub,
-                x="culture_status",
-                y="log10_rel_abundance",
-                order=status_order,
-                palette=palette,
-                width=0.62,
-                fliersize=0.0,
-                linewidth=1.0,
-                ax=ax,
+        hidden_boxes: list[str] = []
+        for pos, status in enumerate(status_order):
+            status_values = (
+                sub.loc[sub["culture_status"] == status, "log10_rel_abundance"]
+                .dropna()
+                .to_numpy()
             )
+            was_drawn = draw_single_group_boxplot(
+                ax=ax,
+                values=status_values,
+                position=float(pos),
+                color=palette[status],
+            )
+            if not was_drawn:
+                hidden_boxes.append(
+                    f"{status.replace('Culture ', '').capitalize()} n={status_counts.loc[status]}"
+                )
         sns.stripplot(
             data=sub,
             x="culture_status",
             y="log10_rel_abundance",
+            hue="culture_status",
             order=status_order,
+            hue_order=status_order,
             palette=palette,
             dodge=False,
             jitter=0.22,
@@ -507,6 +538,10 @@ def plot_abundance_boxplot(
             ax=ax,
             zorder=3,
         )
+        legend = ax.get_legend()
+        if legend is not None:
+            legend.remove()
+        ax.set_xlim(-0.5, len(status_order) - 0.5)
         qvalue = q_lookup.get(label, np.nan)
         if pd.notna(qvalue):
             ax.set_title(f"{label} U-test q={wc.format_sig(qvalue)}", fontsize=10)
@@ -514,21 +549,16 @@ def plot_abundance_boxplot(
             ax.set_title(label, fontsize=10)
         ax.set_xlabel("")
         ax.set_ylabel("log10(rel. abundance + 1e-6)", fontsize=9)
+        ax.set_xticks(range(len(status_order)))
         ax.set_xticklabels(
-            [tick.get_text().split()[-1].capitalize() for tick in ax.get_xticklabels()],
-            rotation=20,
-            ha="right",
-            fontsize=8,
+            ["Negative", "Positive"], rotation=20, ha="right", fontsize=8
         )
-        ax.set_yticklabels(
-            [tick.get_text() for tick in ax.get_yticklabels()],
-            fontsize=8,
-        )
-        if not show_box:
+        ax.tick_params(axis="y", labelsize=8)
+        if hidden_boxes:
             ax.text(
                 0.5,
                 0.98,
-                f"dots only (n-={status_counts.iloc[0]}, n+={status_counts.iloc[1]})",
+                "box hidden for n<=3: " + "; ".join(hidden_boxes),
                 transform=ax.transAxes,
                 ha="center",
                 va="top",

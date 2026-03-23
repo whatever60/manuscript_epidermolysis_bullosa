@@ -18,7 +18,8 @@
 #
 # This notebook reuses the existing Bracken parsing/QC pipeline and reproduces
 # patient-faceted barplot views:
-# 1) host fraction per sample, defined as Homo sapiens reads / total Bracken species-level reads
+# 1) species-level classified-read composition per sample, split into bacteria domain, human,
+#    and non-bacterial/non-human residual
 # 2) bacterial-genus relative abundance per sample, removing missing-genus assignments,
 #    renormalizing, retaining genera with >=10% in at least one sample, and collapsing the rest into Others.
 #
@@ -80,69 +81,82 @@ def sample_letter_sort(series: pd.Series) -> pd.Series:
     return series.fillna("").astype(str)
 
 
+def patient_facet_width_ratios(sample_counts: list[int]) -> list[float]:
+    return [max(1.0, float(count)) for count in sample_counts]
+
+
+def set_patient_facet_xlim(ax: plt.Axes, n_bars: int) -> None:
+    x_span = max(1.0, float(n_bars))
+    ax.set_xlim(-0.5, -0.5 + x_span)
+    ax.margins(x=0.0)
+
+
+def separated_tab20b(n_colors: int) -> list[tuple[float, float, float]]:
+    base_palette = list(sns.color_palette("tab20b", n_colors=20))
+    reordered: list[tuple[float, float, float]] = []
+    for offset in range(4):
+        reordered.extend(base_palette[offset::4])
+    return reordered[:n_colors]
+
+
 # %% [markdown]
-# ## Build Host-Fraction Plot Data
+# ## Build Species-Level Composition Plot Data
 #
-# Host fraction here is explicitly defined as:
-# Homo sapiens reads / total Bracken species-level reads.
+# This first barplot uses three mutually exclusive fractions from the Bracken species-all table:
+# bacteria domain, Homo sapiens (shown in the legend as Human), and the non-bacterial/non-human residual.
 #
 
 # %%
-qc["host_fraction_root"] = np.where(
-    qc["bracken_root_reads"] > 0,
-    qc["human_species_reads"] / qc["bracken_root_reads"],
-    np.nan,
-)
-
-host_plot_df = (
+composition_plot_df = (
     qc[
         [
             "patient_id",
             "sample_letter",
             "code",
-            "body_region",
-            "host_fraction_root",
-            "bracken_root_reads",
-            "human_species_reads",
+            "human_species_fraction",
+            "bacterial_species_fraction",
+            "non_bacterial_non_human_fraction",
         ]
     ]
-    .dropna(subset=["host_fraction_root"])
+    .dropna(
+        subset=[
+            "human_species_fraction",
+            "bacterial_species_fraction",
+            "non_bacterial_non_human_fraction",
+        ]
+    )
     .copy()
 )
-host_plot_df["patient_id"] = host_plot_df["patient_id"].astype(str)
-host_plot_df["sample_label"] = host_plot_df["sample_letter"].astype(str)
-host_plot_df["body_region_label"] = host_plot_df["body_region"].map(
-    base.BODY_REGION_LABELS
-).fillna("Others")
-host_plot_df = host_plot_df.sort_values(
+composition_plot_df["patient_id"] = composition_plot_df["patient_id"].astype(str)
+composition_plot_df["sample_label"] = composition_plot_df["sample_letter"].astype(str)
+composition_plot_df = composition_plot_df.sort_values(
     ["patient_id", "sample_letter", "code"], key=patient_sort_key
 )
+composition_plot_df["Bacteria domain"] = composition_plot_df["bacterial_species_fraction"]
+composition_plot_df["Human"] = composition_plot_df["human_species_fraction"]
+composition_plot_df["Others"] = composition_plot_df["non_bacterial_non_human_fraction"]
 
 
 # %% [markdown]
-# ## Figure 15.01: Host Fraction Barplot (One Axis Per Patient, Single Long Row)
+# ## Figure 15.01: Species-Level Composition Barplot (One Axis Per Patient, Single Long Row)
 #
 
 # %%
-patient_ids = host_plot_df["patient_id"].drop_duplicates().tolist()
+patient_ids = composition_plot_df["patient_id"].drop_duplicates().tolist()
 n_patients = len(patient_ids)
 
-body_regions_present = [
-    key
-    for key in base.BODY_REGION_ORDER
-    if key in host_plot_df["body_region"].dropna().unique().tolist()
+composition_order = ["Human", "Bacteria domain", "Others"]
+composition_palette = {
+    "Human": "#b75d69",
+    "Bacteria domain": "#3f7f4c",
+    "Others": "#8d99ae",
+}
+
+host_sample_counts = [
+    composition_plot_df.loc[composition_plot_df["patient_id"] == patient].shape[0]
+    for patient in patient_ids
 ]
-if "others" not in body_regions_present and "others" in host_plot_df["body_region"].tolist():
-    body_regions_present.append("others")
-
-region_palette = dict(
-    zip(body_regions_present, sns.color_palette("Set2", n_colors=len(body_regions_present)))
-)
-
-host_width_ratios = []
-for patient in patient_ids:
-    n_samples = host_plot_df.loc[host_plot_df["patient_id"] == patient].shape[0]
-    host_width_ratios.append(max(1, n_samples))
+host_width_ratios = patient_facet_width_ratios(host_sample_counts)
 
 host_total_samples = int(sum(host_width_ratios))
 host_fig_width = max(16.0, host_total_samples * 0.42 + n_patients * 0.35 + 4.5)
@@ -158,35 +172,46 @@ axes = np.atleast_1d(axes).ravel()
 
 for idx, patient in enumerate(patient_ids):
     ax = axes[idx]
-    sub = host_plot_df.loc[host_plot_df["patient_id"] == patient].copy()
+    sub = composition_plot_df.loc[composition_plot_df["patient_id"] == patient].copy()
     sub = sub.sort_values(["sample_letter", "code"], key=sample_letter_sort)
     x = np.arange(sub.shape[0])
-    colors = [region_palette.get(k, "#999999") for k in sub["body_region"].tolist()]
-
-    ax.bar(x, sub["host_fraction_root"].to_numpy() * 100, color=colors, width=0.50)
+    bottom = np.zeros(sub.shape[0], dtype=float)
+    for category in composition_order:
+        values = sub[category].to_numpy() * 100
+        ax.bar(
+            x,
+            values,
+            bottom=bottom,
+            color=composition_palette[category],
+            width=0.50,
+            linewidth=0,
+            label=category,
+        )
+        bottom += values
     ax.set_xticks(x)
     ax.set_xticklabels(sub["sample_label"].tolist(), fontsize=8)
+    set_patient_facet_xlim(ax, sub.shape[0])
     ax.set_ylim(0, 100)
     ax.grid(False)
     ax.xaxis.grid(False)
     ax.yaxis.grid(False)
     ax.set_title(f"Patient {int(float(patient)):02d} (n={sub.shape[0]})", fontsize=10)
     if idx == 0:
-        ax.set_ylabel("Host fraction (%)", fontsize=9)
+        ax.set_ylabel("Classified-read fraction (%)", fontsize=9)
 
 legend_handles = [
-    Patch(facecolor=region_palette[k], edgecolor="none", label=base.BODY_REGION_LABELS.get(k, k))
-    for k in body_regions_present
+    Patch(facecolor=composition_palette[k], edgecolor="none", label=k)
+    for k in composition_order
 ]
 fig.legend(
     handles=legend_handles,
-    title="Body region",
+    title="Category",
     loc="center left",
     bbox_to_anchor=(1.01, 0.5),
     frameon=False,
 )
 fig.suptitle(
-    "Host fraction by sample and patient\n(Homo sapiens reads / total Bracken species-level reads)",
+    "Species-level classified-read composition by sample and patient\n(Bacteria domain, Human, and non-bacterial/non-human residual)",
     y=1.02,
     fontsize=13,
 )
@@ -291,16 +316,15 @@ patient_ids_genus = genus_plot["patient_id"].drop_duplicates().tolist()
 n_patients_genus = len(patient_ids_genus)
 
 genus_non_other = [g for g in stack_order if g != "Others"]
-genus_palette_non_other = sns.color_palette(
-    "tab20b", n_colors=max(1, len(genus_non_other))
-)
+genus_palette_non_other = separated_tab20b(max(1, len(genus_non_other)))
 genus_color_map = dict(zip(genus_non_other, genus_palette_non_other))
 genus_color_map["Others"] = "#9e9e9e"
 
-genus_width_ratios = []
-for patient in patient_ids_genus:
-    n_samples = genus_plot.loc[genus_plot["patient_id"] == patient].shape[0]
-    genus_width_ratios.append(max(1, n_samples))
+genus_sample_counts = [
+    genus_plot.loc[genus_plot["patient_id"] == patient].shape[0]
+    for patient in patient_ids_genus
+]
+genus_width_ratios = patient_facet_width_ratios(genus_sample_counts)
 
 genus_total_samples = int(sum(genus_width_ratios))
 genus_fig_width = max(16.0, genus_total_samples * 0.42 + n_patients_genus * 0.35 + 5.5)
@@ -337,6 +361,7 @@ for idx, patient in enumerate(patient_ids_genus):
 
     ax.set_xticks(x)
     ax.set_xticklabels(sub["sample_label"].tolist(), fontsize=8)
+    set_patient_facet_xlim(ax, sub.shape[0])
     ax.set_ylim(0, 100)
     ax.grid(False)
     ax.xaxis.grid(False)
@@ -381,7 +406,7 @@ summary = pd.DataFrame(
             FIG_GENUS.name,
         ],
         "description": [
-            "Host-fraction barplot by patient facets (Homo sapiens / root Bracken)",
+            "Species-level classified-read composition by patient facets (Bacteria domain, Human, Others)",
             "Bacterial-genus stacked barplot by patient facets (>=10% in >=1 sample + Others)",
         ],
     }

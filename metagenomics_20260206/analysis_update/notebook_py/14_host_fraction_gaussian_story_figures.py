@@ -376,6 +376,9 @@ if handles:
         bbox_to_anchor=(1.01, 1.0),
         frameon=False,
     )
+for boundary in np.arange(0.5, max(len(patient_order) - 0.5, 0.5), 1.0):
+    axes[0].axvline(boundary, color="#e0e0e0", linewidth=0.8, zorder=0)
+axes[0].set_xlim(-0.5, len(patient_order) - 0.5)
 axes[0].set_title("Host fraction by patient")
 axes[0].set_xlabel("Patient")
 axes[0].set_ylabel("Host genomic DNA fraction")
@@ -406,7 +409,9 @@ axes[1].set_ylabel("Host genomic DNA fraction")
 axes[1].tick_params(axis="x", rotation=25)
 axes[1].yaxis.set_major_formatter(PercentFormatter(1))
 
-body_order = ["lower_extremity", "head_neck", "upper_extremity", "trunk_perineum", "others"]
+body_order = [
+    region for region in body_region_order if host_plot_df["body_region"].astype(str).eq(region).any()
+]
 sns.boxplot(
     data=host_plot_df,
     x="body_region",
@@ -436,11 +441,14 @@ body_tick_labels = {
     "trunk_perineum": "Trunk/perineum",
     "others": "Others",
 }
+axes[2].set_xticks(np.arange(len(body_order)))
 axes[2].set_xticklabels([body_tick_labels.get(label, label) for label in body_order], rotation=25)
 axes[2].yaxis.set_major_formatter(PercentFormatter(1))
 
 for ax in axes:
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=30, ha="right")
+    ax.tick_params(axis="x", labelrotation=30)
+    for tick in ax.get_xticklabels():
+        tick.set_ha("right")
 
 fig.tight_layout()
 fig_14_01_path = wc.figure_path(context, 18, "host_fraction_overview")
@@ -519,10 +527,14 @@ sns.boxplot(
     data=host_plot_df,
     x="acute_like_binary",
     y="host_removed_fraction",
+    hue="acute_like_binary",
     order=["Others", "Acute-like"],
-    palette=["#d9d9d9", "#bc4749"],
+    hue_order=["Others", "Acute-like"],
+    palette={"Others": "#d9d9d9", "Acute-like": "#bc4749"},
+    dodge=False,
     width=0.7,
     fliersize=0,
+    legend=False,
     ax=axes[0],
 )
 sns.stripplot(
@@ -547,10 +559,14 @@ sns.boxplot(
     data=host_plot_df,
     x="upper_extremity_binary",
     y="host_removed_fraction",
+    hue="upper_extremity_binary",
     order=["Others", "Upper extremity"],
-    palette=["#d9d9d9", "#457b9d"],
+    hue_order=["Others", "Upper extremity"],
+    palette={"Others": "#d9d9d9", "Upper extremity": "#457b9d"},
+    dodge=False,
     width=0.7,
     fliersize=0,
+    legend=False,
     ax=axes[1],
 )
 sns.stripplot(
@@ -622,4 +638,3 @@ display(Markdown("### table_14_02_host_gaussian_random_effects"))
 display(pd.read_csv(wc.table_path(context, 37, "host_gaussian_random_effects"), sep="\t").head(20))
 display(Markdown("### table_14_03_host_descriptive_utests"))
 display(pd.read_csv(context.table_dir / "table_14_03_host_descriptive_utests.tsv", sep="\t"))
-
