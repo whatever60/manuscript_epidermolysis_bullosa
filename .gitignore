@@ -74,6 +74,11 @@ metagenomics_20260206/analysis_update/figures_used/
 metagenomics_20260206/analysis_update/tables/
 metagenomics_20260206/analysis_update/yq_*.md
 
+# Figure directories (regenerable)
+**/figures/
+**/figures_used/
+**/figs/
+
 # -----------------------------
 # Logs / transient files
 # -----------------------------
